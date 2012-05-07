@@ -2,14 +2,15 @@
 //  AppDelegate.m
 //  Grid
 //
-//  Created by Yang Song on 4/23/12.
+//  Created by Yang Song on 4/12/12.
 //  Copyright XecuDev 2012. All rights reserved.
 //
 
 #import "cocos2d.h"
 
 #import "AppDelegate.h"
-#import "HelloWorldLayer.h"
+#import "GameLayer.h"
+#import "ChooseLevelMenu.h"
 
 @implementation AppController
 
@@ -35,7 +36,7 @@
 	director_.wantsFullScreenLayout = YES;
 
 	// Display FSP and SPF
-	[director_ setDisplayStats:YES];
+	[director_ setDisplayStats:NO];
 
 	// set FPS at 60
 	[director_ setAnimationInterval:1.0/60];
@@ -80,7 +81,8 @@
 	[CCTexture2D PVRImagesHavePremultipliedAlpha:YES];
 
 	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.
-	[director_ pushScene: [HelloWorldLayer scene]]; 
+	//[director_ pushScene: [GameLayer scene]]; 
+    [director_ pushScene: [ChooseLevelMenu scene]]; 
 
 	return YES;
 }
@@ -88,7 +90,7 @@
 // Supported orientations: Landscape. Customize it for your own needs
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-	return UIInterfaceOrientationIsLandscape(interfaceOrientation);
+	return UIInterfaceOrientationIsPortrait(interfaceOrientation);
 }
 
 

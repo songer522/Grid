@@ -2,7 +2,7 @@
 //  AppDelegate.h
 //  Grid
 //
-//  Created by Yang Song on 4/23/12.
+//  Created by Yang Song on 4/12/12.
 //  Copyright XecuDev 2012. All rights reserved.
 //
 
