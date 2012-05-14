@@ -16,6 +16,9 @@
     int _blueScore;
     int _orangeScore;
     int _damageCount;
+    int _blueMapCount;
+    int _orangeMapCount;
+
 }
 @property (retain,nonatomic)NSMutableArray *lines;
 @property (retain,nonatomic)NSMutableArray *rows;
@@ -23,6 +26,8 @@
 @property int blueScore;
 @property int orangeScore;
 @property int damageCount;
+@property int blueMapCount;
+@property int orangeMapCount;
 +(id)GridWithNumOfLines:(int)numberOfLines NumberOfRows:(int)numberOfRows;
 -(id)getEdgeAtLineIndex:(NSUInteger)lineIndex EdgeIndex:(NSUInteger)edgeIndex;
 -(id)getEdgeAtRowIndex:(NSUInteger)rowIndex EdgeIndex:(NSUInteger)edgeIndex;

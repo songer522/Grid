@@ -19,6 +19,8 @@
 @synthesize orangeScore=_orangeScore;
 @synthesize boxs=_boxs;
 @synthesize damageCount=_damageCount;
+@synthesize blueMapCount=_blueMapCount;
+@synthesize orangeMapCount=_orangeMapCount;
 
 +(id)GridWithNumOfLines:(int)numberOfLines NumberOfRows:(int)numberOfRows
 {
@@ -48,6 +50,8 @@
         _blueScore=0;
         _orangeScore=0;
         _damageCount=0;
+        _blueMapCount=0;
+        _orangeMapCount=0;
         
   
         
@@ -108,11 +112,13 @@
     _blueScore=0;
     _orangeScore=0;
     _damageCount=0;
+    _orangeMapCount=0;
+    _blueMapCount=0;
     for(EdgeArray *array in _lines)
     {
         for(Edge *edge in array)
         {
-            edge.isFilled=NO;
+            edge.isFilled=YES;
         }
     }
     
@@ -120,7 +126,7 @@
     {
         for(Edge *edge in array)
         {
-            edge.isFilled=NO;
+            edge.isFilled=YES;
         }
     }
     
@@ -128,7 +134,7 @@
     {
         for(Box *box in array)
         {
-            box.status=EMPTY_BOX;
+            box.status=UNAVAILABLE;
         }
     }
 

@@ -96,13 +96,10 @@
         }
         if(_waitToFadeOutTreasureBoxBlue<0)
         {
-            //[_treasureBox1 setVisible:NO];
-            // NSLog(@"opacity%c",_treasureBox1.boxGraphic.opacity);
+           
             [self.boxGraphic setOpacity:0];
             [_parentGridView fillBlockAtPositionX:self.boxPosition.x PositionY:self.boxPosition.y WithColor:BLUE_BOX];
-            //_parentGridView.secondBoxPositionX=self.boxPosition.x;
-           // _parentGridView.secondBoxPositionY=self.boxPosition.y;
-           // _parentGridView.waitToShowSecondBoxBlue=0.5;
+         
             
         }
     }
@@ -119,13 +116,10 @@
         
         if(_waitToFadeOutTreasureBoxOrange<0)
         {
-            //[_treasureBox1 setVisible:NO];
-            //NSLog(@"opacity%c",_treasureBox1.boxGraphic.opacity);
+           
             [self.boxGraphic setOpacity:0];
             [_parentGridView fillBlockAtPositionX:self.boxPosition.x PositionY:self.boxPosition.y WithColor:ORANGE_BOX];
-           // _parentGridView.secondBoxPositionX=self.boxPosition.x;
-           // _parentGridView.secondBoxPositionY=self.boxPosition.y;
-           // _parentGridView.waitToShowSecondBoxOrange=0.5;
+           
             
         }
     }

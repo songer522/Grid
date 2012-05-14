@@ -13,12 +13,12 @@
 @implementation GameWindow
 @synthesize waitToFadeInTreasureBoxMessageBox=_waitToFadeInTreasureBoxMessageBox;
 @synthesize waitToFadeOutTreasureBoxMessageBox=_waitToFadeOutTreasureBoxMessageBox;
-+(id)GameWindowWithImage:(NSString *)imageName text:(NSString*)text andPosition:(CGPoint)position
++(id)GameWindowWithImage:(NSString *)imageName text:(NSString*)text number:(NSString*)number andPosition:(CGPoint)position
 {
-    return [[self alloc] initWithImage:imageName text:text  andPosition:position];
+    return [[self alloc] initWithImage:imageName text:text number:number  andPosition:position];
 }
 
--(id)initWithImage:(NSString *)imageName  text:(NSString*)text  andPosition:(CGPoint)position
+-(id)initWithImage:(NSString *)imageName  text:(NSString*)text number:(NSString*)number andPosition:(CGPoint)position
 {
     if ((self=[super init])) {
         
@@ -27,12 +27,12 @@
          [_box setPosition:position];
         _text=[CCLabelTTF labelWithString:text fontName:@"Marker Felt" fontSize: HD_TEXT(16)];
         [_text setColor: ccBLACK];
-        _number=[CCLabelTTF labelWithString:@"+5" fontName:@"Marker Felt" fontSize: HD_TEXT(28)];
+        _number=[CCLabelTTF labelWithString:number fontName:@"Marker Felt" fontSize: HD_TEXT(28)];
         [_number setColor: ccBLACK];
         [_text setPosition:ccp(position.x+0.45*EDGE_LENGTH,position.y+0.25*EDGE_LENGTH)];
         [_number setPosition:ccp(position.x+0.45*EDGE_LENGTH,position.y-0.25*EDGE_LENGTH)];
         _Icon=[CCSprite spriteWithSpriteFrameName:imageName];
-        [_Icon setPosition:ccp(position.x-0.9*EDGE_LENGTH,position.y)];
+        [_Icon setPosition:ccp(position.x-0.7*EDGE_LENGTH,position.y)];
 
        
         
@@ -52,6 +52,14 @@
     [_number setOpacity:opacity];
     [_Icon setOpacity:opacity];
 }
+
+-(void)setImage:(NSString *)imageName text:(NSString*)text number:(NSString*)number
+{
+    [_Icon setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:imageName]];
+    [_text setString:text];
+    [_number setString:number];
+}
+
 
 - (void)update:(ccTime)dt
 {

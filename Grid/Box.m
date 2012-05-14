@@ -19,7 +19,7 @@
 -(id)init
 {
     if ((self=[super init])) {
-        _status=EMPTY_BOX;
+        _status=UNAVAILABLE;
         
         
     }

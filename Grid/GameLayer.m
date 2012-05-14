@@ -22,11 +22,14 @@
 #import "Cannon.h"
 #import "BoxIcon.h"
 #import "Ship.h"
+#import "TreasureMap.h"
 #import "ChooseLevelMenu.h"
+#import "GameSettings.h"
 #include <stdlib.h>
 #define WAIT_TO_FADE_OUT_TREASUREBOX 2.0
 #define WAIT_TO_FADE_OUT_CANNON 1.0
 #define WAIT_TO_FADE_OUT_SHIP 2.0
+#define WAIT_TO_FADE_OUT_MAP 1.0;
 
 #pragma mark - HelloWorldLayer
 
@@ -37,6 +40,8 @@
 @synthesize gridModel=_gridModel;
 @synthesize gridView=_gridView;
 @synthesize touchEnable=_touchEnable;
+@synthesize currentSession;
+@synthesize picker=_picker;
 // Helper class method that creates a Scene with the HelloWorldLayer as the only child.
 +(CCScene *) scene
 {
@@ -67,6 +72,7 @@
 		
 		[[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"spriteSheet.plist" ];
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"background.plist" ];
+     
         // [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"animation.plist"];
         
         _gridModel=[GridModel GridWithNumOfLines:NUM_OF_LINES NumberOfRows:NUM_OF_ROWS];
@@ -77,22 +83,39 @@
             
         
         [self addChild:_gridView];
-        
+        /*
         [self loadTreasureBoxAtRow:1 ItemIndex:3];
         [self loadTreasureBoxAtRow:3 ItemIndex:3];
         [self loadCannonAtRow:2 ItemIndex:4 Flip:NO];
         [self loadCannonAtRow:2 ItemIndex:2 Flip:YES];
+        [self loadTreasureMapAtRow:0 ItemIndex:1 Part:TREASUREMAP_PART_ONE];
+        [self loadTreasureMapAtRow:4 ItemIndex:5 Part:TREASUREMAP_PART_TWO];
         [self loadShipAtRow:0 ItemIndex:5 Flip:NO];
         [self loadShipAtRow:4 ItemIndex:1 Flip:YES];
+         */
         [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
         _changeColor=YES;
         _isBlueColor=NO;
         _touchEnable=YES;
-        _twoPlayerOnOneDevice=NO;
+        
         _CPUTurn=NO;
         _isNewGame=YES;
+       
+        _gameMode=[[GameSettings shared] getGlobalForKey:@"gameMode"];
         
+        if([_gameMode isEqualToString:@"solo"])
+        {
+        _twoPlayerOnOneDevice=NO;
+        }
         
+    else if ([_gameMode isEqualToString:@"oneDevice"])
+              {
+                  _twoPlayerOnOneDevice=YES;
+              }
+        else if([_gameMode isEqualToString:@"blueTooth"])
+        {
+            _twoPlayerOnOneDevice=NO;
+        }
         if(!_twoPlayerOnOneDevice)
         {
             _brain=[CPUBrain instance];
@@ -163,6 +186,12 @@
  
 }
 */
+
+
+
+#pragma mark Load power-ups
+
+
 - (void)loadTreasureBoxRandom
 {   /*
     _gridView.treasureBox1=[TreasureBox treasureBoxAtPosition:[self generatePositionForTreasureBox]];
@@ -193,12 +222,7 @@
 
 
 - (void)loadTreasureBoxAtRow:(int)rowIndex ItemIndex:(int)edgeIndex
-{   /*
-     _gridView.treasureBox1=[TreasureBox treasureBoxAtPosition:[self generatePositionForTreasureBox]];
-     _gridView.treasureBox1.parentGridView=_gridView;
-     [_gridView addChild:_gridView.treasureBox1];
-     [_gridView.powerUpsArray addObject:_gridView.treasureBox1];
-     */
+{  
     TreasureBox *box=[TreasureBox treasureBoxAtPosition:[self generatePositionForItem:TREASUREBOX AtRow:rowIndex ItemIndex:edgeIndex]];
     box.parentGridView=_gridView;
     [_gridView addChild:box];
@@ -207,13 +231,7 @@
 }
 -(void)loadCannonAtRow:(int)rowIndex ItemIndex:(int)edgeIndex Flip:(BOOL)flipOrNot
 {
-    /*
-     _gridView.cannon1=[Cannon cannonAtPosition:[self generatePositionForCannon] Flip:NO];
-     _gridView.cannon1.parentGridView=_gridView;
-     // [_gridView.cannon1.cannonGraphic setFlipX:YES];
-     //[_gridView.cannon1.cannonBallGraphic setFlipX:YES];
-     [_gridView addChild:_gridView.cannon1];
-     */
+   
     Cannon *cannon=[Cannon cannonAtPosition:[self generatePositionForItem:CANNON AtRow:rowIndex ItemIndex:edgeIndex] Flip:flipOrNot];
     cannon.parentGridView=_gridView;
     [_gridView addChild:cannon];
@@ -222,33 +240,51 @@
 
 -(void)loadShipAtRow:(int)rowIndex ItemIndex:(int)edgeIndex Flip:(BOOL)flipOrNot
 {
-    /*
-     _gridView.cannon1=[Cannon cannonAtPosition:[self generatePositionForCannon] Flip:NO];
-     _gridView.cannon1.parentGridView=_gridView;
-     // [_gridView.cannon1.cannonGraphic setFlipX:YES];
-     //[_gridView.cannon1.cannonBallGraphic setFlipX:YES];
-     [_gridView addChild:_gridView.cannon1];
-     */
-   // Ship *ship=[Ship cannonAtPosition:[self generatePositionForItem:CANNON AtRow:rowIndex ItemIndex:edgeIndex] Flip:flipOrNot];
+    
     Ship *ship=[Ship shipAtPosition:[self generatePositionForItem:SHIP AtRow:rowIndex ItemIndex:edgeIndex ] Flip:flipOrNot];
     ship.parentGridView=_gridView;
     [_gridView addChild:ship];
     [_gridView.shipArray addObject:ship];
 }
+-(void)loadTreasureMapAtRow:(int)rowIndex ItemIndex:(int)edgeIndex Part:(TreasureMapNumber)number
+{
+    
+    TreasureMap *map=[TreasureMap treasureMapAtPosition:[self generatePositionForItem:MAP AtRow:rowIndex ItemIndex:edgeIndex] andType:number ];
+    map.parentGridView=_gridView;
+    [_gridView addChild:map];
+    [_gridView.mapArray addObject:map];
+}
 
 
-
+#pragma mark Handle touch 
 -(BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event{
     CGPoint touchOrigin = [touch locationInView:[touch view]];
 	CGPoint touchOrigin2 = [[CCDirector sharedDirector] convertToGL:touchOrigin];
-    if(touchOrigin2.x>ADJUST_X(15) && touchOrigin2.x<ADJUST_X(90) && touchOrigin2.y>ADJUST_Y(445) && touchOrigin2.y<ADJUST_Y(475))
+    if(touchOrigin2.x>ADJUST_X(15) && touchOrigin2.x<ADJUST_X(90) && touchOrigin2.y>ADJUST_Y(440) && touchOrigin2.y<ADJUST_Y(470))
     {
         [self newButtonPressed];
     }
-   else if (touchOrigin2.x>ADJUST_X(235) && touchOrigin2.x<ADJUST_X(310) && touchOrigin2.y>ADJUST_Y(445) && touchOrigin2.y<ADJUST_Y(475))
+   else if (touchOrigin2.x>ADJUST_X(110) && touchOrigin2.x<ADJUST_X(170) && touchOrigin2.y>ADJUST_Y(440) && touchOrigin2.y<ADJUST_Y(470))
    {
        [self menuButtonPressed];
    }
+    else if (touchOrigin2.x>ADJUST_X(260) && touchOrigin2.x<ADJUST_X(320) && touchOrigin2.y>ADJUST_Y(425) && touchOrigin2.y<ADJUST_Y(480))
+    {
+        if(_gridView.isSoundOn)
+        {
+            [_gridView.soundButton setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Button_SoundOff.png"]];
+            _gridView.isSoundOn=NO;
+            [[GameSettings shared] setGlobal:@"NO" ForKey:@"isSoundOn"];
+            
+        }
+        else
+        {
+            [_gridView.soundButton setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Button_SoundOn.png"]];
+            _gridView.isSoundOn=YES;
+            [[GameSettings shared] setGlobal:@"YES" ForKey:@"isSoundOn"];
+        }
+    }
+
     if(_touchEnable)
     {
   
@@ -668,6 +704,7 @@
 -(void)menuButtonPressed
 {
     //NSLog(@"menuButton Pressed");
+    
     CCAnimation *buttonAnimation=[CCAnimation animation];
     [buttonAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Button_Menu.png"]];
     [buttonAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Button_Menu_Pressed.png" ]];
@@ -677,7 +714,18 @@
     [_gridView.menuButton runAction:[[[CCAnimate alloc] initWithAnimation:buttonAnimation] autorelease]];
     _drawPosition=ccp(0,0);
     CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
-    [director_ replaceScene: [ChooseLevelMenu scene]]; 
+    [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[ChooseLevelMenu scene]]]; 
+     
+    
+    
+    
+    /*
+    _picker = [[GKPeerPickerController alloc] init];
+    _picker.delegate = self;
+    _picker.connectionTypesMask = GKPeerPickerConnectionTypeNearby;
+    
+    [_picker show];
+     */
 }
 
 
@@ -709,7 +757,7 @@
         int blockBoxIndex=(pointX-X_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
         
       Box *box=  [_gridModel getBoxAtLineIndex:blockLineIndex BoxIndex:blockBoxIndex];
-        if(box.status==EMPTY_BOX||box.status==TREASUREBOX||box.status==CANNON||box.status==SHIP)
+        if(box.status==EMPTY_BOX||box.status==TREASUREBOX||box.status==CANNON||box.status==SHIP||box.status==MAP)
         {
         if(_isBlueColor)
         {
@@ -746,6 +794,11 @@
                 box.status=BLUE;
                 [self blueShipMoving:point];
             }
+            else if (box.status==MAP){
+                box.status=BLUE;
+                [self blueFoundTreasureMap:point];
+            }
+            
                 
             else
             {
@@ -790,6 +843,10 @@
                 box.status=ORANGE;
                 [self orangeShipMoving:point];
             }
+            else if (box.status==MAP){
+                box.status=ORANGE;
+                [self orangeFoundTreasureMap:point];
+            }
             else
             {
                  box.status=ORANGE;
@@ -817,7 +874,7 @@
         int blockBoxIndex=(pointX-X_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
         
         Box *box=  [_gridModel getBoxAtLineIndex:blockLineIndex BoxIndex:blockBoxIndex];
-        if(box.status==EMPTY_BOX||box.status==TREASUREBOX||box.status==CANNON||box.status==SHIP)
+        if(box.status==EMPTY_BOX||box.status==TREASUREBOX||box.status==CANNON||box.status==SHIP||box.status==MAP)
         {
         if(_isBlueColor)
         {
@@ -853,7 +910,10 @@
                 box.status=BLUE;
                 [self blueShipMoving:point];
             }
-
+            else if (box.status==MAP){
+                box.status=BLUE;
+                [self blueFoundTreasureMap:point];
+            }
             
             else
             {
@@ -904,6 +964,10 @@
             else if (box.status==SHIP){
                 box.status=ORANGE;
                 [self orangeShipMoving:point];
+            }
+            else if (box.status==MAP){
+                box.status=ORANGE;
+                [self orangeFoundTreasureMap:point];
             }
             else
             {
@@ -959,7 +1023,7 @@
         int blockBoxIndex=(pointX-X_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
         
         Box *box=  [_gridModel getBoxAtLineIndex:blockLineIndex BoxIndex:blockBoxIndex];
-        if(box.status==EMPTY_BOX||box.status==TREASUREBOX||box.status==CANNON||box.status==SHIP)
+        if(box.status==EMPTY_BOX||box.status==TREASUREBOX||box.status==CANNON||box.status==SHIP||box.status==MAP)
         {
         if(_isBlueColor)
         {
@@ -997,7 +1061,10 @@
                 box.status=BLUE;
                 [self blueShipMoving:point];
             }
-
+            else if (box.status==MAP){
+                box.status=BLUE;
+                [self blueFoundTreasureMap:point];
+            }
             else {
                 box.status=BLUE;
 
@@ -1040,6 +1107,10 @@
                 box.status=ORANGE;
                 [self orangeShipMoving:point];
             }
+            else if (box.status==MAP){
+                box.status=ORANGE;
+                [self orangeFoundTreasureMap:point];
+            }
             else
             {
                  box.status=ORANGE;
@@ -1069,7 +1140,7 @@
         
         Box *box=  [_gridModel getBoxAtLineIndex:blockLineIndex BoxIndex:blockBoxIndex];
         
-        if(box.status==EMPTY_BOX||box.status==TREASUREBOX||box.status==CANNON||box.status==SHIP)
+        if(box.status==EMPTY_BOX||box.status==TREASUREBOX||box.status==CANNON||box.status==SHIP||box.status==MAP)
         {
         if(_isBlueColor)
         {
@@ -1103,7 +1174,10 @@
                 box.status=BLUE;
                 [self blueShipMoving:point];
             }
-
+            else if (box.status==MAP){
+                box.status=BLUE;
+                [self blueFoundTreasureMap:point];
+            }
             else
             {
                  box.status=BLUE;
@@ -1153,7 +1227,10 @@
                 box.status=ORANGE;
                 [self orangeShipMoving:point];
             }
-
+            else if (box.status==MAP){
+                box.status=ORANGE;
+                [self orangeFoundTreasureMap:point];
+            }
             else {
                   box.status=ORANGE;
             
@@ -1183,18 +1260,49 @@
 {
     BOOL hasWinner=NO;
     int i= [_gridView.treasureBoxArray count];
-    int totalScore=i*4+25-_gridModel.damageCount;
-    NSLog(@"total score is%d",totalScore);
+    int j=[_gridView.mapArray count];
+    int totalScore=i*2+25-_gridModel.damageCount;
+    if(_gridModel.blueMapCount==2||_gridModel.orangeMapCount==2)
+    {
+     totalScore=i*2+25-_gridModel.damageCount+(j*5)/2;
+    }
+       NSLog(@"total score is%d",totalScore);
     if((_gridModel.blueScore+_gridModel.orangeScore)==totalScore)
     {
         hasWinner=YES;
         if(_gridModel.blueScore>_gridModel.orangeScore)
         {
-            [_gridView.lable setString:[NSString stringWithFormat:@"You Won!"]];
+            if([_gameMode isEqualToString:@"solo"])
+            {
+                [_gridView.lable setString:[NSString stringWithFormat:@"You Won!"]];
+            }
+            
+            else if ([_gameMode isEqualToString:@"oneDevice"])
+            {
+                [_gridView.lable setString:[NSString stringWithFormat:@"Player 1 Won!"]];
+            }
+            else if([_gameMode isEqualToString:@"blueTooth"])
+            {
+                [_gridView.lable setString:[NSString stringWithFormat:@"You Won!"]];
+            }
+
+           
             
         }
         else {
-            [_gridView.lable setString:[NSString stringWithFormat:@"CPU Won!"]];
+            if([_gameMode isEqualToString:@"solo"])
+            {
+                [_gridView.lable setString:[NSString stringWithFormat:@"CPU Won!"]];
+            }
+            
+            else if ([_gameMode isEqualToString:@"oneDevice"])
+            {
+                [_gridView.lable setString:[NSString stringWithFormat:@"Player 2 Won!"]];
+            }
+            else if([_gameMode isEqualToString:@"blueTooth"])
+            {
+                [_gridView.lable setString:[NSString stringWithFormat:@"CPU Won!"]];
+            }
         }
         //[self newGame];
         _touchEnable=YES;
@@ -1203,7 +1311,21 @@
     }
     return hasWinner;
 }
-
+- (void)checkTreasureMapWinner
+{
+    if(_gridModel.blueMapCount==2)
+    {
+        [_gridView showMessageBoxForTreasureMap];
+        _gridModel.blueScore=_gridModel.blueScore+5;
+        [_gridView.blueScoreBox changeScore:5];
+    }
+    else if(_gridModel.orangeMapCount==2)
+    {
+        [_gridView showMessageBoxForTreasureMap];
+        _gridModel.orangeScore=_gridModel.orangeScore+5;
+        [_gridView.orangeScoreBox changeScore:5];
+    }
+}
 -(void)newGame
 {
     /*
@@ -1272,34 +1394,82 @@
     _changeColor=YES;
     _isBlueColor=NO;
     _touchEnable=YES;
+    /*
     [self loadTreasureBoxAtRow:1 ItemIndex:3];
     [self loadTreasureBoxAtRow:3 ItemIndex:3];
     [self loadCannonAtRow:2 ItemIndex:4 Flip:NO];
     [self loadCannonAtRow:2 ItemIndex:2 Flip:YES];
+    [self loadTreasureMapAtRow:0 ItemIndex:1 Part:TREASUREMAP_PART_ONE];
+    [self loadTreasureMapAtRow:4 ItemIndex:5 Part:TREASUREMAP_PART_TWO];
      [self loadShipAtRow:0 ItemIndex:5 Flip:NO];
      [self loadShipAtRow:4 ItemIndex:1 Flip:YES];
+  */
    }
 
 - (void)showPlayerTurnInfo
 {
     if(_changeColor&&_isBlueColor)
     {
+        if([_gameMode isEqualToString:@"solo"])
+        {
+            [_gridView.lable setString:[NSString stringWithFormat:@"CPU's Turn"]];
+        }
         
-        [_gridView.lable setString:[NSString stringWithFormat:@"CPU's Turn"]];
-        
-    }
+        else if ([_gameMode isEqualToString:@"oneDevice"])
+        {
+            [_gridView.lable setString:[NSString stringWithFormat:@"Player 2's Turn"]];
+        }
+        else if([_gameMode isEqualToString:@"blueTooth"])
+        {
+            [_gridView.lable setString:[NSString stringWithFormat:@"CPU's Turn"]];
+        }    }
     else if (_changeColor &&!_isBlueColor)
     {
-        [_gridView.lable setString:[NSString stringWithFormat:@"Your Turn"]];
+        if([_gameMode isEqualToString:@"solo"])
+        {
+            [_gridView.lable setString:[NSString stringWithFormat:@"Your Turn"]];
+        }
+        
+        else if ([_gameMode isEqualToString:@"oneDevice"])
+        {
+            [_gridView.lable setString:[NSString stringWithFormat:@"Player 1's Turn"]];
+        }
+        else if([_gameMode isEqualToString:@"blueTooth"])
+        {
+            [_gridView.lable setString:[NSString stringWithFormat:@"Your Turn"]];
+        } 
     }
     
     else if(!_changeColor && _isBlueColor){
-        [_gridView.lable setString:[NSString stringWithFormat:@"Your Turn"]];
-        [self checkWinner];
+        if([_gameMode isEqualToString:@"solo"])
+        {
+            [_gridView.lable setString:[NSString stringWithFormat:@"Your Turn"]];
+        }
+        
+        else if ([_gameMode isEqualToString:@"oneDevice"])
+        {
+            [_gridView.lable setString:[NSString stringWithFormat:@"Player 1's Turn"]];
+        }
+        else if([_gameMode isEqualToString:@"blueTooth"])
+        {
+            [_gridView.lable setString:[NSString stringWithFormat:@"Your Turn"]];
+        }         [self checkWinner];
     }
     else if (!_changeColor &&!_isBlueColor)
     {
-        [_gridView.lable setString:[NSString stringWithFormat:@"CPU's Turn"]];
+        if([_gameMode isEqualToString:@"solo"])
+        {
+            [_gridView.lable setString:[NSString stringWithFormat:@"CPU's Turn"]];
+        }
+        
+        else if ([_gameMode isEqualToString:@"oneDevice"])
+        {
+            [_gridView.lable setString:[NSString stringWithFormat:@"Player 2's Turn"]];
+        }
+        else if([_gameMode isEqualToString:@"blueTooth"])
+        {
+            [_gridView.lable setString:[NSString stringWithFormat:@"CPU's Turn"]];
+        } 
         [self checkWinner];
     }
     
@@ -1351,10 +1521,7 @@
 - (CGPoint)generatePositionForItem:(BoxInfo)boxInfor AtRow:(int)rowIndex ItemIndex:(int)edgeIndex
 {
     
-    //int rowIndex =( arc4random() % 4) + 1;
-    //int edgeIndex = (arc4random() % 5) + 1;                      
-    //int rowIndex=2;
-    //int edgeIndex=3;
+    
     CGFloat pointY= edgeIndex * EDGE_LENGTH + Y_MARGIN-0.5*EDGE_LENGTH;
     CGFloat pointX=0.5*EDGE_LENGTH+rowIndex*EDGE_LENGTH+X_MARGIN;
     int blockLineIndex=(pointY-Y_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
@@ -1377,26 +1544,7 @@
     //int edgeIndex=5;
     CGFloat pointY= edgeIndex * EDGE_LENGTH + Y_MARGIN-0.5*EDGE_LENGTH;
     CGFloat pointX=0.5*EDGE_LENGTH+rowIndex*EDGE_LENGTH+X_MARGIN;
-    /*
-    while(pointX==_gridView.treasureBox1.boxPosition.x&&pointX==_gridView.treasureBox1.boxPosition.x)
-    {
-        int rowIndex =( arc4random() % 4) + 1;
-        int edgeIndex = (arc4random() % 5) + 1;                      
-       
-       pointY= edgeIndex * EDGE_LENGTH + Y_MARGIN-0.5*EDGE_LENGTH;
-       pointX=0.5*EDGE_LENGTH+rowIndex*EDGE_LENGTH+X_MARGIN;
-         
-    }
-    int blockLineIndex=(pointY-Y_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
-    int blockBoxIndex=(pointX-X_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
-    
-    Box *box=  [_gridModel getBoxAtLineIndex:blockLineIndex BoxIndex:blockBoxIndex];
-    box.status=CANNON;
 
-   CGPoint point=ccp(pointX,pointY);
-    
-    return point;
-     */
     int blockLineIndex=(pointY-Y_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
     int blockBoxIndex=(pointX-X_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
     
@@ -1473,18 +1621,9 @@
     box.waitToPlayTreasureBoxAnimation=0;
     [box playOpenAnimation];
     box.waitToFadeOutTreasureBoxBlue=WAIT_TO_FADE_OUT_TREASUREBOX;
-    
-    
-    //_gridView.waitToPlayTreasureBoxAnimation=0;
-    
-    /*
-    _gridView.treasureBox1.waitToPlayTreasureBoxAnimation=0;
-    [_gridView.treasureBox1 playOpenAnimation];
-   // _gridView.waitToFadeOutTreasureBoxBlue=WAIT_TO_FADE_OUT_TREASUREBOX;
-     _gridView.treasureBox1.waitToFadeOutTreasureBoxBlue=WAIT_TO_FADE_OUT_TREASUREBOX;
-     */
-    _gridModel.blueScore=_gridModel.blueScore+5;
-    [_gridView.blueScoreBox changeScore:5];
+
+    _gridModel.blueScore=_gridModel.blueScore+3;
+    [_gridView.blueScoreBox changeScore:3];
     [_gridView showMessageBoxForTreasureBox];
 }
 
@@ -1496,15 +1635,9 @@
     [box playOpenAnimation];
     box.waitToFadeOutTreasureBoxOrange=WAIT_TO_FADE_OUT_TREASUREBOX;
 
-    
-    //_gridView.waitToPlayTreasureBoxAnimation=0;
-    /*
-    _gridView.treasureBox1.waitToPlayTreasureBoxAnimation=0;
-    [_gridView.treasureBox1 playOpenAnimation];
-    _gridView.treasureBox1.waitToFadeOutTreasureBoxOrange=WAIT_TO_FADE_OUT_TREASUREBOX;
-    */
-    _gridModel.orangeScore=_gridModel.orangeScore+5;
-    [_gridView.orangeScoreBox changeScore:5];
+
+    _gridModel.orangeScore=_gridModel.orangeScore+3;
+    [_gridView.orangeScoreBox changeScore:3];
     [_gridView showMessageBoxForTreasureBox];
 }
 
@@ -1514,11 +1647,7 @@
     [cannon playCannonShootingAnimation];
    // [cannon playCannonMovingAnimation];
     cannon.waitToFadeOutCannonBlue=WAIT_TO_FADE_OUT_CANNON;
-    /*
-    [_gridView.cannon1 playCannonShootingAnimation];
-    [_gridView.cannon1 playCannonMovingAnimation];
-    _gridView.cannon1.waitToFadeOutCannonBlue=WAIT_TO_FADE_OUT_CANNON;
-     */
+
     _gridModel.blueScore=_gridModel.blueScore+1;
     [_gridView.blueScoreBox changeScore:1];
     [self cannonDamage:cannon.cannonPosition];
@@ -1532,16 +1661,42 @@
     [cannon playCannonShootingAnimation];
     //[cannon playCannonMovingAnimation];
     cannon.waitToFadeOutCannonOrange=WAIT_TO_FADE_OUT_CANNON;
-    /*
-    [_gridView.cannon1 playCannonShootingAnimation];
-    [_gridView.cannon1 playCannonMovingAnimation];
-     _gridView.cannon1.waitToFadeOutCannonOrange=WAIT_TO_FADE_OUT_CANNON;
-     */
+
     _gridModel.orangeScore=_gridModel.orangeScore+1;
     [_gridView.orangeScoreBox changeScore:1];
     [self cannonDamage:cannon.cannonPosition];
 
 }
+
+
+-(void)blueFoundTreasureMap:(CGPoint)point
+{
+    TreasureMap *map=[_gridView getMapAtPosition:point];
+    map.waitToFadeOutTreasureMapBlue=WAIT_TO_FADE_OUT_MAP;
+    _gridModel.blueScore=_gridModel.blueScore+1;
+    _gridModel.blueMapCount++;
+    
+    [_gridView.blueScoreBox changeScore:1];
+    [self checkTreasureMapWinner];
+        
+    
+    
+}
+
+-(void)orangeFoundTreasureMap:(CGPoint)point
+{
+    TreasureMap *map=[_gridView getMapAtPosition:point];
+    map.waitToFadeOutTreasureMapOrange=WAIT_TO_FADE_OUT_MAP;
+    
+    _gridModel.orangeScore=_gridModel.orangeScore+1;
+    _gridModel.orangeMapCount++;
+    [_gridView.orangeScoreBox changeScore:1];
+    [self checkTreasureMapWinner];
+    
+}
+
+
+
 -(void)blueShipMoving:(CGPoint)point
 {
     Ship *ship=[_gridView getShipAtPosition:point];
@@ -1549,11 +1704,7 @@
     ship.waitToPlayShipAnimation=0;
     [ship playShipFastAnimation];
     ship.waitToFadeOutShipBlue=WAIT_TO_FADE_OUT_SHIP;
-    /*
-     [_gridView.cannon1 playCannonShootingAnimation];
-     [_gridView.cannon1 playCannonMovingAnimation];
-     _gridView.cannon1.waitToFadeOutCannonBlue=WAIT_TO_FADE_OUT_CANNON;
-     */
+  
     _gridModel.blueScore=_gridModel.blueScore+1;
     [_gridView.blueScoreBox changeScore:1];
     [self shipTakingOver:ship.shipPosition];
@@ -1569,11 +1720,7 @@
     ship.waitToPlayShipAnimation=0;
     [ship playShipFastAnimation];
     ship.waitToFadeOutShipOrange=WAIT_TO_FADE_OUT_SHIP;
-    /*
-     [_gridView.cannon1 playCannonShootingAnimation];
-     [_gridView.cannon1 playCannonMovingAnimation];
-     _gridView.cannon1.waitToFadeOutCannonBlue=WAIT_TO_FADE_OUT_CANNON;
-     */
+
     _gridModel.orangeScore=_gridModel.orangeScore+1;
     [_gridView.orangeScoreBox changeScore:1];
     [self shipTakingOver:ship.shipPosition];
@@ -1686,27 +1833,7 @@
             }
 
         }
-        /*
-        Box *boxAttacked= [_gridModel getBoxAtLineIndex:lineIndex BoxIndex:(boxIndex-1)];
-        if (boxAttacking.status==BLUE&&boxAttacked.status==ORANGE)
-        {
-            BoxIcon *box=[_gridView getBoxAtPosition: [_gridView getBoxPositionAt:LEFT From:point]];
-            [box playBreakAnimation:ORANGE_BOX];
-            _gridModel.orangeScore=_gridModel.orangeScore-1;
-            [_gridView.orangeScoreBox changeScore:-1];
-            _gridModel.damageCount++;
-            
-        }
-        
-        if(boxAttacking.status==ORANGE&&boxAttacked.status==BLUE)
-        {
-            BoxIcon *box=[_gridView getBoxAtPosition: [_gridView getBoxPositionAt:LEFT From:point]];
-            [box playBreakAnimation:BLUE_BOX];
-            _gridModel.blueScore=_gridModel.blueScore-1;
-            [_gridView.blueScoreBox changeScore:-1];
-            _gridModel.damageCount++;
-        }
-        */
+   
     }
     else
     {
@@ -1751,27 +1878,7 @@
             
         }
 
-        /*
-        Box *boxAttacked=[_gridModel getBoxAtLineIndex:lineIndex BoxIndex:(boxIndex+1)];
-        if (boxAttacking.status==BLUE&&boxAttacked.status==ORANGE)
-        {
-            BoxIcon *box=[_gridView getBoxAtPosition: [_gridView getBoxPositionAt:RIGHT From:point]];
-            [box playBreakAnimation:ORANGE_BOX];
-            _gridModel.orangeScore=_gridModel.orangeScore-1;
-            [_gridView.orangeScoreBox changeScore:-1];
-            _gridModel.damageCount++;
-            
-        }
-        
-        if(boxAttacking.status==ORANGE&&boxAttacked.status==BLUE)
-        {
-            BoxIcon *box=[_gridView getBoxAtPosition: [_gridView getBoxPositionAt:RIGHT From:point]];
-            [box playBreakAnimation:BLUE_BOX];
-            _gridModel.blueScore=_gridModel.blueScore-1;
-            [_gridView.blueScoreBox changeScore:-1];
-            _gridModel.damageCount++;
-        }
-         */
+     
         
     }
     
@@ -1787,6 +1894,10 @@
 	// cocos2d will automatically release all the children (Label)
 	
 	// don't forget to call "super dealloc"
+    [[CCSpriteFrameCache sharedSpriteFrameCache] removeSpriteFramesFromFile:@"spriteSheet.plist"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] removeSpriteFramesFromFile:@"background.plist"];
+    
+    
 	[super dealloc];
 }
 
@@ -1806,4 +1917,8 @@
 	AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
 	[[app navController] dismissModalViewControllerAnimated:YES];
 }
+
+
+
+
 @end

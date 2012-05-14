@@ -15,7 +15,11 @@
 #import "Ship.h"
 #import "TreasureBox.h"
 #import "Cannon.h"
+#import "TreasureMap.h"
 #import "GameLayer.h"
+#import "GameSettings.h"
+#import "Box.h"
+
 
 
 @implementation GridView
@@ -36,16 +40,13 @@
 @synthesize boxArray=_boxArray;
 @synthesize edgeArray=_edgeArray;
 @synthesize shipArray=_shipArray;
+@synthesize mapArray=_mapArray;
 @synthesize parentController=_parentController;
-//@synthesize waitToFadeOutTreasureBoxBlue=_waitToFadeOutTreasureBoxBlue;
-//@synthesize waitToFadeOutTreasureBoxOrange=_waitToFadeOutTreasureBoxOrange;
-//@synthesize waitToPlayTreasureBoxAnimation=_waitToPlayTreasureBoxAnimation;
-//@synthesize waitToFadeOutCannonBlue=_waitToFadeOutCannonBlue;
-//@synthesize waitToFadeOutCannonOrange=_waitToFadeOutCannonOrange;
 @synthesize lastEdge=_lastEdge;
 @synthesize dots=_dots;
-//@synthesize treasureBox1=_treasureBox1;
-//@synthesize cannon1=_cannon1;
+@synthesize soundButton=_soundButton;
+@synthesize isSoundOn=_isSoundOn;
+
 
 +(id)gridViewInController:(id)controller
 {
@@ -63,8 +64,11 @@
         _dashLines=[CCLayer node];        
         _dots=[CCLayer node];
         
-        [self loadDots];
-        [self loadDashLines];
+       // [self loadDots];
+       //[self loadDashLines];
+       
+        
+        
         
         _waitToShowBox=0;
        // _waitToPlayTreasureBoxAnimation=0.3;
@@ -73,7 +77,7 @@
         
         _lable=[CCLabelTTF labelWithString:@"Please Start" fontName:@"Marker Felt" fontSize: HD_TEXT(24)];
         [_lable setColor:ccBLACK];
-        _lable.position=ADJUST_CCP(ccp(160,420)) ;
+        _lable.position=ADJUST_CCP(ccp(160,415)) ;
         
         _edgeLayer=[CCLayer node];
         _blockLayer=[CCLayer node];
@@ -84,26 +88,61 @@
         _theNewGameButton=[CCSprite spriteWithSpriteFrameName:@"Button_NewGame.png"];
         _menuButton=[CCSprite spriteWithSpriteFrameName:@"Button_Menu.png"];
         
-        [_theNewGameButton setPosition:ADJUST_CCP(ccp(50,460))];
-        [_menuButton setPosition:ADJUST_CCP(ccp(270,460))];
-        _window=[GameWindow GameWindowWithImage:@"Graphic_TBox_1.png" text:@"Treasure Points" andPosition:ADJUST_CCP(ccp(160,70))];
+        
+        _isSoundOn=YES;
+        NSString *soundSetting=[[GameSettings shared] getGlobalForKey:@"isSoundOn"];
+        if([soundSetting isEqualToString:@"NO"])
+        {
+            _isSoundOn=NO;
+        }
+        else 
+        {
+            _isSoundOn=YES;
+        }
+        if(_isSoundOn)
+        {
+            _soundButton=[CCSprite spriteWithSpriteFrameName:@"Button_SoundOn.png"];
+        }
+        else {
+            _soundButton=[CCSprite spriteWithSpriteFrameName:@"Button_SoundOff.png"];
+        }
+
+        [_soundButton setPosition:ADJUST_CCP(ccp(290,455))];
+        
+
+        
+        [_theNewGameButton setPosition:ADJUST_CCP(ccp(50,455))];
+        [_menuButton setPosition:ADJUST_CCP(ccp(140,455))];
+        _window=[GameWindow GameWindowWithImage:@"Graphic_TBox_1.png" text:@"Treasure Points" number:@"+5" andPosition:ADJUST_CCP(ccp(160,70))];
         [_window setOpacity:0];  
        
+       
+        //tileMap = [CCTMXTiledMap tiledMapWithTMXFile: [CCFileUtils fullPathFromRelativePath:@"DAL_Level1.tmx"]];
+        tileMap = [CCTMXTiledMap tiledMapWithTMXFile: @"DAL_Level6.tmx"];
         
-      //CCTMXTiledMap  *tileMap = [CCTMXTiledMap tiledMapWithTMXFile:@"story_hard_level3.tmx"];
+        _itemLayer = [tileMap layerNamed:@"Items"];
+        _itemLayer.visible = NO;
         
+        _lineRightLayer=[tileMap layerNamed:@"Right"];
+        _lineDownLayer=[tileMap layerNamed:@"Down"];
         
-        //[tileMap setPosition:ADJUST_CCP(ccp(160,240))];
+        [tileMap setPosition:ADJUST_CCP(ccp(1,93.5))];
        // _powerUpsArray=[NSMutableArray arrayWithObjects:_treasureBox1, nil];
 
+        
+        
+        
+        
         
         _treasureBoxArray=[[NSMutableArray alloc] init ];
         _cannonArray=[[NSMutableArray alloc] init];
         _boxArray=[[NSMutableArray alloc] init];
         _edgeArray=[[NSMutableArray alloc] init];
         _shipArray=[[NSMutableArray alloc] init];
+        _mapArray=[[NSMutableArray alloc] init];
+        
         [self addChild:_background];
-        //[self addChild:tileMap];
+        [self addChild:tileMap];
         [self addChild:_dashLines];
         [self addChild:_blockLayer];
         [self addChild:_edgeLayer];
@@ -113,28 +152,108 @@
         [self addChild:_orangeScoreBox];
         [self addChild:_menuButton];
         [self addChild:_theNewGameButton];
+        [self addChild:_soundButton];
          [self addChild:_window];
                
         [self loadEdgeIndicator];
+        [self loadPowerUpsAndsetupModel];
+        _lastEdge=[EdgeGraphic spriteWithSpriteFrameName:@"Graphic_Dot.png"];
+        [_lastEdge setPosition:ADJUST_CCP(ccp(0,0))];
+        [_lastEdge setVisible:NO];
+        [_dots addChild:_lastEdge];
     }
     return self;
 }
 
--(void)loadDots
+-(void)loadPowerUpsAndsetupModel
 {
     for(int positionX = X_MARGIN; positionX< X_BOUNDARY_RIGHT; positionX=positionX+EDGE_LENGTH )
     {
         for (int positionY= Y_MARGIN; positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
-            CCSprite *dot=[CCSprite spriteWithSpriteFrameName:@"Graphic_Dot.png"];
-            [dot setPosition:ccp(positionX,positionY)];
-            [_dots addChild:dot];
+            //CCSprite *dot=[CCSprite spriteWithSpriteFrameName:@"Graphic_Dot.png"];
+            //[dot setPosition:ccp(positionX,positionY)];
+            //[_dots addChild:dot];
+            CGPoint tileCoord = [self tileCoordForPosition:ccp(positionX,positionY)];
+            int tileGid = [_lineRightLayer tileGIDAt:tileCoord];
+            if (tileGid) {
+                NSDictionary *properties = [tileMap propertiesForGID:tileGid];
+                if (properties) {
+                    NSString *collision = [properties valueForKey:@"RowFilled"];
+                    if (collision && [collision compare:@"True"] == NSOrderedSame) {
+                        Edge *edge= [_parentController.gridModel getEdgeAtRowIndex:tileCoord.x EdgeIndex:(NUM_OF_LINES-tileCoord.y)];
+                        edge.isFilled=NO;
+                        NSLog(@"row edge Filled (%f,%f) position (%d,%d), tileGid:%d",tileCoord.x,tileCoord.y,positionX,positionY,tileGid);
+                    }
+                }
+            }
+            
+            int tileGid2 = [_lineDownLayer tileGIDAt:tileCoord];
+            if (tileGid2) {
+                NSDictionary *properties = [tileMap propertiesForGID:tileGid2];
+                if (properties) {
+                    NSString *collision = [properties valueForKey:@"LineFilled"];
+                    if (collision && [collision compare:@"True"] == NSOrderedSame) {
+                        Edge *edge=[_parentController.gridModel getEdgeAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) EdgeIndex:tileCoord.x];
+                        edge.isFilled=NO;
+                         NSLog(@"line edge Filled (%f,%f) position (%d,%d), tileGid:%d",tileCoord.x,tileCoord.y,positionX,positionY,tileGid);
+                        Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
+                        box.status=EMPTY_BOX;
+                    }
+                }
+            }
+            int tileGid3 = [_itemLayer tileGIDAt:tileCoord];
+            if (tileGid3) {
+                NSDictionary *properties = [tileMap propertiesForGID:tileGid3];
+                if (properties) {
+                    NSString *collision = [properties valueForKey:@"Item"];
+                    if (collision && [collision compare:@"TreasureBox"] == NSOrderedSame) {
+                        Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
+                        box.status=TREASUREBOX;
+                        [_parentController loadTreasureBoxAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
+                    }
+                    else if (collision && [collision compare:@"CannonLeft"] == NSOrderedSame) {
+                        Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
+                        box.status=CANNON;
+                        [_parentController loadCannonAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Flip:NO];
+                    }
+                    else if (collision && [collision compare:@"CannonRight"] == NSOrderedSame) {
+                        Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
+                        box.status=CANNON;
+                      [_parentController loadCannonAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Flip:YES];
+                    }
+                    else if (collision && [collision compare:@"ShipLeft"] == NSOrderedSame) {
+                        Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
+                        box.status=SHIP;
+                        [_parentController loadShipAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Flip:YES];
+
+                    }
+                    else if (collision && [collision compare:@"ShipRight"] == NSOrderedSame) {
+                        Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
+                        box.status=SHIP;
+                        [_parentController loadShipAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Flip:NO];
+                    }
+                    else if (collision && [collision compare:@"MapOne"] == NSOrderedSame) {
+                        Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
+                        box.status=MAP;
+                        [_parentController loadTreasureMapAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Part:TREASUREMAP_PART_ONE];
+
+                    }
+                    else if (collision && [collision compare:@"MapTwo"] == NSOrderedSame) {
+                        Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
+                        box.status=MAP;
+                        [_parentController loadTreasureMapAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Part:TREASUREMAP_PART_TWO];
+                    }
+                }
+            }
+
+
+            
+            
+            
         }
     }
     
-     _lastEdge=[EdgeGraphic spriteWithSpriteFrameName:@"Graphic_Dot.png"];
-    [_lastEdge setPosition:ADJUST_CCP(ccp(0,0))];
-    [_lastEdge setVisible:NO];
-     [_dots addChild:_lastEdge];
+   
      
 }
 
@@ -170,6 +289,18 @@
     
     
 }
+
+- (CGPoint)tileCoordForPosition:(CGPoint)position {
+   
+    // int x = (position.x-X_MARGIN) / tileMap.tileSize.width;
+    int x = (position.x-X_MARGIN) / HD_PIXELS(53);
+    //int y = ((tileMap.mapSize.height * tileMap.tileSize.height) - position.y) / tileMap.tileSize.height;
+    int y=(HD_PIXELS(385) - position.y) / HD_PIXELS(53);
+    return ccp(x, y);
+}
+
+
+
 - (id)getTreasureBoxAtPosition:(CGPoint)point
 {
     for(TreasureBox *obj in _treasureBoxArray)
@@ -214,6 +345,22 @@
     
 }
 
+
+- (id)getMapAtPosition:(CGPoint)point
+{
+    for(TreasureMap *obj in _mapArray)
+    {
+        if (obj.mapPosition.x==point.x && obj.mapPosition.y==point.y) 
+        {
+            return obj;
+        }
+        
+    }
+    NSLog(@"map not found!");
+    return nil;
+    
+}
+
 -(id)getBoxAtPosition:(CGPoint)point
 {
     for(BoxIcon *obj in _boxArray)
@@ -251,8 +398,15 @@
 
 - (void)showMessageBoxForTreasureBox
 {
-    
+    [_window setImage:@"Graphic_TBox_1.png" text:@"Treasure Box" number:@"+2"];
     _window.waitToFadeInTreasureBoxMessageBox=1.0;
+}
+
+- (void)showMessageBoxForTreasureMap
+{
+    [_window setImage:@"Graphic_TBox_Small.png" text:@"Treasure Map" number:@"+5"];
+    _window.waitToFadeInTreasureBoxMessageBox=1.0;
+
 }
 
 
@@ -352,6 +506,7 @@
     [_orangeScoreBox reset];
     [_blueScoreBox reset];
     //[_gridView removeChild:_gridView.treasureBox1 cleanup:YES];
+    [self loadPowerUpsAndsetupModel];
     for(TreasureBox *obj in _treasureBoxArray)
     {
         [self removeChild:obj cleanup:YES];
@@ -366,6 +521,10 @@
         [self removeChild:obj cleanup:YES];
     }
     for(BoxIcon *obj in _boxArray)
+    {
+        [self removeChild:obj cleanup:YES];
+    }
+    for(TreasureMap *obj in _mapArray)
     {
         [self removeChild:obj cleanup:YES];
     }
@@ -386,6 +545,7 @@
     [_boxArray removeAllObjects];
     [_edgeArray removeAllObjects];
     [_shipArray removeAllObjects];
+    [_mapArray removeAllObjects];
 }
 - (void)update:(ccTime)dt {
     /*
@@ -448,6 +608,10 @@
         [obj update:dt];
     }
     for (EdgeGraphic *obj in _edgeArray)
+    {
+        [obj update:dt];
+    }
+    for(TreasureMap *obj in _mapArray)
     {
         [obj update:dt];
     }
@@ -704,6 +868,7 @@
     [_boxArray release];
     [_edgeArray release];
     [_shipArray release];
+    [_mapArray release];
     [super dealloc];
     
 }

@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>frames</key>
+	<dict>
+		
+		<key>Button_Bluetooth.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{20, 189}, {489, 120}}</string>
+			<key>spriteOffset</key>
+			<string>{3, -80}</string>
+			<key>spriteSize</key>
+			<string>{489, 120}</string>
+			<key>spriteSourceSize</key>
+			<string>{523, 338}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{0, 796}, {489, 120}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Button_Bluetooth_Pressed.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{20, 189}, {489, 120}}</string>
+			<key>spriteOffset</key>
+			<string>{3, -80}</string>
+			<key>spriteSize</key>
+			<string>{489, 120}</string>
+			<key>spriteSourceSize</key>
+			<string>{523, 338}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{0, 674}, {489, 120}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Button_Facebook.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{13, 11}, {85, 85}}</string>
+			<key>spriteOffset</key>
+			<string>{1, 1}</string>
+			<key>spriteSize</key>
+			<string>{85, 85}</string>
+			<key>spriteSourceSize</key>
+			<string>{109, 109}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{491, 482}, {85, 85}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Button_GoBack.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{0, 0}, {89, 89}}</string>
+			<key>spriteOffset</key>
+			<string>{0, -0}</string>
+			<key>spriteSize</key>
+			<string>{89, 89}</string>
+			<key>spriteSourceSize</key>
+			<string>{89, 89}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{491, 122}, {89, 89}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Button_OneDevice.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{20, 21}, {489, 120}}</string>
+			<key>spriteOffset</key>
+			<string>{3, 88}</string>
+			<key>spriteSize</key>
+			<string>{489, 120}</string>
+			<key>spriteSourceSize</key>
+			<string>{523, 338}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{0, 552}, {489, 120}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Button_OneDevice_Pressed.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{20, 21}, {489, 120}}</string>
+			<key>spriteOffset</key>
+			<string>{3, 88}</string>
+			<key>spriteSize</key>
+			<string>{489, 120}</string>
+			<key>spriteSourceSize</key>
+			<string>{523, 338}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{491, 0}, {489, 120}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Button_SoloMode.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{20, 21}, {489, 136}}</string>
+			<key>spriteOffset</key>
+			<string>{3, 80}</string>
+			<key>spriteSize</key>
+			<string>{489, 136}</string>
+			<key>spriteSourceSize</key>
+			<string>{523, 338}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{0, 138}, {489, 136}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Button_SoloMode_Pressed.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{20, 21}, {489, 136}}</string>
+			<key>spriteOffset</key>
+			<string>{3, 80}</string>
+			<key>spriteSize</key>
+			<string>{489, 136}</string>
+			<key>spriteSourceSize</key>
+			<string>{523, 338}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{0, 414}, {489, 136}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Button_SoundOff.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{0, 0}, {89, 89}}</string>
+			<key>spriteOffset</key>
+			<string>{0, -0}</string>
+			<key>spriteSize</key>
+			<string>{89, 89}</string>
+			<key>spriteSourceSize</key>
+			<string>{89, 89}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{491, 304}, {89, 89}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Button_SoundOn.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{0, 0}, {89, 89}}</string>
+			<key>spriteOffset</key>
+			<string>{0, -0}</string>
+			<key>spriteSize</key>
+			<string>{89, 89}</string>
+			<key>spriteSourceSize</key>
+			<string>{89, 89}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{491, 213}, {89, 89}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Button_Twitter.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{13, 11}, {85, 85}}</string>
+			<key>spriteOffset</key>
+			<string>{1, 1}</string>
+			<key>spriteSize</key>
+			<string>{85, 85}</string>
+			<key>spriteSourceSize</key>
+			<string>{109, 109}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{491, 395}, {85, 85}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Button_TwoPlayers.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{20, 189}, {489, 136}}</string>
+			<key>spriteOffset</key>
+			<string>{3, -88}</string>
+			<key>spriteSize</key>
+			<string>{489, 136}</string>
+			<key>spriteSourceSize</key>
+			<string>{523, 338}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{0, 276}, {489, 136}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Button_TwoPlayers_Pressed.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{20, 189}, {489, 136}}</string>
+			<key>spriteOffset</key>
+			<string>{3, -88}</string>
+			<key>spriteSize</key>
+			<string>{489, 136}</string>
+			<key>spriteSourceSize</key>
+			<string>{523, 338}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{0, 0}, {489, 136}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+	</dict>
+	<key>metadata</key>
+	<dict>
+		<key>version</key>
+		<string>1.5.1</string>
+		<key>format</key>
+		<integer>3</integer>
+		<key>size</key>
+		<string>{1024, 1024}</string>
+		<key>name</key>
+		<string>MainMenuSprites2</string>
+		<key>premultipliedAlpha</key>
+		<false/>
+		<key>target</key>
+		<dict>
+			<key>name</key>
+			<string>-hd</string>
+			<key>textureFileName</key>
+			<string>-hd</string>
+			<key>textureFileExtension</key>
+			<string>.png</string>
+			<key>coordinatesFileName</key>
+			<string>-hd</string>
+			<key>coordinatesFileExtension</key>
+			<string>.plist</string>
+			<key>premultipliedAlpha</key>
+			<false/>
+		</dict>
+	</dict>
+</dict>
+</plist>

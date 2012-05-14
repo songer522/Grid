@@ -20,7 +20,8 @@
 }
 @property float waitToFadeInTreasureBoxMessageBox;
 @property float waitToFadeOutTreasureBoxMessageBox;
-+(id)GameWindowWithImage:(NSString *)imageName text:(NSString*)text andPosition:(CGPoint)position;
++(id)GameWindowWithImage:(NSString *)imageName text:(NSString*)text number:(NSString*)number andPosition:(CGPoint)position;
+-(void)setImage:(NSString *)imageName text:(NSString*)text number:(NSString*)number;
 -(void)setOpacity:(GLubyte)opacity;
 - (void)update:(ccTime)dt;
 @end

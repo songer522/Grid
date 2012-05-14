@@ -141,7 +141,9 @@
 {
 	self.tilesets = [NSMutableArray arrayWithCapacity:4];
 	self.layers = [NSMutableArray arrayWithCapacity:4];
-	self.filename = tmxFileName;
+	
+    
+    self.filename = tmxFileName;
 	self.resources = resourcePath;
 	self.objectGroups = [NSMutableArray arrayWithCapacity:4];
 	self.properties = [NSMutableDictionary dictionaryWithCapacity:5];
@@ -167,7 +169,8 @@
 {
 	if( (self=[super init])) {
 		[self internalInit:tmxFile resourcePath:nil];
-		[self parseXMLFile:filename_];
+		
+        [self parseXMLFile:filename_];
 	}
 	return self;
 }

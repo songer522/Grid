@@ -10,7 +10,9 @@
 
 #import "AppDelegate.h"
 #import "GameLayer.h"
+#import "MainMenu.h"
 #import "ChooseLevelMenu.h"
+#import "GameSettings.h"
 
 @implementation AppController
 
@@ -82,7 +84,8 @@
 
 	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.
 	//[director_ pushScene: [GameLayer scene]]; 
-    [director_ pushScene: [ChooseLevelMenu scene]]; 
+   // [director_ pushScene: [ChooseLevelMenu scene]]; 
+    [director_ pushScene: [MainMenu scene]]; 
 
 	return YES;
 }
@@ -112,6 +115,8 @@
 {
 	if( [navController_ visibleViewController] == director_ )
 		[director_ stopAnimation];
+    [[GameSettings shared] saveToDisk];
+
 }
 
 -(void) applicationWillEnterForeground:(UIApplication*)application
@@ -123,6 +128,8 @@
 // application will be killed
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+    [[GameSettings shared] saveToDisk];
+
 	CC_DIRECTOR_END();
 }
 
@@ -130,6 +137,8 @@
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
 	[[CCDirector sharedDirector] purgeCachedData];
+    [[GameSettings shared] saveToDisk];
+
 }
 
 // next delta time will be zero

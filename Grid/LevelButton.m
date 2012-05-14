@@ -9,9 +9,11 @@
 #import "LevelButton.h"
 #import "GameSettings.h"
 #import "GameLayer.h"
+#import "DeviceSettings.h"
+
 
 @implementation LevelButton
-
+@synthesize buttonId=_buttonId;
 
 +(id)levelButtonWithId:(int)buttonId
 {
@@ -35,22 +37,29 @@
    NSString *unlockedValue = [[GameSettings shared] getGlobalForKey:[NSString stringWithFormat:@"level%d",_buttonId]];
     if ([unlockedValue isEqualToString:@"YES"])
     {
-                _buttonGraphic=[CCSprite spriteWithSpriteFrameName:@"Button_Level.png"];
-          [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
+                _buttonGraphic=[CCSprite spriteWithSpriteFrameName:@"Graphic_LevelBack.png"];
+        _levelNumber=[CCLabelTTF labelWithString:[NSString stringWithFormat:@"%d",_buttonId] fontName:@"Marker Felt" fontSize: HD_TEXT(38)];
+
+         // [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
+       [self addChild:_buttonGraphic];
+        [self addChild:_levelNumber];
     }
     else {
-        _buttonGraphic=[CCSprite spriteWithSpriteFrameName:@"Button_Locked.png"];
-        
+        _buttonGraphic=[CCSprite spriteWithSpriteFrameName:@"Graphic_LevelLocked.png"];
+         [self addChild:_buttonGraphic];
     }
+    
             
-    [self addChild:_buttonGraphic];
+   
         
   
 }
 -(void)setPosition:(CGPoint)position
 {
     [_buttonGraphic setPosition:position];
+    [_levelNumber setPosition:position];
     _buttonPosition=position;
+    
 }
 
 -(BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event{
@@ -81,6 +90,12 @@
 -(void)ButtonPressed
 {
     NSString *unlockedValue = [[GameSettings shared] getGlobalForKey:[NSString stringWithFormat:@"level%d",_buttonId]];
+    
+    NSString *levelNumber=[NSString stringWithFormat:@"%d",_buttonId];
+    [[GameSettings shared] setGlobal:levelNumber ForKey:@"selectedLevel"];
+    
+    
+    
     if ([unlockedValue isEqualToString:@"YES"])
     {
     CCAnimation *buttonAnimation=[CCAnimation animation];
@@ -91,7 +106,7 @@
     [_buttonGraphic runAction:[[[CCAnimate alloc] initWithAnimation:buttonAnimation] autorelease]];
         
         CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
-        [director_ replaceScene: [GameLayer scene]]; 
+        [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[GameLayer scene]]]; 
 
     }
     
@@ -99,7 +114,7 @@
 
 -(BOOL)checkTouchAtPosition:(CGPoint)point
 {
-    if(abs(point.x-_buttonPosition.x)<20&&abs(point.y-_buttonPosition.y)<20)
+    if(abs(point.x-_buttonPosition.x)<20&&abs(point.y-_buttonPosition.y)<20 )
     {
         return YES;
     }

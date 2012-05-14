@@ -52,7 +52,7 @@ static GameSettings *_shared = nil;
     
     [self saveToDisk];
 }
--(void)setGlobal:(NSString*)setting ForKey:(NSString*)key;
+-(void)setGlobal:(NSString*)setting ForKey:(NSString*)key
 {
     [_settings setValue:[NSString stringWithString:setting] forKey:key];
 }
@@ -67,6 +67,26 @@ static GameSettings *_shared = nil;
     
     return @"";
 }
+
+-(id)getObjForKey:(NSString*)key
+{
+    id returnVal = [_settings valueForKey:key];
+    
+    if (returnVal) {
+        return returnVal;        
+    }
+    
+    return @"";
+}
+
+
+-(void)saveObj:(id)obj ForKey:(NSString*)key
+{
+    [_settings setValue:obj forKey:key];
+}
+
+
+
 
 -(void)loadFromSettingsPlist
 {

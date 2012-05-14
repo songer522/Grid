@@ -9,13 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
 
+
 @interface LevelButton : CCLayer
 {
     CCSprite *_buttonGraphic;
     CGPoint _buttonPosition;
+    CCLabelTTF *_levelNumber;
     int _buttonId;
 }
-
+@property int buttonId;
 +(id)levelButtonWithId:(int)buttonId;
 
 -(id)initWithId:(int)buttonId;
@@ -24,5 +26,6 @@
 
 -(void)setPosition:(CGPoint)position;
 -(void)ButtonPressed;
+-(BOOL)checkTouchAtPosition:(CGPoint)point;
 
 @end

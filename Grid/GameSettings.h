@@ -22,4 +22,7 @@
 -(void)loadFromSettingsPlist;
 -(void)saveToDisk;
 -(void)eraseData;
+
+-(id)getObjForKey:(NSString*)key;
+-(void)saveObj:(id)obj ForKey:(NSString*)key;
 @end

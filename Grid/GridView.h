@@ -38,15 +38,19 @@ typedef enum {
     ScoreBox *_blueScoreBox;
     ScoreBox *_orangeScoreBox;
     CCSprite *_theNewGameButton;
+    CCSprite *_soundButton;
     CCSprite *_menuButton;
     float _waitToShowBox;
     float _waitToShowSecondBoxBlue;
     float _waitToShowSecondBoxOrange;
-   // CCSprite *tempSprite;
-   // CCSprite *tempSprite2;
+  
     EdgeGraphic *_lastEdge;
-    //TreasureBox *_treasureBox1;
-    //Cannon *_cannon1;
+    CCTMXTiledMap  *tileMap;
+    CCTMXLayer *_itemLayer;
+    CCTMXLayer *_lineRightLayer;
+    CCTMXLayer *_lineDownLayer;
+    
+    
     GameWindow *_window;
     float _secondBoxPositionX;
     float _secondBoxPositionY;
@@ -55,23 +59,17 @@ typedef enum {
     NSMutableArray *_boxArray;
     NSMutableArray *_edgeArray;
     NSMutableArray *_shipArray;
+    NSMutableArray *_mapArray;
     
     GameLayer *_parentController;
-   // float _waitToPlayTreasureBoxAnimation;
-    //float _waitToFadeOutTreasureBoxBlue;
-    //float _waitToFadeOutTreasureBoxOrange;
-    //float _waitToFadeOutCannonBlue;
-    //float _waitToFadeOutCannonOrange;
-    //float _waitToFadeInTreasureBoxMessageBox;
-    //float _waitToFadeOutTreasureBoxMessageBox;
+     BOOL _isSoundOn;
 }
 @property (retain, nonatomic)CCSprite *edgeIndicator;
 @property (retain, nonatomic)EdgeGraphic *lastEdge;
 @property (retain, nonatomic)CCSprite *theNewGameButton;
 @property (retain, nonatomic)CCSprite *menuButton;
 @property (retain, nonatomic)CCSprite *dots;
-//@property (retain,nonatomic)TreasureBox *treasureBox1;
-//@property (retain,nonatomic)Cannon *cannon1;
+@property (retain,nonatomic) CCSprite *soundButton;
 @property (retain, nonatomic)CCLayer *edgeLayer;
 @property (retain, nonatomic)CCLayer *blockLayer;
 @property (retain, nonatomic)CCLabelTTF *lable;
@@ -86,7 +84,8 @@ typedef enum {
 @property (nonatomic,retain)NSMutableArray *boxArray;
 @property (nonatomic,retain)NSMutableArray *edgeArray;
 @property (nonatomic,retain)NSMutableArray *shipArray;
-
+@property (nonatomic,retain)NSMutableArray *mapArray;
+@property BOOL isSoundOn;
 @property (nonatomic,assign)GameLayer *parentController;
 //@property float waitToFadeOutTreasureBoxBlue;
 //@property float waitToFadeOutTreasureBoxOrange;
@@ -105,11 +104,12 @@ typedef enum {
                   PositionY:(CGFloat)positionY
                   WithColor:(BoxColor)color;
 - (void)showMessageBoxForTreasureBox;
-
+- (void)showMessageBoxForTreasureMap;
 - (id)getTreasureBoxAtPosition:(CGPoint)point;
 - (id)getCannoAtPosition:(CGPoint)point;
 - (id)getBoxAtPosition:(CGPoint)point;
 - (id)getShipAtPosition:(CGPoint)point;
+- (id)getMapAtPosition:(CGPoint)point;
 - (CGPoint)getBoxPositionAt:(Direction)direction From:(CGPoint)point;
 -(CGPoint)getItemPositionAtRowIndex:(int)rowIndex ItemIndex:(int)edgeIndex;
 - (void)update:(ccTime)dt;

@@ -60,6 +60,43 @@
 }
 - (void)update:(ccTime)dt
 {
+    if(_waitToFadeOutTreasureMapBlue>0)
+    {
+        _waitToFadeOutTreasureMapBlue=_waitToFadeOutTreasureMapBlue-dt;
+        
+        if(_waitToFadeOutTreasureMapBlue<0.5&&_waitToFadeOutTreasureMapBlue>0)
+        {
+            [self.mapGraphic setOpacity:_waitToFadeOutTreasureMapBlue*510];
+        }
+        if(_waitToFadeOutTreasureMapBlue<0)
+        {
+            
+            [self.mapGraphic setOpacity:0];
+            [_parentGridView fillBlockAtPositionX:self.mapPosition.x PositionY:self.mapPosition.y WithColor:BLUE_BOX];
+            
+            
+        }
+    }
     
+    if(_waitToFadeOutTreasureMapOrange>0)
+    {
+        _waitToFadeOutTreasureMapOrange=_waitToFadeOutTreasureMapOrange-dt;
+        
+        
+        if(_waitToFadeOutTreasureMapOrange<0.5 && _waitToFadeOutTreasureMapOrange>0)
+        {
+            [self.mapGraphic setOpacity:_waitToFadeOutTreasureMapOrange*510];
+        }
+        
+        if(_waitToFadeOutTreasureMapOrange<0)
+        {
+            
+            [self.mapGraphic setOpacity:0];
+            [_parentGridView fillBlockAtPositionX:self.mapPosition.x PositionY:self.mapPosition.y WithColor:ORANGE_BOX];
+            
+            
+        }
+    }
+
 }
 @end

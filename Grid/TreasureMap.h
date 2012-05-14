@@ -35,7 +35,7 @@ typedef enum {
 @property float waitToFadeOutTreasureMapOrange;
 @property (nonatomic,assign)GridView *parentGridView;
 @property (nonatomic,assign)TreasureMapNumber partNumber;
-+ (id)treasureMapAtPosition:(CGPoint)position;
++ (id)treasureMapAtPosition:(CGPoint)position andType:(TreasureMapNumber)part;
 - (void)playHalfOpenAnimation;
 - (void)playOpenAnimation;
 - (void)update:(ccTime)dt;

@@ -13,6 +13,7 @@ typedef enum {
     CANNON,
     TREASUREBOX,
     SHIP,
+    MAP,
     EMPTY_BOX,
     UNAVAILABLE
     
