@@ -45,7 +45,7 @@
     NSString *tempString=[NSString stringWithFormat:_imageName];
     NSString *aString=[tempString stringByDeletingPathExtension];
 
-     NSLog(@"%@",aString);
+     //NSLog(@"%@",aString);
     [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:_imageName]];
     [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[aString stringByAppendingString:suffix] ]];
       [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:_imageName]];

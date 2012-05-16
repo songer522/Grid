@@ -28,9 +28,11 @@
     BOOL _changeColor;
     int _blueScore;
     int _orangeScore;
+    int _boxCount;
     BOOL _CPUTurn;
     BOOL _touchEnable;
     BOOL _isNewGame;
+    BOOL _CPUThinking;
     BOOL _twoPlayerOnOneDevice;
     NSString *_gameMode;
    
@@ -39,6 +41,8 @@
     GKPeerPickerController *_picker;
 }
 @property BOOL CPUTurn;
+@property BOOL CPUThinking;
+@property int boxCount;
 @property BOOL isNewGame;
 @property (retain,nonatomic)GridView *gridView;
 @property (retain,nonatomic)GridModel *gridModel;

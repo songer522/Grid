@@ -14,7 +14,8 @@ typedef enum {
     FILLED_WITH_THREE_EDGES,
     FILLED_WITH_TWO_EDGES,
     FILLED_WITH_ONE_EDGES,
-    EMPTY
+    EMPTY,
+    SINGLE_LINE
     
     
 } BoxStatus;
@@ -33,6 +34,7 @@ typedef enum {
 
 
 @property (nonatomic,retain)GameLayer *grid;
+@property float waitToCheckRandomEdge;
 +(id)instance;
 
 //-(void)move:(GameLayer *)grid;

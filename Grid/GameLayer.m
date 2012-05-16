@@ -36,6 +36,8 @@
 // HelloWorldLayer implementation
 @implementation GameLayer
 @synthesize CPUTurn=_CPUTurn;
+@synthesize CPUThinking=_CPUThinking;
+@synthesize boxCount=_boxCount;
 @synthesize isNewGame=_isNewGame;
 @synthesize gridModel=_gridModel;
 @synthesize gridView=_gridView;
@@ -99,6 +101,7 @@
         _touchEnable=YES;
         
         _CPUTurn=NO;
+        _CPUThinking=NO;
         _isNewGame=YES;
        
         _gameMode=[[GameSettings shared] getGlobalForKey:@"gameMode"];
@@ -122,7 +125,23 @@
             _brain.grid=self;
         }
         [self schedule:@selector(update:)];
+        [self newGame];
+        _boxCount=0;
+         
+        for(BoxArray *array in _gridModel.boxs)
+        {
+            for(Box *box in array)
+            {
+                if(box.status==EMPTY_BOX||box.status==MAP||box.status==CANNON||box.status==TREASUREBOX||box.status==SHIP)
+                {
+                    _boxCount++;
+                }
+            }
+        }
+
+      // [_brain fillRandomEdge];
         
+       
 		/*
 		
 		//
@@ -349,9 +368,13 @@
 -(void)drawEdgeAtRowIndex:(NSInteger)rowIndex EdgeIndex:(NSInteger)edgeIndex
 {
    // NSLog(@"edge touched at row %d, number %d, an edge is drew",rowIndex,edgeIndex);
+    
+  
+    
     Edge *edge= [_gridModel getEdgeAtRowIndex:rowIndex EdgeIndex:edgeIndex];
     if(![edge checkFiled])
     {
+        
         edge.isFilled=YES;
         [_gridView.lastEdge setVisible:NO];
         [_gridView.lastEdge setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[self getEdgeIndicatorColor]]];
@@ -363,15 +386,18 @@
         [_gridView drawEdgeAtPosition:ccp(pointX,pointY) AndColor:lineColor Vertical:NO];
        
         _changeColor=YES;
+        
      
         [self checkIfSquareExistForEdgeOnARowAtIndex:rowIndex EdgeIndex:edgeIndex];
         
+        /*
         if(!_twoPlayerOnOneDevice &&_CPUTurn)
         {
            // [_brain move:self];
             _touchEnable=NO;
             [_brain move];
         }
+        */ 
         
     }
 
@@ -384,6 +410,7 @@
    
     if(![edge checkFiled])
     {
+        
         edge.isFilled=YES;
          [_gridView.lastEdge setVisible:NO];
         [_gridView.lastEdge setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[self getEdgeIndicatorColor]]];
@@ -395,16 +422,19 @@
         [_gridView drawEdgeAtPosition:ccp(pointX,pointY) AndColor:lineColor Vertical:YES];
         
         _changeColor=YES;
+        
       
         [self checkIfSquareExistForEdgeOnALineAtIndex:lineIndex EdgeIndex:edgeIndex];
         
+        /*
         if(!_twoPlayerOnOneDevice &&_CPUTurn)
         {
              //[_brain move:self];
             _touchEnable=NO;
             [_brain move];
         }
-        
+         
+        */
     }
 
 }
@@ -745,9 +775,9 @@
    // BOOL aboveFilled=NO;
     if(top.isFilled && topLeft.isFilled && topRight.isFilled)
     {
-        _changeColor=NO;
-        _CPUTurn=NO;
-      //  aboveFilled=YES;
+       
+        
+       // _CPUTurn=NO;
         //square above is filled
         CGFloat pointY= edgeIndex * EDGE_LENGTH + Y_MARGIN+0.5*EDGE_LENGTH;
         CGFloat pointX=0.5*EDGE_LENGTH+rowIndex*EDGE_LENGTH+X_MARGIN;
@@ -759,9 +789,13 @@
       Box *box=  [_gridModel getBoxAtLineIndex:blockLineIndex BoxIndex:blockBoxIndex];
         if(box.status==EMPTY_BOX||box.status==TREASUREBOX||box.status==CANNON||box.status==SHIP||box.status==MAP)
         {
+            //_changeColor=NO;
+            //_CPUTurn=NO;
+            
         if(_isBlueColor)
         {
-           
+            _changeColor=NO;
+            _CPUTurn=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
             if([self checkIfThereIsATreasureBox:point])
@@ -810,7 +844,7 @@
             
         }
         else {
-             
+            _changeColor=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
             if([self checkIfThereIsATreasureBox:point])
@@ -864,8 +898,8 @@
     
     if(bottom.isFilled && bottomLeft.isFilled && bottomRight.isFilled)
     {
-        _changeColor=NO;
-        _CPUTurn=NO;
+       
+        //_CPUTurn=NO;
         //square underneath is filled
         CGFloat pointY= edgeIndex * EDGE_LENGTH + Y_MARGIN-0.5*EDGE_LENGTH;
         CGFloat pointX=0.5*EDGE_LENGTH+rowIndex*EDGE_LENGTH+X_MARGIN;
@@ -876,9 +910,11 @@
         Box *box=  [_gridModel getBoxAtLineIndex:blockLineIndex BoxIndex:blockBoxIndex];
         if(box.status==EMPTY_BOX||box.status==TREASUREBOX||box.status==CANNON||box.status==SHIP||box.status==MAP)
         {
+           
         if(_isBlueColor)
         {
-           
+            _CPUTurn=NO;
+             _changeColor=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
             if([self checkIfThereIsATreasureBox:point])
@@ -935,7 +971,7 @@
              
         }
         else {
-             
+              _changeColor=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
             if([self checkIfThereIsATreasureBox:point])
@@ -994,6 +1030,14 @@
         //[self checkWinner];
     }
     
+    if(!_twoPlayerOnOneDevice &&_CPUTurn&&!_CPUThinking)
+    {
+        // [_brain move:self];
+        _touchEnable=NO;
+        [_brain move];
+    }
+    
+    
     [self showPlayerTurnInfo];
     
 }
@@ -1012,8 +1056,8 @@
     //BOOL LeftFilled=NO;
     if(left.isFilled && topLeft.isFilled && bottomLeft.isFilled)
     {
-        _changeColor=NO;
-        _CPUTurn=NO;
+        
+        //_CPUTurn=NO;
       //  LeftFilled=YES;
         //square left is filled
         CGFloat pointX=edgeIndex * EDGE_LENGTH + X_MARGIN - 0.5 * EDGE_LENGTH;
@@ -1025,9 +1069,12 @@
         Box *box=  [_gridModel getBoxAtLineIndex:blockLineIndex BoxIndex:blockBoxIndex];
         if(box.status==EMPTY_BOX||box.status==TREASUREBOX||box.status==CANNON||box.status==SHIP||box.status==MAP)
         {
+            //_changeColor=NO;
+            //_CPUTurn=NO;
         if(_isBlueColor)
         {
-           
+            _CPUTurn=NO;
+            _changeColor=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
             if([self checkIfThereIsATreasureBox:point])
@@ -1076,7 +1123,7 @@
             }
                      }
         else {
-            
+            _changeColor=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
             if([self checkIfThereIsATreasureBox:point])
@@ -1129,8 +1176,8 @@
     
     if(right.isFilled && topRight.isFilled && bottomRight.isFilled)
     {
-        _changeColor=NO;
-        _CPUTurn=NO;
+        
+        //_CPUTurn=NO;
         //square right is filled
         CGFloat pointX=edgeIndex * EDGE_LENGTH + X_MARGIN + 0.5 * EDGE_LENGTH;
         CGFloat pointY=lineIndex * EDGE_LENGTH + Y_MARGIN + 0.5 * EDGE_LENGTH;
@@ -1142,9 +1189,12 @@
         
         if(box.status==EMPTY_BOX||box.status==TREASUREBOX||box.status==CANNON||box.status==SHIP||box.status==MAP)
         {
+            //_changeColor=NO;
+            //_CPUTurn=NO;
         if(_isBlueColor)
         {
-           
+            _changeColor=NO;
+            _CPUTurn=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
             if([self checkIfThereIsATreasureBox:point])
@@ -1197,7 +1247,7 @@
             }
         }
         else {
-          
+          _changeColor=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
             if([self checkIfThereIsATreasureBox:point])
@@ -1253,6 +1303,13 @@
         
         //[self checkWinner];
     }
+    
+    if(!_twoPlayerOnOneDevice &&_CPUTurn&&!_CPUThinking)
+    {
+        // [_brain move:self];
+        _touchEnable=NO;
+        [_brain move];
+    }
     [self showPlayerTurnInfo];
 }
 
@@ -1261,10 +1318,15 @@
     BOOL hasWinner=NO;
     int i= [_gridView.treasureBoxArray count];
     int j=[_gridView.mapArray count];
-    int totalScore=i*2+25-_gridModel.damageCount;
+    
+    
+    
+    
+        
+    int totalScore=i*2+_boxCount-_gridModel.damageCount;
     if(_gridModel.blueMapCount==2||_gridModel.orangeMapCount==2)
     {
-     totalScore=i*2+25-_gridModel.damageCount+(j*5)/2;
+     totalScore=i*2+_boxCount-_gridModel.damageCount+(j*5)/2;
     }
        NSLog(@"total score is%d",totalScore);
     if((_gridModel.blueScore+_gridModel.orangeScore)==totalScore)
@@ -1289,6 +1351,26 @@
            
             
         }
+        else if(_gridModel.blueScore==_gridModel.orangeScore)
+        {
+            if([_gameMode isEqualToString:@"solo"])
+            {
+                [_gridView.lable setString:[NSString stringWithFormat:@"Tie Game!"]];
+            }
+            
+            else if ([_gameMode isEqualToString:@"oneDevice"])
+            {
+                [_gridView.lable setString:[NSString stringWithFormat:@"Tie Game!"]];
+            }
+            else if([_gameMode isEqualToString:@"blueTooth"])
+            {
+                [_gridView.lable setString:[NSString stringWithFormat:@"Tie Game!"]];
+            }
+            
+            
+            
+        }
+
         else {
             if([_gameMode isEqualToString:@"solo"])
             {
@@ -1389,11 +1471,37 @@
         }
     }
     */
+     [_gridModel resetModel];
     [_gridView resetView];
-    [_gridModel resetModel];
+   
     _changeColor=YES;
-    _isBlueColor=NO;
-    _touchEnable=YES;
+    
+    _CPUThinking=NO;
+    _CPUTurn=NO;
+    if(!_twoPlayerOnOneDevice)
+    {
+     int yesOrNo = arc4random() % 2;
+    
+    if(yesOrNo)
+    {
+     _touchEnable=YES;
+     _isBlueColor=NO;
+    
+    }
+    else {
+        _isBlueColor=YES;
+      
+        _touchEnable=NO;
+        _brain.waitToCheckRandomEdge=0.5;
+      
+    }
+    }
+    else {
+        _touchEnable=YES;
+        _isBlueColor=NO;
+    }
+    
+     
     /*
     [self loadTreasureBoxAtRow:1 ItemIndex:3];
     [self loadTreasureBoxAtRow:3 ItemIndex:3];

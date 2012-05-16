@@ -22,6 +22,7 @@
 
 
 
+
 @implementation GridView
 @synthesize edgeIndicator=_edgeIndicator;
 @synthesize lable=_lable;
@@ -65,7 +66,7 @@
         _dots=[CCLayer node];
         
        // [self loadDots];
-       //[self loadDashLines];
+       [self loadDashLines];
        
         
         
@@ -118,7 +119,10 @@
        
        
         //tileMap = [CCTMXTiledMap tiledMapWithTMXFile: [CCFileUtils fullPathFromRelativePath:@"DAL_Level1.tmx"]];
-        tileMap = [CCTMXTiledMap tiledMapWithTMXFile: @"DAL_Level6.tmx"];
+        
+        NSString *LevelNumber=[[GameSettings shared] getGlobalForKey:@"selectedLevel"];
+        
+        tileMap = [CCTMXTiledMap tiledMapWithTMXFile: [NSString stringWithFormat:@"DAL_Level%@.tmx",LevelNumber ]];
         
         _itemLayer = [tileMap layerNamed:@"Items"];
         _itemLayer.visible = NO;
@@ -155,25 +159,59 @@
         [self addChild:_soundButton];
          [self addChild:_window];
                
-        [self loadEdgeIndicator];
-        [self loadPowerUpsAndsetupModel];
+       [self loadEdgeIndicator];
+       
+        //[self loadPowerUpsAndsetupModel];
         _lastEdge=[EdgeGraphic spriteWithSpriteFrameName:@"Graphic_Dot.png"];
         [_lastEdge setPosition:ADJUST_CCP(ccp(0,0))];
         [_lastEdge setVisible:NO];
         [_dots addChild:_lastEdge];
-    }
+    
+        //[self loadiAd];
+        }
+        
     return self;
 }
 
+-(void)loadiAd
+{
+    UIViewController *controller = [[UIViewController alloc] init];
+    
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+   {
+       controller.view.frame = CGRectMake(0,ADJUST_Y(463),HD_PIXELS(480),HD_PIXELS(32));
+   }
+   else {
+       controller.view.frame=CGRectMake(0, 430, 480, 32);
+   }
+       [controller.view setBackgroundColor:[UIColor clearColor]];
+    
+    //From the official iAd programming guide
+    ADBannerView *adView = [[ADBannerView alloc] initWithFrame:CGRectZero];
+    [adView setBackgroundColor:[UIColor clearColor]];
+    adView.requiredContentSizeIdentifiers = [NSSet setWithObject:ADBannerContentSizeIdentifierPortrait];
+    
+    adView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
+    
+    [controller.view addSubview:adView];
+    
+    //Then I add the adView to the openglview of cocos2d
+    [[[CCDirector sharedDirector] view] addSubview:controller.view];
+    
+}
+
+
+
 -(void)loadPowerUpsAndsetupModel
 {
-    for(int positionX = X_MARGIN; positionX< X_BOUNDARY_RIGHT; positionX=positionX+EDGE_LENGTH )
+    for(int positionX = HD_PIXELS(27.5); positionX< X_BOUNDARY_RIGHT; positionX=positionX+EDGE_LENGTH )
     {
-        for (int positionY= Y_MARGIN; positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
+        for (int positionY= HD_PIXELS(120); positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
             //CCSprite *dot=[CCSprite spriteWithSpriteFrameName:@"Graphic_Dot.png"];
             //[dot setPosition:ccp(positionX,positionY)];
             //[_dots addChild:dot];
             CGPoint tileCoord = [self tileCoordForPosition:ccp(positionX,positionY)];
+            BOOL rightLineFilled=NO;
             int tileGid = [_lineRightLayer tileGIDAt:tileCoord];
             if (tileGid) {
                 NSDictionary *properties = [tileMap propertiesForGID:tileGid];
@@ -182,6 +220,7 @@
                     if (collision && [collision compare:@"True"] == NSOrderedSame) {
                         Edge *edge= [_parentController.gridModel getEdgeAtRowIndex:tileCoord.x EdgeIndex:(NUM_OF_LINES-tileCoord.y)];
                         edge.isFilled=NO;
+                        rightLineFilled=YES;
                         NSLog(@"row edge Filled (%f,%f) position (%d,%d), tileGid:%d",tileCoord.x,tileCoord.y,positionX,positionY,tileGid);
                     }
                 }
@@ -195,9 +234,12 @@
                     if (collision && [collision compare:@"True"] == NSOrderedSame) {
                         Edge *edge=[_parentController.gridModel getEdgeAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) EdgeIndex:tileCoord.x];
                         edge.isFilled=NO;
-                         NSLog(@"line edge Filled (%f,%f) position (%d,%d), tileGid:%d",tileCoord.x,tileCoord.y,positionX,positionY,tileGid);
-                        Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
-                        box.status=EMPTY_BOX;
+                         NSLog(@"line edge Filled (%f,%f) position (%d,%d), tileGid:%d",tileCoord.x,tileCoord.y,positionX,positionY,tileGid2);
+                        
+                        if(rightLineFilled)
+                        {
+                            
+                        }
                     }
                 }
             }
@@ -243,6 +285,11 @@
                         box.status=MAP;
                         [_parentController loadTreasureMapAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Part:TREASUREMAP_PART_TWO];
                     }
+                    else if (collision && [collision compare:@"Empty"] == NSOrderedSame) {
+                        Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
+                        box.status=EMPTY_BOX;
+                    }
+
                 }
             }
 
@@ -293,7 +340,7 @@
 - (CGPoint)tileCoordForPosition:(CGPoint)position {
    
     // int x = (position.x-X_MARGIN) / tileMap.tileSize.width;
-    int x = (position.x-X_MARGIN) / HD_PIXELS(53);
+    int x = (position.x+1-HD_PIXELS(27.5)) / HD_PIXELS(53);
     //int y = ((tileMap.mapSize.height * tileMap.tileSize.height) - position.y) / tileMap.tileSize.height;
     int y=(HD_PIXELS(385) - position.y) / HD_PIXELS(53);
     return ccp(x, y);
@@ -506,7 +553,7 @@
     [_orangeScoreBox reset];
     [_blueScoreBox reset];
     //[_gridView removeChild:_gridView.treasureBox1 cleanup:YES];
-    [self loadPowerUpsAndsetupModel];
+   
     for(TreasureBox *obj in _treasureBoxArray)
     {
         [self removeChild:obj cleanup:YES];
@@ -546,6 +593,8 @@
     [_edgeArray removeAllObjects];
     [_shipArray removeAllObjects];
     [_mapArray removeAllObjects];
+    
+     [self loadPowerUpsAndsetupModel];
 }
 - (void)update:(ccTime)dt {
     /*

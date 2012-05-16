@@ -9,11 +9,15 @@
 #import "CPUBrain.h"
 #import "EdgeArray.h"
 #import "Edge.h"
+#import "Box.h"
+#import "MapSettings.h"
+#import "DeviceSettings.h"
 
 #include <stdlib.h>
 
 @implementation CPUBrain
 @synthesize grid=_grid;
+@synthesize waitToCheckRandomEdge=_waitToCheckRandomEdge;
 +(id)instance
 {
     return [[self alloc] init];
@@ -37,6 +41,7 @@
 
 -(void)startBrain
 {
+    _grid.CPUThinking=YES;
     _waitToCheckThreeEdgeBox=0.1;
     
     //if(![self checkThreeEdgesfilledBox:grid])
@@ -77,6 +82,7 @@
     {
         
         _grid.CPUTurn=NO;
+        _grid.CPUThinking=NO;
         
         
         [_grid drawEdgeAtLineIndex:lineIndexOrRowIndex EdgeIndex:edgeIndex];
@@ -91,6 +97,7 @@
         if (!edge.isFilled)
         {
         _grid.CPUTurn=NO;
+             _grid.CPUThinking=NO;
         [_grid drawEdgeAtRowIndex:lineIndexOrRowIndex EdgeIndex:edgeIndex];
          //filledAnEdge=YES;
         _grid.touchEnable=YES;
@@ -116,11 +123,11 @@
     {
         Edge *edge= [_grid.gridModel getEdgeAtLineIndex:lineIndexOrRowIndex EdgeIndex:edgeIndex];
         BoxStatus status= [self getEdgeInfoOnALineAtIndex:lineIndexOrRowIndex EdgeIndex:edgeIndex];
-        if(!edge.isFilled&&(status== FILLED_WITH_ONE_EDGES||status==EMPTY))
+        if(!edge.isFilled&&(status== FILLED_WITH_ONE_EDGES||status==EMPTY || status==SINGLE_LINE))
         {
             
             _grid.CPUTurn=NO;
-            
+             _grid.CPUThinking=NO;
             
             [_grid drawEdgeAtLineIndex:lineIndexOrRowIndex EdgeIndex:edgeIndex];
             // filledAnEdge=YES;
@@ -133,9 +140,10 @@
     else {
         Edge *edge= [_grid.gridModel getEdgeAtRowIndex:lineIndexOrRowIndex EdgeIndex:edgeIndex];
         BoxStatus status=[self getEdgeInfoOnARowAtIndex:lineIndexOrRowIndex EdgeIndex:edgeIndex];
-        if (!edge.isFilled&&(status== FILLED_WITH_ONE_EDGES||status==EMPTY))
+        if (!edge.isFilled&&(status== FILLED_WITH_ONE_EDGES||status==EMPTY|| status==SINGLE_LINE))
         {
             _grid.CPUTurn=NO;
+             _grid.CPUThinking=NO;
             [_grid drawEdgeAtRowIndex:lineIndexOrRowIndex EdgeIndex:edgeIndex];
             //filledAnEdge=YES;
             _grid.touchEnable=YES;
@@ -143,7 +151,8 @@
             return;
         }
     }
-    if(![_grid checkWinner]&&_countForSearchingNonThreeEdgeBox<50)
+    int multiplier=1250/_grid.boxCount;
+    if(![_grid checkWinner]&&_countForSearchingNonThreeEdgeBox<multiplier)
     {
         _waitToCheckNonThreeEdgeBox=0.01;
         _countForSearchingNonThreeEdgeBox++;
@@ -303,28 +312,51 @@
         if (obj.isFilled)
             leftCount++; 
     }
+    CGFloat pointX1=edgeIndex * EDGE_LENGTH + X_MARGIN - 0.5 * EDGE_LENGTH;
+    CGFloat pointY1=lineIndex * EDGE_LENGTH + Y_MARGIN + 0.5 * EDGE_LENGTH;
     
+    int blockLineIndex1=(pointY1-Y_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
+    int blockBoxIndex1=(pointX1-X_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
+    
+    Box *box1=  [_grid.gridModel getBoxAtLineIndex:blockLineIndex1 BoxIndex:blockBoxIndex1];
     NSArray *array2=[NSArray arrayWithObjects:right,topRight,bottomRight, nil];
     for(Edge *obj in array2)
     {
         if(obj.isFilled)
             rightCount++;
     }
-        
+    CGFloat pointX2=edgeIndex * EDGE_LENGTH + X_MARGIN + 0.5 * EDGE_LENGTH;
+    CGFloat pointY2=lineIndex * EDGE_LENGTH + Y_MARGIN + 0.5 * EDGE_LENGTH;
     
-    if(leftCount==3||rightCount==3)
+    int blockLineIndex2=(pointY2-Y_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
+    int blockBoxIndex2=(pointX2-X_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
+   // NSLog(@"blockLineIndex1:%d, blockBoxIndex1:%d",blockBoxIndex1,blockBoxIndex1);
+   // NSLog(@"blockLineIndex2:%d, blockBoxIndex2:%d",blockBoxIndex2,blockBoxIndex2);
+    
+    Box *box2=  [_grid.gridModel getBoxAtLineIndex:blockLineIndex2 BoxIndex:blockBoxIndex2];    
+    
+    if((leftCount==3 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))||(rightCount==3 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX)))
     {
         return FILLED_WITH_THREE_EDGES;
     }
-    else if(leftCount==2||rightCount==2)
+    
+    else if(box1.status==UNAVAILABLE && box2.status==UNAVAILABLE)
+    {
+        return SINGLE_LINE;
+    }
+
+    else if((leftCount==2 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))||(rightCount==2 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX)))
     {
         return FILLED_WITH_TWO_EDGES;
     }
-    else if (leftCount==1||rightCount==1){
+    else if((leftCount==1 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))||(rightCount==1 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX))){
         return FILLED_WITH_ONE_EDGES;
     }
-    else {
+    else if((leftCount==0 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))&&(rightCount==0 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX))){
         return EMPTY;
+    }
+    else {
+        return FILLED_WITH_THREE_EDGES_AND_ITEM;
     }
     }
 
@@ -350,6 +382,16 @@
         if (obj.isFilled)
             topCount++;
     }
+    CGFloat pointY1= edgeIndex * EDGE_LENGTH + Y_MARGIN+0.5*EDGE_LENGTH;
+    CGFloat pointX1=0.5*EDGE_LENGTH+rowIndex*EDGE_LENGTH+X_MARGIN;
+    
+    
+    int blockLineIndex1=(pointY1-Y_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
+    int blockBoxIndex1=(pointX1-X_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
+    
+    Box *box1=  [_grid.gridModel getBoxAtLineIndex:blockLineIndex1 BoxIndex:blockBoxIndex1];
+    
+    
     
     NSArray *array2=[NSArray arrayWithObjects:bottom,bottomLeft,bottomRight, nil];
     for(Edge *obj in array2)
@@ -357,21 +399,37 @@
         if(obj.isFilled)
             bottomCount++;
     }
-
+    CGFloat pointY2= edgeIndex * EDGE_LENGTH + Y_MARGIN-0.5*EDGE_LENGTH;
+    CGFloat pointX2=0.5*EDGE_LENGTH+rowIndex*EDGE_LENGTH+X_MARGIN;
     
-    if(topCount==3||bottomCount==3)
+    int blockLineIndex2=(pointY2-Y_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
+    int blockBoxIndex2=(pointX2-X_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
+   // NSLog(@"blockLineIndex1:%d, blockBoxIndex1:%d",blockBoxIndex1,blockBoxIndex1);
+   // NSLog(@"blockLineIndex2:%d, blockBoxIndex2:%d",blockBoxIndex2,blockBoxIndex2);
+    Box *box2=  [_grid.gridModel getBoxAtLineIndex:blockLineIndex2 BoxIndex:blockBoxIndex2];
+    
+    
+    if((topCount==3 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))||(bottomCount==3 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX)))
     {
         return FILLED_WITH_THREE_EDGES;
     }
-    else if(topCount==2||bottomCount==2)
+    else if(box1.status==UNAVAILABLE && box2.status==UNAVAILABLE)
+    {
+        return SINGLE_LINE;
+    }
+    
+    else if((topCount==2 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))||(bottomCount==2 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX)))
     {
         return FILLED_WITH_TWO_EDGES;
     }
-    else if (topCount==1||bottomCount==1){
+    else if((topCount==1 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))||(bottomCount==1 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX))){
         return FILLED_WITH_ONE_EDGES;
     }
-    else {
+    else if((topCount==0 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))&&(bottomCount==0 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX))){
         return EMPTY;
+    }
+    else {
+        return FILLED_WITH_THREE_EDGES_AND_ITEM;
     }
 }
 - (void)update:(ccTime)dt {

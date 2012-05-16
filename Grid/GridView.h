@@ -9,9 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
 #import "ScoreBox.h"
-
+#import <UIKit/UIKit.h>
 #import "GameWindow.h"
 #import "EdgeGraphic.h"
+#import <iAd/iAd.h>
 
 typedef enum {
    BLUE_BOX,
@@ -27,7 +28,7 @@ typedef enum {
     
 } Direction;
 @class GameLayer;
-@interface GridView : CCLayer {
+@interface GridView : CCLayer<ADBannerViewDelegate> {
     CCLabelTTF *_lable;
     CCSprite *_background;
     CCSprite *_dashLines;

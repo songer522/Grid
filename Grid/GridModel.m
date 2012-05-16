@@ -62,11 +62,13 @@
 
 -(id)getBoxAtLineIndex:(NSInteger)lineIndex BoxIndex:(NSUInteger)boxIndex
 {
-    if(lineIndex>4)
-    {
+   
+    if (boxIndex>4 ) {
         return nil;
     }
-    if (boxIndex>4) {
+    
+    if(lineIndex>4||lineIndex<0)
+    {
         return nil;
     }
     Box *box=[(BoxArray*)[_boxs objectAtIndex:lineIndex] objectAtIndex:boxIndex];

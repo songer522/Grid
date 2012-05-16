@@ -163,6 +163,7 @@
 		614BA26C15460F0900A3568C /* spriteSheet-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = 614BA25C15460F0900A3568C /* spriteSheet-ipadhd.png */; };
 		614BA26D15460F0900A3568C /* spriteSheet.plist in Resources */ = {isa = PBXBuildFile; fileRef = 614BA25D15460F0900A3568C /* spriteSheet.plist */; };
 		614BA26E15460F0900A3568C /* spriteSheet.png in Resources */ = {isa = PBXBuildFile; fileRef = 614BA25E15460F0900A3568C /* spriteSheet.png */; };
+		615A29C715630F5B00E2D465 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 615A29C415630F2D00E2D465 /* iAd.framework */; };
 		619677281553232D001F74E5 /* ChooseLevelMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 619677271553232D001F74E5 /* ChooseLevelMenu.m */; };
 		6196772C155326D7001F74E5 /* GameSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 6196772B155326D6001F74E5 /* GameSettings.m */; };
 		6196772F1553287D001F74E5 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 6196772E1553287D001F74E5 /* Database.m */; };
@@ -199,29 +200,52 @@
 		61A7A09C155AD58B0059DD91 /* MainMenuSprites.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61A7A08C155AD58B0059DD91 /* MainMenuSprites.plist */; };
 		61A7A09D155AD58B0059DD91 /* MainMenuSprites.png in Resources */ = {isa = PBXBuildFile; fileRef = 61A7A08D155AD58B0059DD91 /* MainMenuSprites.png */; };
 		61A892431548896B00A74A37 /* TreasureBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A892421548896B00A74A37 /* TreasureBox.m */; };
+		61AFD0041562C0F50004EB69 /* DAL_Level1-hd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFD81562C0F50004EB69 /* DAL_Level1-hd.tmx */; };
+		61AFD0051562C0F50004EB69 /* DAL_Level1-ipad.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFD91562C0F50004EB69 /* DAL_Level1-ipad.tmx */; };
+		61AFD0061562C0F50004EB69 /* DAL_Level1-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFDA1562C0F50004EB69 /* DAL_Level1-ipadhd.tmx */; };
+		61AFD0071562C0F50004EB69 /* DAL_Level1.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFDB1562C0F50004EB69 /* DAL_Level1.tmx */; };
+		61AFD0081562C0F50004EB69 /* DAL_Level2-hd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFDC1562C0F50004EB69 /* DAL_Level2-hd.tmx */; };
+		61AFD0091562C0F50004EB69 /* DAL_Level2-ipad.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFDD1562C0F50004EB69 /* DAL_Level2-ipad.tmx */; };
+		61AFD00A1562C0F50004EB69 /* DAL_Level2-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFDE1562C0F50004EB69 /* DAL_Level2-ipadhd.tmx */; };
+		61AFD00B1562C0F50004EB69 /* DAL_Level2.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFDF1562C0F50004EB69 /* DAL_Level2.tmx */; };
+		61AFD00C1562C0F50004EB69 /* DAL_Level3-hd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFE01562C0F50004EB69 /* DAL_Level3-hd.tmx */; };
+		61AFD00D1562C0F50004EB69 /* DAL_Level3-ipad.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFE11562C0F50004EB69 /* DAL_Level3-ipad.tmx */; };
+		61AFD00E1562C0F50004EB69 /* DAL_Level3-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFE21562C0F50004EB69 /* DAL_Level3-ipadhd.tmx */; };
+		61AFD00F1562C0F50004EB69 /* DAL_Level3.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFE31562C0F50004EB69 /* DAL_Level3.tmx */; };
+		61AFD0101562C0F50004EB69 /* DAL_Level4-hd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFE41562C0F50004EB69 /* DAL_Level4-hd.tmx */; };
+		61AFD0111562C0F50004EB69 /* DAL_Level4-ipad.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFE51562C0F50004EB69 /* DAL_Level4-ipad.tmx */; };
+		61AFD0121562C0F50004EB69 /* DAL_Level4-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFE61562C0F50004EB69 /* DAL_Level4-ipadhd.tmx */; };
+		61AFD0131562C0F50004EB69 /* DAL_Level4.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFE71562C0F50004EB69 /* DAL_Level4.tmx */; };
+		61AFD0141562C0F50004EB69 /* DAL_Level5-hd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFE81562C0F50004EB69 /* DAL_Level5-hd.tmx */; };
+		61AFD0151562C0F50004EB69 /* DAL_Level5-ipad.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFE91562C0F50004EB69 /* DAL_Level5-ipad.tmx */; };
+		61AFD0161562C0F50004EB69 /* DAL_Level5-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFEA1562C0F50004EB69 /* DAL_Level5-ipadhd.tmx */; };
+		61AFD0171562C0F50004EB69 /* DAL_Level5.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFEB1562C0F50004EB69 /* DAL_Level5.tmx */; };
+		61AFD0181562C0F50004EB69 /* DAL_Level6-hd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFEC1562C0F50004EB69 /* DAL_Level6-hd.tmx */; };
+		61AFD0191562C0F50004EB69 /* DAL_Level6-ipad.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFED1562C0F50004EB69 /* DAL_Level6-ipad.tmx */; };
+		61AFD01A1562C0F50004EB69 /* DAL_Level6-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFEE1562C0F50004EB69 /* DAL_Level6-ipadhd.tmx */; };
+		61AFD01B1562C0F50004EB69 /* DAL_Level6.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFEF1562C0F50004EB69 /* DAL_Level6.tmx */; };
+		61AFD01C1562C0F50004EB69 /* DAL_Level7-hd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFF01562C0F50004EB69 /* DAL_Level7-hd.tmx */; };
+		61AFD01D1562C0F50004EB69 /* DAL_Level7-ipad.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFF11562C0F50004EB69 /* DAL_Level7-ipad.tmx */; };
+		61AFD01E1562C0F50004EB69 /* DAL_Level7-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFF21562C0F50004EB69 /* DAL_Level7-ipadhd.tmx */; };
+		61AFD01F1562C0F50004EB69 /* DAL_Level7.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFF31562C0F50004EB69 /* DAL_Level7.tmx */; };
+		61AFD0201562C0F50004EB69 /* DAL_Level8-hd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFF41562C0F50004EB69 /* DAL_Level8-hd.tmx */; };
+		61AFD0211562C0F50004EB69 /* DAL_Level8-ipad.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFF51562C0F50004EB69 /* DAL_Level8-ipad.tmx */; };
+		61AFD0221562C0F50004EB69 /* DAL_Level8-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFF61562C0F50004EB69 /* DAL_Level8-ipadhd.tmx */; };
+		61AFD0231562C0F50004EB69 /* DAL_Level8.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFF71562C0F50004EB69 /* DAL_Level8.tmx */; };
+		61AFD0241562C0F50004EB69 /* DAL_Level9-hd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFF81562C0F50004EB69 /* DAL_Level9-hd.tmx */; };
+		61AFD0251562C0F50004EB69 /* DAL_Level9-ipad.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFF91562C0F50004EB69 /* DAL_Level9-ipad.tmx */; };
+		61AFD0261562C0F50004EB69 /* DAL_Level9-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFFA1562C0F50004EB69 /* DAL_Level9-ipadhd.tmx */; };
+		61AFD0271562C0F50004EB69 /* DAL_Level9.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFFB1562C0F50004EB69 /* DAL_Level9.tmx */; };
+		61AFD0281562C0F50004EB69 /* DAL_Level10-hd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFFC1562C0F50004EB69 /* DAL_Level10-hd.tmx */; };
+		61AFD0291562C0F50004EB69 /* DAL_Level10-ipad.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFFD1562C0F50004EB69 /* DAL_Level10-ipad.tmx */; };
+		61AFD02A1562C0F50004EB69 /* DAL_Level10-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFFE1562C0F50004EB69 /* DAL_Level10-ipadhd.tmx */; };
+		61AFD02B1562C0F50004EB69 /* DAL_Level10.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61AFCFFF1562C0F50004EB69 /* DAL_Level10.tmx */; };
+		61AFD02C1562C0F50004EB69 /* TileGraphic_Final-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 61AFD0001562C0F50004EB69 /* TileGraphic_Final-hd.png */; };
+		61AFD02D1562C0F50004EB69 /* TileGraphic_Final-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 61AFD0011562C0F50004EB69 /* TileGraphic_Final-ipad.png */; };
+		61AFD02E1562C0F50004EB69 /* TileGraphic_Final-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = 61AFD0021562C0F50004EB69 /* TileGraphic_Final-ipadhd.png */; };
+		61AFD02F1562C0F50004EB69 /* TileGraphic_Final.png in Resources */ = {isa = PBXBuildFile; fileRef = 61AFD0031562C0F50004EB69 /* TileGraphic_Final.png */; };
 		61C298621549BE1F00987570 /* GameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C298611549BE1F00987570 /* GameWindow.m */; };
 		61C298661549C8CD00987570 /* Cannon.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C298651549C8CD00987570 /* Cannon.m */; };
-		61EC91F3155DBA1E00D25AD1 /* DAL_Level0_Temp.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91E4155DBA1E00D25AD1 /* DAL_Level0_Temp.tmx */; };
-		61EC91F4155DBA1E00D25AD1 /* DAL_Level1-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91E5155DBA1E00D25AD1 /* DAL_Level1-ipadhd.tmx */; };
-		61EC91F5155DBA1E00D25AD1 /* DAL_Level2-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91E6155DBA1E00D25AD1 /* DAL_Level2-ipadhd.tmx */; };
-		61EC91F6155DBA1E00D25AD1 /* DAL_Level3-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91E7155DBA1E00D25AD1 /* DAL_Level3-ipadhd.tmx */; };
-		61EC91F7155DBA1E00D25AD1 /* DAL_Level4-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91E8155DBA1E00D25AD1 /* DAL_Level4-ipadhd.tmx */; };
-		61EC91F8155DBA1E00D25AD1 /* DAL_Level5-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91E9155DBA1E00D25AD1 /* DAL_Level5-ipadhd.tmx */; };
-		61EC91F9155DBA1E00D25AD1 /* DAL_Level6-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91EA155DBA1E00D25AD1 /* DAL_Level6-ipadhd.tmx */; };
-		61EC91FA155DBA1E00D25AD1 /* DAL_Level7-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91EB155DBA1E00D25AD1 /* DAL_Level7-ipadhd.tmx */; };
-		61EC91FB155DBA1E00D25AD1 /* DAL_Level8-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91EC155DBA1E00D25AD1 /* DAL_Level8-ipadhd.tmx */; };
-		61EC91FC155DBA1E00D25AD1 /* DAL_Level9-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91ED155DBA1E00D25AD1 /* DAL_Level9-ipadhd.tmx */; };
-		61EC91FD155DBA1E00D25AD1 /* DAL_Level10-ipadhd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91EE155DBA1E00D25AD1 /* DAL_Level10-ipadhd.tmx */; };
-		61EC91FE155DBA1E00D25AD1 /* TileGraphic_Final-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91EF155DBA1E00D25AD1 /* TileGraphic_Final-hd.png */; };
-		61EC91FF155DBA1E00D25AD1 /* TileGraphic_Final-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91F0155DBA1E00D25AD1 /* TileGraphic_Final-ipad.png */; };
-		61EC9200155DBA1E00D25AD1 /* TileGraphic_Final-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91F1155DBA1E00D25AD1 /* TileGraphic_Final-ipadhd.png */; };
-		61EC9201155DBA1E00D25AD1 /* TileGraphic_Final.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EC91F2155DBA1E00D25AD1 /* TileGraphic_Final.png */; };
-		61EC9205155DBA7300D25AD1 /* DAL_Level3-hd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC9202155DBA7300D25AD1 /* DAL_Level3-hd.tmx */; };
-		61EC9206155DBA7300D25AD1 /* DAL_Level3-ipad.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC9203155DBA7300D25AD1 /* DAL_Level3-ipad.tmx */; };
-		61EC9207155DBA7300D25AD1 /* DAL_Level3.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC9204155DBA7300D25AD1 /* DAL_Level3.tmx */; };
-		61EC920B155DBC8000D25AD1 /* DAL_Level6-hd.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC9208155DBC8000D25AD1 /* DAL_Level6-hd.tmx */; };
-		61EC920C155DBC8000D25AD1 /* DAL_Level6-ipad.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC9209155DBC8000D25AD1 /* DAL_Level6-ipad.tmx */; };
-		61EC920D155DBC8000D25AD1 /* DAL_Level6.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 61EC920A155DBC8000D25AD1 /* DAL_Level6.tmx */; };
 		61EFFBDA155198FF00EA0732 /* BoxIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 61EFFBD9155198FF00EA0732 /* BoxIcon.m */; };
 		61EFFBDE1551A80A00EA0732 /* EdgeGraphic.m in Sources */ = {isa = PBXBuildFile; fileRef = 61EFFBDD1551A80A00EA0732 /* EdgeGraphic.m */; };
 		61F7404A1551F30900D70904 /* Ship.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F740491551F30800D70904 /* Ship.m */; };
@@ -536,6 +560,7 @@
 		614BA25C15460F0900A3568C /* spriteSheet-ipadhd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "spriteSheet-ipadhd.png"; sourceTree = "<group>"; };
 		614BA25D15460F0900A3568C /* spriteSheet.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = spriteSheet.plist; sourceTree = "<group>"; };
 		614BA25E15460F0900A3568C /* spriteSheet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spriteSheet.png; sourceTree = "<group>"; };
+		615A29C415630F2D00E2D465 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		619677261553232D001F74E5 /* ChooseLevelMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseLevelMenu.h; sourceTree = "<group>"; };
 		619677271553232D001F74E5 /* ChooseLevelMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseLevelMenu.m; sourceTree = "<group>"; };
 		6196772A155326D6001F74E5 /* GameSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameSettings.h; sourceTree = "<group>"; };
@@ -582,31 +607,54 @@
 		61A7A08D155AD58B0059DD91 /* MainMenuSprites.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MainMenuSprites.png; sourceTree = "<group>"; };
 		61A892411548896B00A74A37 /* TreasureBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreasureBox.h; sourceTree = "<group>"; };
 		61A892421548896B00A74A37 /* TreasureBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TreasureBox.m; sourceTree = "<group>"; };
+		61AFCFD81562C0F50004EB69 /* DAL_Level1-hd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level1-hd.tmx"; path = "Art/DAL_Level1-hd.tmx"; sourceTree = "<group>"; };
+		61AFCFD91562C0F50004EB69 /* DAL_Level1-ipad.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level1-ipad.tmx"; path = "Art/DAL_Level1-ipad.tmx"; sourceTree = "<group>"; };
+		61AFCFDA1562C0F50004EB69 /* DAL_Level1-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level1-ipadhd.tmx"; path = "Art/DAL_Level1-ipadhd.tmx"; sourceTree = "<group>"; };
+		61AFCFDB1562C0F50004EB69 /* DAL_Level1.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DAL_Level1.tmx; path = Art/DAL_Level1.tmx; sourceTree = "<group>"; };
+		61AFCFDC1562C0F50004EB69 /* DAL_Level2-hd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level2-hd.tmx"; path = "Art/DAL_Level2-hd.tmx"; sourceTree = "<group>"; };
+		61AFCFDD1562C0F50004EB69 /* DAL_Level2-ipad.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level2-ipad.tmx"; path = "Art/DAL_Level2-ipad.tmx"; sourceTree = "<group>"; };
+		61AFCFDE1562C0F50004EB69 /* DAL_Level2-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level2-ipadhd.tmx"; path = "Art/DAL_Level2-ipadhd.tmx"; sourceTree = "<group>"; };
+		61AFCFDF1562C0F50004EB69 /* DAL_Level2.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DAL_Level2.tmx; path = Art/DAL_Level2.tmx; sourceTree = "<group>"; };
+		61AFCFE01562C0F50004EB69 /* DAL_Level3-hd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level3-hd.tmx"; path = "Art/DAL_Level3-hd.tmx"; sourceTree = "<group>"; };
+		61AFCFE11562C0F50004EB69 /* DAL_Level3-ipad.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level3-ipad.tmx"; path = "Art/DAL_Level3-ipad.tmx"; sourceTree = "<group>"; };
+		61AFCFE21562C0F50004EB69 /* DAL_Level3-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level3-ipadhd.tmx"; path = "Art/DAL_Level3-ipadhd.tmx"; sourceTree = "<group>"; };
+		61AFCFE31562C0F50004EB69 /* DAL_Level3.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DAL_Level3.tmx; path = Art/DAL_Level3.tmx; sourceTree = "<group>"; };
+		61AFCFE41562C0F50004EB69 /* DAL_Level4-hd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level4-hd.tmx"; path = "Art/DAL_Level4-hd.tmx"; sourceTree = "<group>"; };
+		61AFCFE51562C0F50004EB69 /* DAL_Level4-ipad.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level4-ipad.tmx"; path = "Art/DAL_Level4-ipad.tmx"; sourceTree = "<group>"; };
+		61AFCFE61562C0F50004EB69 /* DAL_Level4-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level4-ipadhd.tmx"; path = "Art/DAL_Level4-ipadhd.tmx"; sourceTree = "<group>"; };
+		61AFCFE71562C0F50004EB69 /* DAL_Level4.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DAL_Level4.tmx; path = Art/DAL_Level4.tmx; sourceTree = "<group>"; };
+		61AFCFE81562C0F50004EB69 /* DAL_Level5-hd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level5-hd.tmx"; path = "Art/DAL_Level5-hd.tmx"; sourceTree = "<group>"; };
+		61AFCFE91562C0F50004EB69 /* DAL_Level5-ipad.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level5-ipad.tmx"; path = "Art/DAL_Level5-ipad.tmx"; sourceTree = "<group>"; };
+		61AFCFEA1562C0F50004EB69 /* DAL_Level5-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level5-ipadhd.tmx"; path = "Art/DAL_Level5-ipadhd.tmx"; sourceTree = "<group>"; };
+		61AFCFEB1562C0F50004EB69 /* DAL_Level5.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DAL_Level5.tmx; path = Art/DAL_Level5.tmx; sourceTree = "<group>"; };
+		61AFCFEC1562C0F50004EB69 /* DAL_Level6-hd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level6-hd.tmx"; path = "Art/DAL_Level6-hd.tmx"; sourceTree = "<group>"; };
+		61AFCFED1562C0F50004EB69 /* DAL_Level6-ipad.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level6-ipad.tmx"; path = "Art/DAL_Level6-ipad.tmx"; sourceTree = "<group>"; };
+		61AFCFEE1562C0F50004EB69 /* DAL_Level6-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level6-ipadhd.tmx"; path = "Art/DAL_Level6-ipadhd.tmx"; sourceTree = "<group>"; };
+		61AFCFEF1562C0F50004EB69 /* DAL_Level6.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DAL_Level6.tmx; path = Art/DAL_Level6.tmx; sourceTree = "<group>"; };
+		61AFCFF01562C0F50004EB69 /* DAL_Level7-hd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level7-hd.tmx"; path = "Art/DAL_Level7-hd.tmx"; sourceTree = "<group>"; };
+		61AFCFF11562C0F50004EB69 /* DAL_Level7-ipad.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level7-ipad.tmx"; path = "Art/DAL_Level7-ipad.tmx"; sourceTree = "<group>"; };
+		61AFCFF21562C0F50004EB69 /* DAL_Level7-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level7-ipadhd.tmx"; path = "Art/DAL_Level7-ipadhd.tmx"; sourceTree = "<group>"; };
+		61AFCFF31562C0F50004EB69 /* DAL_Level7.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DAL_Level7.tmx; path = Art/DAL_Level7.tmx; sourceTree = "<group>"; };
+		61AFCFF41562C0F50004EB69 /* DAL_Level8-hd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level8-hd.tmx"; path = "Art/DAL_Level8-hd.tmx"; sourceTree = "<group>"; };
+		61AFCFF51562C0F50004EB69 /* DAL_Level8-ipad.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level8-ipad.tmx"; path = "Art/DAL_Level8-ipad.tmx"; sourceTree = "<group>"; };
+		61AFCFF61562C0F50004EB69 /* DAL_Level8-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level8-ipadhd.tmx"; path = "Art/DAL_Level8-ipadhd.tmx"; sourceTree = "<group>"; };
+		61AFCFF71562C0F50004EB69 /* DAL_Level8.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DAL_Level8.tmx; path = Art/DAL_Level8.tmx; sourceTree = "<group>"; };
+		61AFCFF81562C0F50004EB69 /* DAL_Level9-hd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level9-hd.tmx"; path = "Art/DAL_Level9-hd.tmx"; sourceTree = "<group>"; };
+		61AFCFF91562C0F50004EB69 /* DAL_Level9-ipad.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level9-ipad.tmx"; path = "Art/DAL_Level9-ipad.tmx"; sourceTree = "<group>"; };
+		61AFCFFA1562C0F50004EB69 /* DAL_Level9-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level9-ipadhd.tmx"; path = "Art/DAL_Level9-ipadhd.tmx"; sourceTree = "<group>"; };
+		61AFCFFB1562C0F50004EB69 /* DAL_Level9.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DAL_Level9.tmx; path = Art/DAL_Level9.tmx; sourceTree = "<group>"; };
+		61AFCFFC1562C0F50004EB69 /* DAL_Level10-hd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level10-hd.tmx"; path = "Art/DAL_Level10-hd.tmx"; sourceTree = "<group>"; };
+		61AFCFFD1562C0F50004EB69 /* DAL_Level10-ipad.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level10-ipad.tmx"; path = "Art/DAL_Level10-ipad.tmx"; sourceTree = "<group>"; };
+		61AFCFFE1562C0F50004EB69 /* DAL_Level10-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level10-ipadhd.tmx"; path = "Art/DAL_Level10-ipadhd.tmx"; sourceTree = "<group>"; };
+		61AFCFFF1562C0F50004EB69 /* DAL_Level10.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DAL_Level10.tmx; path = Art/DAL_Level10.tmx; sourceTree = "<group>"; };
+		61AFD0001562C0F50004EB69 /* TileGraphic_Final-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TileGraphic_Final-hd.png"; path = "Art/TileGraphic_Final-hd.png"; sourceTree = "<group>"; };
+		61AFD0011562C0F50004EB69 /* TileGraphic_Final-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TileGraphic_Final-ipad.png"; path = "Art/TileGraphic_Final-ipad.png"; sourceTree = "<group>"; };
+		61AFD0021562C0F50004EB69 /* TileGraphic_Final-ipadhd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TileGraphic_Final-ipadhd.png"; path = "Art/TileGraphic_Final-ipadhd.png"; sourceTree = "<group>"; };
+		61AFD0031562C0F50004EB69 /* TileGraphic_Final.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TileGraphic_Final.png; path = Art/TileGraphic_Final.png; sourceTree = "<group>"; };
 		61C298601549BE1F00987570 /* GameWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameWindow.h; sourceTree = "<group>"; };
 		61C298611549BE1F00987570 /* GameWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameWindow.m; sourceTree = "<group>"; };
 		61C298641549C8CD00987570 /* Cannon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cannon.h; sourceTree = "<group>"; };
 		61C298651549C8CD00987570 /* Cannon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cannon.m; sourceTree = "<group>"; };
-		61EC91E4155DBA1E00D25AD1 /* DAL_Level0_Temp.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DAL_Level0_Temp.tmx; path = Art/DAL_Level0_Temp.tmx; sourceTree = "<group>"; };
-		61EC91E5155DBA1E00D25AD1 /* DAL_Level1-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level1-ipadhd.tmx"; path = "Art/DAL_Level1-ipadhd.tmx"; sourceTree = "<group>"; };
-		61EC91E6155DBA1E00D25AD1 /* DAL_Level2-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level2-ipadhd.tmx"; path = "Art/DAL_Level2-ipadhd.tmx"; sourceTree = "<group>"; };
-		61EC91E7155DBA1E00D25AD1 /* DAL_Level3-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level3-ipadhd.tmx"; path = "Art/DAL_Level3-ipadhd.tmx"; sourceTree = "<group>"; };
-		61EC91E8155DBA1E00D25AD1 /* DAL_Level4-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level4-ipadhd.tmx"; path = "Art/DAL_Level4-ipadhd.tmx"; sourceTree = "<group>"; };
-		61EC91E9155DBA1E00D25AD1 /* DAL_Level5-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level5-ipadhd.tmx"; path = "Art/DAL_Level5-ipadhd.tmx"; sourceTree = "<group>"; };
-		61EC91EA155DBA1E00D25AD1 /* DAL_Level6-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level6-ipadhd.tmx"; path = "Art/DAL_Level6-ipadhd.tmx"; sourceTree = "<group>"; };
-		61EC91EB155DBA1E00D25AD1 /* DAL_Level7-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level7-ipadhd.tmx"; path = "Art/DAL_Level7-ipadhd.tmx"; sourceTree = "<group>"; };
-		61EC91EC155DBA1E00D25AD1 /* DAL_Level8-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level8-ipadhd.tmx"; path = "Art/DAL_Level8-ipadhd.tmx"; sourceTree = "<group>"; };
-		61EC91ED155DBA1E00D25AD1 /* DAL_Level9-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level9-ipadhd.tmx"; path = "Art/DAL_Level9-ipadhd.tmx"; sourceTree = "<group>"; };
-		61EC91EE155DBA1E00D25AD1 /* DAL_Level10-ipadhd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level10-ipadhd.tmx"; path = "Art/DAL_Level10-ipadhd.tmx"; sourceTree = "<group>"; };
-		61EC91EF155DBA1E00D25AD1 /* TileGraphic_Final-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TileGraphic_Final-hd.png"; path = "Art/TileGraphic_Final-hd.png"; sourceTree = "<group>"; };
-		61EC91F0155DBA1E00D25AD1 /* TileGraphic_Final-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TileGraphic_Final-ipad.png"; path = "Art/TileGraphic_Final-ipad.png"; sourceTree = "<group>"; };
-		61EC91F1155DBA1E00D25AD1 /* TileGraphic_Final-ipadhd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TileGraphic_Final-ipadhd.png"; path = "Art/TileGraphic_Final-ipadhd.png"; sourceTree = "<group>"; };
-		61EC91F2155DBA1E00D25AD1 /* TileGraphic_Final.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TileGraphic_Final.png; path = Art/TileGraphic_Final.png; sourceTree = "<group>"; };
-		61EC9202155DBA7300D25AD1 /* DAL_Level3-hd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level3-hd.tmx"; path = "Art/DAL_Level3-hd.tmx"; sourceTree = "<group>"; };
-		61EC9203155DBA7300D25AD1 /* DAL_Level3-ipad.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level3-ipad.tmx"; path = "Art/DAL_Level3-ipad.tmx"; sourceTree = "<group>"; };
-		61EC9204155DBA7300D25AD1 /* DAL_Level3.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DAL_Level3.tmx; path = Art/DAL_Level3.tmx; sourceTree = "<group>"; };
-		61EC9208155DBC8000D25AD1 /* DAL_Level6-hd.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level6-hd.tmx"; path = "Art/DAL_Level6-hd.tmx"; sourceTree = "<group>"; };
-		61EC9209155DBC8000D25AD1 /* DAL_Level6-ipad.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "DAL_Level6-ipad.tmx"; path = "Art/DAL_Level6-ipad.tmx"; sourceTree = "<group>"; };
-		61EC920A155DBC8000D25AD1 /* DAL_Level6.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DAL_Level6.tmx; path = Art/DAL_Level6.tmx; sourceTree = "<group>"; };
 		61EFFBD8155198FF00EA0732 /* BoxIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoxIcon.h; sourceTree = "<group>"; };
 		61EFFBD9155198FF00EA0732 /* BoxIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoxIcon.m; sourceTree = "<group>"; };
 		61EFFBDC1551A80A00EA0732 /* EdgeGraphic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdgeGraphic.h; sourceTree = "<group>"; };
@@ -620,6 +668,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				615A29C715630F5B00E2D465 /* iAd.framework in Frameworks */,
 				614BA0A615460DFD00A3568C /* QuartzCore.framework in Frameworks */,
 				614BA0A815460DFD00A3568C /* OpenGLES.framework in Frameworks */,
 				614BA0AA15460DFD00A3568C /* OpenAL.framework in Frameworks */,
@@ -823,6 +872,7 @@
 		614BA0A415460DFD00A3568C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				615A29C415630F2D00E2D465 /* iAd.framework */,
 				614BA0A515460DFD00A3568C /* QuartzCore.framework */,
 				614BA0A715460DFD00A3568C /* OpenGLES.framework */,
 				614BA0A915460DFD00A3568C /* OpenAL.framework */,
@@ -1258,27 +1308,50 @@
 		61A86D49155D637E0083AB00 /* Levels */ = {
 			isa = PBXGroup;
 			children = (
-				61EC9208155DBC8000D25AD1 /* DAL_Level6-hd.tmx */,
-				61EC9209155DBC8000D25AD1 /* DAL_Level6-ipad.tmx */,
-				61EC920A155DBC8000D25AD1 /* DAL_Level6.tmx */,
-				61EC9202155DBA7300D25AD1 /* DAL_Level3-hd.tmx */,
-				61EC9203155DBA7300D25AD1 /* DAL_Level3-ipad.tmx */,
-				61EC9204155DBA7300D25AD1 /* DAL_Level3.tmx */,
-				61EC91E4155DBA1E00D25AD1 /* DAL_Level0_Temp.tmx */,
-				61EC91E5155DBA1E00D25AD1 /* DAL_Level1-ipadhd.tmx */,
-				61EC91E6155DBA1E00D25AD1 /* DAL_Level2-ipadhd.tmx */,
-				61EC91E7155DBA1E00D25AD1 /* DAL_Level3-ipadhd.tmx */,
-				61EC91E8155DBA1E00D25AD1 /* DAL_Level4-ipadhd.tmx */,
-				61EC91E9155DBA1E00D25AD1 /* DAL_Level5-ipadhd.tmx */,
-				61EC91EA155DBA1E00D25AD1 /* DAL_Level6-ipadhd.tmx */,
-				61EC91EB155DBA1E00D25AD1 /* DAL_Level7-ipadhd.tmx */,
-				61EC91EC155DBA1E00D25AD1 /* DAL_Level8-ipadhd.tmx */,
-				61EC91ED155DBA1E00D25AD1 /* DAL_Level9-ipadhd.tmx */,
-				61EC91EE155DBA1E00D25AD1 /* DAL_Level10-ipadhd.tmx */,
-				61EC91EF155DBA1E00D25AD1 /* TileGraphic_Final-hd.png */,
-				61EC91F0155DBA1E00D25AD1 /* TileGraphic_Final-ipad.png */,
-				61EC91F1155DBA1E00D25AD1 /* TileGraphic_Final-ipadhd.png */,
-				61EC91F2155DBA1E00D25AD1 /* TileGraphic_Final.png */,
+				61AFCFD81562C0F50004EB69 /* DAL_Level1-hd.tmx */,
+				61AFCFD91562C0F50004EB69 /* DAL_Level1-ipad.tmx */,
+				61AFCFDA1562C0F50004EB69 /* DAL_Level1-ipadhd.tmx */,
+				61AFCFDB1562C0F50004EB69 /* DAL_Level1.tmx */,
+				61AFCFDC1562C0F50004EB69 /* DAL_Level2-hd.tmx */,
+				61AFCFDD1562C0F50004EB69 /* DAL_Level2-ipad.tmx */,
+				61AFCFDE1562C0F50004EB69 /* DAL_Level2-ipadhd.tmx */,
+				61AFCFDF1562C0F50004EB69 /* DAL_Level2.tmx */,
+				61AFCFE01562C0F50004EB69 /* DAL_Level3-hd.tmx */,
+				61AFCFE11562C0F50004EB69 /* DAL_Level3-ipad.tmx */,
+				61AFCFE21562C0F50004EB69 /* DAL_Level3-ipadhd.tmx */,
+				61AFCFE31562C0F50004EB69 /* DAL_Level3.tmx */,
+				61AFCFE41562C0F50004EB69 /* DAL_Level4-hd.tmx */,
+				61AFCFE51562C0F50004EB69 /* DAL_Level4-ipad.tmx */,
+				61AFCFE61562C0F50004EB69 /* DAL_Level4-ipadhd.tmx */,
+				61AFCFE71562C0F50004EB69 /* DAL_Level4.tmx */,
+				61AFCFE81562C0F50004EB69 /* DAL_Level5-hd.tmx */,
+				61AFCFE91562C0F50004EB69 /* DAL_Level5-ipad.tmx */,
+				61AFCFEA1562C0F50004EB69 /* DAL_Level5-ipadhd.tmx */,
+				61AFCFEB1562C0F50004EB69 /* DAL_Level5.tmx */,
+				61AFCFEC1562C0F50004EB69 /* DAL_Level6-hd.tmx */,
+				61AFCFED1562C0F50004EB69 /* DAL_Level6-ipad.tmx */,
+				61AFCFEE1562C0F50004EB69 /* DAL_Level6-ipadhd.tmx */,
+				61AFCFEF1562C0F50004EB69 /* DAL_Level6.tmx */,
+				61AFCFF01562C0F50004EB69 /* DAL_Level7-hd.tmx */,
+				61AFCFF11562C0F50004EB69 /* DAL_Level7-ipad.tmx */,
+				61AFCFF21562C0F50004EB69 /* DAL_Level7-ipadhd.tmx */,
+				61AFCFF31562C0F50004EB69 /* DAL_Level7.tmx */,
+				61AFCFF41562C0F50004EB69 /* DAL_Level8-hd.tmx */,
+				61AFCFF51562C0F50004EB69 /* DAL_Level8-ipad.tmx */,
+				61AFCFF61562C0F50004EB69 /* DAL_Level8-ipadhd.tmx */,
+				61AFCFF71562C0F50004EB69 /* DAL_Level8.tmx */,
+				61AFCFF81562C0F50004EB69 /* DAL_Level9-hd.tmx */,
+				61AFCFF91562C0F50004EB69 /* DAL_Level9-ipad.tmx */,
+				61AFCFFA1562C0F50004EB69 /* DAL_Level9-ipadhd.tmx */,
+				61AFCFFB1562C0F50004EB69 /* DAL_Level9.tmx */,
+				61AFCFFC1562C0F50004EB69 /* DAL_Level10-hd.tmx */,
+				61AFCFFD1562C0F50004EB69 /* DAL_Level10-ipad.tmx */,
+				61AFCFFE1562C0F50004EB69 /* DAL_Level10-ipadhd.tmx */,
+				61AFCFFF1562C0F50004EB69 /* DAL_Level10.tmx */,
+				61AFD0001562C0F50004EB69 /* TileGraphic_Final-hd.png */,
+				61AFD0011562C0F50004EB69 /* TileGraphic_Final-ipad.png */,
+				61AFD0021562C0F50004EB69 /* TileGraphic_Final-ipadhd.png */,
+				61AFD0031562C0F50004EB69 /* TileGraphic_Final.png */,
 			);
 			name = Levels;
 			sourceTree = "<group>";
@@ -1391,27 +1464,50 @@
 				61A7A09B155AD58B0059DD91 /* MainMenuSprites-ipadhd.png in Resources */,
 				61A7A09C155AD58B0059DD91 /* MainMenuSprites.plist in Resources */,
 				61A7A09D155AD58B0059DD91 /* MainMenuSprites.png in Resources */,
-				61EC91F3155DBA1E00D25AD1 /* DAL_Level0_Temp.tmx in Resources */,
-				61EC91F4155DBA1E00D25AD1 /* DAL_Level1-ipadhd.tmx in Resources */,
-				61EC91F5155DBA1E00D25AD1 /* DAL_Level2-ipadhd.tmx in Resources */,
-				61EC91F6155DBA1E00D25AD1 /* DAL_Level3-ipadhd.tmx in Resources */,
-				61EC91F7155DBA1E00D25AD1 /* DAL_Level4-ipadhd.tmx in Resources */,
-				61EC91F8155DBA1E00D25AD1 /* DAL_Level5-ipadhd.tmx in Resources */,
-				61EC91F9155DBA1E00D25AD1 /* DAL_Level6-ipadhd.tmx in Resources */,
-				61EC91FA155DBA1E00D25AD1 /* DAL_Level7-ipadhd.tmx in Resources */,
-				61EC91FB155DBA1E00D25AD1 /* DAL_Level8-ipadhd.tmx in Resources */,
-				61EC91FC155DBA1E00D25AD1 /* DAL_Level9-ipadhd.tmx in Resources */,
-				61EC91FD155DBA1E00D25AD1 /* DAL_Level10-ipadhd.tmx in Resources */,
-				61EC91FE155DBA1E00D25AD1 /* TileGraphic_Final-hd.png in Resources */,
-				61EC91FF155DBA1E00D25AD1 /* TileGraphic_Final-ipad.png in Resources */,
-				61EC9200155DBA1E00D25AD1 /* TileGraphic_Final-ipadhd.png in Resources */,
-				61EC9201155DBA1E00D25AD1 /* TileGraphic_Final.png in Resources */,
-				61EC9205155DBA7300D25AD1 /* DAL_Level3-hd.tmx in Resources */,
-				61EC9206155DBA7300D25AD1 /* DAL_Level3-ipad.tmx in Resources */,
-				61EC9207155DBA7300D25AD1 /* DAL_Level3.tmx in Resources */,
-				61EC920B155DBC8000D25AD1 /* DAL_Level6-hd.tmx in Resources */,
-				61EC920C155DBC8000D25AD1 /* DAL_Level6-ipad.tmx in Resources */,
-				61EC920D155DBC8000D25AD1 /* DAL_Level6.tmx in Resources */,
+				61AFD0041562C0F50004EB69 /* DAL_Level1-hd.tmx in Resources */,
+				61AFD0051562C0F50004EB69 /* DAL_Level1-ipad.tmx in Resources */,
+				61AFD0061562C0F50004EB69 /* DAL_Level1-ipadhd.tmx in Resources */,
+				61AFD0071562C0F50004EB69 /* DAL_Level1.tmx in Resources */,
+				61AFD0081562C0F50004EB69 /* DAL_Level2-hd.tmx in Resources */,
+				61AFD0091562C0F50004EB69 /* DAL_Level2-ipad.tmx in Resources */,
+				61AFD00A1562C0F50004EB69 /* DAL_Level2-ipadhd.tmx in Resources */,
+				61AFD00B1562C0F50004EB69 /* DAL_Level2.tmx in Resources */,
+				61AFD00C1562C0F50004EB69 /* DAL_Level3-hd.tmx in Resources */,
+				61AFD00D1562C0F50004EB69 /* DAL_Level3-ipad.tmx in Resources */,
+				61AFD00E1562C0F50004EB69 /* DAL_Level3-ipadhd.tmx in Resources */,
+				61AFD00F1562C0F50004EB69 /* DAL_Level3.tmx in Resources */,
+				61AFD0101562C0F50004EB69 /* DAL_Level4-hd.tmx in Resources */,
+				61AFD0111562C0F50004EB69 /* DAL_Level4-ipad.tmx in Resources */,
+				61AFD0121562C0F50004EB69 /* DAL_Level4-ipadhd.tmx in Resources */,
+				61AFD0131562C0F50004EB69 /* DAL_Level4.tmx in Resources */,
+				61AFD0141562C0F50004EB69 /* DAL_Level5-hd.tmx in Resources */,
+				61AFD0151562C0F50004EB69 /* DAL_Level5-ipad.tmx in Resources */,
+				61AFD0161562C0F50004EB69 /* DAL_Level5-ipadhd.tmx in Resources */,
+				61AFD0171562C0F50004EB69 /* DAL_Level5.tmx in Resources */,
+				61AFD0181562C0F50004EB69 /* DAL_Level6-hd.tmx in Resources */,
+				61AFD0191562C0F50004EB69 /* DAL_Level6-ipad.tmx in Resources */,
+				61AFD01A1562C0F50004EB69 /* DAL_Level6-ipadhd.tmx in Resources */,
+				61AFD01B1562C0F50004EB69 /* DAL_Level6.tmx in Resources */,
+				61AFD01C1562C0F50004EB69 /* DAL_Level7-hd.tmx in Resources */,
+				61AFD01D1562C0F50004EB69 /* DAL_Level7-ipad.tmx in Resources */,
+				61AFD01E1562C0F50004EB69 /* DAL_Level7-ipadhd.tmx in Resources */,
+				61AFD01F1562C0F50004EB69 /* DAL_Level7.tmx in Resources */,
+				61AFD0201562C0F50004EB69 /* DAL_Level8-hd.tmx in Resources */,
+				61AFD0211562C0F50004EB69 /* DAL_Level8-ipad.tmx in Resources */,
+				61AFD0221562C0F50004EB69 /* DAL_Level8-ipadhd.tmx in Resources */,
+				61AFD0231562C0F50004EB69 /* DAL_Level8.tmx in Resources */,
+				61AFD0241562C0F50004EB69 /* DAL_Level9-hd.tmx in Resources */,
+				61AFD0251562C0F50004EB69 /* DAL_Level9-ipad.tmx in Resources */,
+				61AFD0261562C0F50004EB69 /* DAL_Level9-ipadhd.tmx in Resources */,
+				61AFD0271562C0F50004EB69 /* DAL_Level9.tmx in Resources */,
+				61AFD0281562C0F50004EB69 /* DAL_Level10-hd.tmx in Resources */,
+				61AFD0291562C0F50004EB69 /* DAL_Level10-ipad.tmx in Resources */,
+				61AFD02A1562C0F50004EB69 /* DAL_Level10-ipadhd.tmx in Resources */,
+				61AFD02B1562C0F50004EB69 /* DAL_Level10.tmx in Resources */,
+				61AFD02C1562C0F50004EB69 /* TileGraphic_Final-hd.png in Resources */,
+				61AFD02D1562C0F50004EB69 /* TileGraphic_Final-ipad.png in Resources */,
+				61AFD02E1562C0F50004EB69 /* TileGraphic_Final-ipadhd.png in Resources */,
+				61AFD02F1562C0F50004EB69 /* TileGraphic_Final.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

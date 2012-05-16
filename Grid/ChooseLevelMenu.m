@@ -56,6 +56,7 @@
          [[GameSettings shared] setGlobal:@"YES" ForKey:@"level8"];
          [[GameSettings shared] setGlobal:@"YES" ForKey:@"level9"];
          [[GameSettings shared] setGlobal:@"YES" ForKey:@"level10"];
+        /*
          [[GameSettings shared] setGlobal:@"YES" ForKey:@"level11"];
          [[GameSettings shared] setGlobal:@"YES" ForKey:@"level12"];
          [[GameSettings shared] setGlobal:@"YES" ForKey:@"level13"];
@@ -66,6 +67,7 @@
          [[GameSettings shared] setGlobal:@"YES" ForKey:@"level18"];
          [[GameSettings shared] setGlobal:@"YES" ForKey:@"level19"];
          [[GameSettings shared] setGlobal:@"YES" ForKey:@"level20"];
+         */
         [self addChild: background];
      
         _buttonArray=[[NSMutableArray alloc] init];
