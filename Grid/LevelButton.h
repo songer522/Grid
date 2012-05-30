@@ -14,10 +14,14 @@
 {
     CCSprite *_buttonGraphic;
     CGPoint _buttonPosition;
+    CCSprite *_medal;
     CCLabelTTF *_levelNumber;
     int _buttonId;
+    BOOL _hasMedal;
 }
 @property int buttonId;
+@property BOOL hasMedal;
+@property (retain,nonatomic) CCLabelTTF *levelNumber;
 +(id)levelButtonWithId:(int)buttonId;
 
 -(id)initWithId:(int)buttonId;
@@ -25,7 +29,7 @@
 -(void)initButton;
 
 -(void)setPosition:(CGPoint)position;
--(void)ButtonPressed;
+-(BOOL)ButtonPressed;
 -(BOOL)checkTouchAtPosition:(CGPoint)point;
 
 @end

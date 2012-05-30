@@ -101,7 +101,7 @@ static GameSettings *_shared = nil;
 
 -(void)saveToDisk
 {
-    saveData(_savedSettings, @"savedSettings");
+    saveData(_settings, @"savedSettings");
 }
 
 @end

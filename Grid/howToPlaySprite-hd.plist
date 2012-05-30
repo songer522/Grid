@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>frames</key>
+	<dict>
+		
+		<key>Graphic_HTP_1.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{18, 26}, {610, 529}}</string>
+			<key>spriteOffset</key>
+			<string>{3, -6}</string>
+			<key>spriteSize</key>
+			<string>{610, 529}</string>
+			<key>spriteSourceSize</key>
+			<string>{640, 569}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{5, 5}, {610, 529}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Graphic_HTP_2.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{18, 26}, {610, 529}}</string>
+			<key>spriteOffset</key>
+			<string>{3, -6}</string>
+			<key>spriteSize</key>
+			<string>{610, 529}</string>
+			<key>spriteSourceSize</key>
+			<string>{640, 569}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{620, 5}, {610, 529}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Graphic_HTP_3.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{18, 26}, {610, 529}}</string>
+			<key>spriteOffset</key>
+			<string>{3, -6}</string>
+			<key>spriteSize</key>
+			<string>{610, 529}</string>
+			<key>spriteSourceSize</key>
+			<string>{640, 569}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{620, 539}, {610, 529}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Graphic_HTP_4.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{18, 26}, {610, 529}}</string>
+			<key>spriteOffset</key>
+			<string>{3, -6}</string>
+			<key>spriteSize</key>
+			<string>{610, 529}</string>
+			<key>spriteSourceSize</key>
+			<string>{640, 569}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{5, 539}, {610, 529}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Graphic_HTP_5.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{18, 26}, {610, 529}}</string>
+			<key>spriteOffset</key>
+			<string>{3, -6}</string>
+			<key>spriteSize</key>
+			<string>{610, 529}</string>
+			<key>spriteSourceSize</key>
+			<string>{640, 569}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{5, 1073}, {610, 529}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Graphic_HTP_6_Delete.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{510, 28}, {88, 87}}</string>
+			<key>spriteOffset</key>
+			<string>{234, 213}</string>
+			<key>spriteSize</key>
+			<string>{88, 87}</string>
+			<key>spriteSourceSize</key>
+			<string>{640, 569}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{5, 1607}, {88, 87}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+	</dict>
+	<key>metadata</key>
+	<dict>
+		<key>version</key>
+		<string>1.5.1</string>
+		<key>format</key>
+		<integer>3</integer>
+		<key>size</key>
+		<string>{2048, 2048}</string>
+		<key>name</key>
+		<string>howToPlaySprite2</string>
+		<key>premultipliedAlpha</key>
+		<false/>
+		<key>target</key>
+		<dict>
+			<key>name</key>
+			<string>-hd</string>
+			<key>textureFileName</key>
+			<string>-hd</string>
+			<key>textureFileExtension</key>
+			<string>.png</string>
+			<key>coordinatesFileName</key>
+			<string>-hd</string>
+			<key>coordinatesFileExtension</key>
+			<string>.plist</string>
+			<key>premultipliedAlpha</key>
+			<false/>
+		</dict>
+	</dict>
+</dict>
+</plist>

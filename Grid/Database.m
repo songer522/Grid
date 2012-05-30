@@ -19,7 +19,7 @@ id loadData(NSString * filename) {
     if ([[NSFileManager defaultManager] fileExistsAtPath:filepath]) {
         NSData *data = [[[NSData alloc] initWithContentsOfFile:filepath] autorelease];
         NSKeyedUnarchiver *unarchiver = [[[NSKeyedUnarchiver alloc] initForReadingWithData:data] autorelease];
-        id retval = [unarchiver decodeObjectForKey:@"Data"];
+        id retval = [unarchiver decodeObjectForKey:@"TotoalData"];
         [unarchiver finishDecoding];
         return retval;
     }
@@ -29,7 +29,7 @@ id loadData(NSString * filename) {
 void saveData(id theData, NSString *filename) {
     NSMutableData *data = [[[NSMutableData alloc] init] autorelease];
     NSKeyedArchiver *archiver = [[[NSKeyedArchiver alloc] initForWritingWithMutableData:data] autorelease];
-    [archiver encodeObject:theData forKey:@"Data"];
+    [archiver encodeObject:theData forKey:@"TotoalData"];
     [archiver finishEncoding];
     [data writeToFile:pathForFile(filename) atomically:YES];
 }

@@ -22,7 +22,7 @@
         
         
         _count=0;
-        _score=[CCLabelTTF labelWithString:@"0" fontName:@"Marker Felt" fontSize: HD_TEXT(38)];
+        _score=[CCLabelTTF labelWithString:@"0" fontName:@"Impact" fontSize: HD_TEXT(34)];
         _box=[CCSprite spriteWithSpriteFrameName:imageName];
         [self setPosition:position];
         
@@ -44,6 +44,8 @@
 -(void)setPosition:(CGPoint)position
 {
     [_box setPosition:position];
+    
+    //[_score setPosition:ccp(position.x,(position.y-HD_PIXELS(7)))];
     [_score setPosition:position];
 }
 

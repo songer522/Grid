@@ -10,8 +10,11 @@
 #import "cocos2d.h"
 #import "ScoreBox.h"
 #import <UIKit/UIKit.h>
-#import "GameWindow.h"
+#import "MessageWindow.h"
 #import "EdgeGraphic.h"
+#import "GameoverWindow.h"
+#import "HowToPlayPage.h"
+#import "FlashDot.h"
 #import <iAd/iAd.h>
 
 typedef enum {
@@ -28,6 +31,9 @@ typedef enum {
     
 } Direction;
 @class GameLayer;
+@class GameoverWindow;
+@class HowToPlayPage;
+@class FlashDot;
 @interface GridView : CCLayer<ADBannerViewDelegate> {
     CCLabelTTF *_lable;
     CCSprite *_background;
@@ -41,9 +47,19 @@ typedef enum {
     CCSprite *_theNewGameButton;
     CCSprite *_soundButton;
     CCSprite *_menuButton;
+    CCSprite *_helpButton;
+    //CCSprite *_playerIndicator;
+    //CCSprite *_playerIndicator2;
+    
+    CCSprite *_blueIndicator;
+    CCSprite *_orangeIndicator;
+    FlashDot *_dot1;
+    FlashDot *_dot2;
     float _waitToShowBox;
-    float _waitToShowSecondBoxBlue;
-    float _waitToShowSecondBoxOrange;
+    float _waitToShowBlueIndicator;
+    float _waitToShowOrangeIndicator;
+   
+
   
     EdgeGraphic *_lastEdge;
     CCTMXTiledMap  *tileMap;
@@ -52,7 +68,9 @@ typedef enum {
     CCTMXLayer *_lineDownLayer;
     
     
-    GameWindow *_window;
+    MessageWindow *_window;
+    GameoverWindow *_gameoverWindow;
+    HowToPlayPage *_howToPlayPage;
     float _secondBoxPositionX;
     float _secondBoxPositionY;
     NSMutableArray *_treasureBoxArray;
@@ -67,19 +85,29 @@ typedef enum {
 }
 @property (retain, nonatomic)CCSprite *edgeIndicator;
 @property (retain, nonatomic)EdgeGraphic *lastEdge;
+@property (retain, nonatomic)FlashDot *dot1;
+@property (retain, nonatomic)FlashDot *dot2;
 @property (retain, nonatomic)CCSprite *theNewGameButton;
 @property (retain, nonatomic)CCSprite *menuButton;
 @property (retain, nonatomic)CCSprite *dots;
 @property (retain,nonatomic) CCSprite *soundButton;
+@property (retain,nonatomic) CCSprite *helpButton;
+//@property (retain,nonatomic) CCSprite *playerIndicator;
+//@property (retain,nonatomic) CCSprite *playerIndicator2;
+
+@property (retain,nonatomic)CCSprite *blueIndicator;
+@property (retain,nonatomic)CCSprite *orangeIndicator;
 @property (retain, nonatomic)CCLayer *edgeLayer;
 @property (retain, nonatomic)CCLayer *blockLayer;
-@property (retain, nonatomic)CCLabelTTF *lable;
+//@property (retain, nonatomic)CCLabelTTF *lable;
 @property (retain, nonatomic)ScoreBox *blueScoreBox;
 @property (retain, nonatomic)ScoreBox *orangeScoreBox;
 @property float secondBoxPositionX;
 @property float secondBoxPositionY;
-@property float waitToShowSecondBoxBlue;
-@property float waitToShowSecondBoxOrange;
+@property float waitToShowBlueIndicator;
+@property float waitToShowOrangeIndicator;
+@property (retain,nonatomic)GameoverWindow *gameoverWindow;
+@property (retain,nonatomic)HowToPlayPage *howToPlayPage;
 @property (nonatomic,retain)NSMutableArray *treasureBoxArray;
 @property (nonatomic,retain)NSMutableArray *cannonArray;
 @property (nonatomic,retain)NSMutableArray *boxArray;
@@ -111,6 +139,8 @@ typedef enum {
 - (id)getBoxAtPosition:(CGPoint)point;
 - (id)getShipAtPosition:(CGPoint)point;
 - (id)getMapAtPosition:(CGPoint)point;
+-(void)blueIsOn;
+-(void)orangeIsOn;
 - (CGPoint)getBoxPositionAt:(Direction)direction From:(CGPoint)point;
 -(CGPoint)getItemPositionAtRowIndex:(int)rowIndex ItemIndex:(int)edgeIndex;
 - (void)update:(ccTime)dt;

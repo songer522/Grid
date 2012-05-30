@@ -14,6 +14,8 @@
 
 @implementation LevelButton
 @synthesize buttonId=_buttonId;
+@synthesize hasMedal=_hasMedal;
+@synthesize levelNumber=_levelNumber;
 
 +(id)levelButtonWithId:(int)buttonId
 {
@@ -33,16 +35,34 @@
 
 -(void)initButton
 {
-      
+    _hasMedal=NO;
    NSString *unlockedValue = [[GameSettings shared] getGlobalForKey:[NSString stringWithFormat:@"level%d",_buttonId]];
     if ([unlockedValue isEqualToString:@"YES"])
     {
                 _buttonGraphic=[CCSprite spriteWithSpriteFrameName:@"Graphic_LevelBack.png"];
-        _levelNumber=[CCLabelTTF labelWithString:[NSString stringWithFormat:@"%d",_buttonId] fontName:@"Marker Felt" fontSize: HD_TEXT(38)];
+        
+        
+        
+        int num= _buttonId % 16;
+        if(num==0)
+        {
+            num=16;
+                
+            
+        }
+        _levelNumber=[CCLabelTTF labelWithString:[NSString stringWithFormat:@"%d",num] fontName:@"Impact" fontSize: HD_TEXT(34)];
 
          // [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
        [self addChild:_buttonGraphic];
         [self addChild:_levelNumber];
+        
+        NSString *clearLevel=[[GameSettings shared] getGlobalForKey:[NSString stringWithFormat:@"ClearLevel%d",_buttonId]];
+        if([clearLevel isEqualToString:@"YES"])
+        {
+            _medal=[CCSprite spriteWithSpriteFrameName:@"Graphic_LevelCleared.png"];
+            [self addChild:_medal];
+            _hasMedal=YES;
+        }
     }
     else {
         _buttonGraphic=[CCSprite spriteWithSpriteFrameName:@"Graphic_LevelLocked.png"];
@@ -58,6 +78,7 @@
 {
     [_buttonGraphic setPosition:position];
     [_levelNumber setPosition:position];
+    [_medal setPosition:position];
     _buttonPosition=position;
     
 }
@@ -68,7 +89,7 @@
     
   if ( [self checkTouchAtPosition:touchOrigin2])
   {
-      [self ButtonPressed];
+      //[self ButtonPressed];
   }
     
     
@@ -87,13 +108,17 @@
 
 
 
--(void)ButtonPressed
+-(BOOL)ButtonPressed
 {
     NSString *unlockedValue = [[GameSettings shared] getGlobalForKey:[NSString stringWithFormat:@"level%d",_buttonId]];
     
     NSString *levelNumber=[NSString stringWithFormat:@"%d",_buttonId];
     [[GameSettings shared] setGlobal:levelNumber ForKey:@"selectedLevel"];
-    
+    NSString *buttonNumber=_levelNumber.string;
+    if(buttonNumber)
+    {
+    [[GameSettings shared] setGlobal:buttonNumber ForKey:@"levelNumberOnButton"];
+    }
     
     
     if ([unlockedValue isEqualToString:@"YES"])
@@ -107,14 +132,18 @@
         
         CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
         [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[GameLayer scene]]]; 
+        return YES;
 
+    }
+    else {
+        return NO;
     }
     
 }
 
 -(BOOL)checkTouchAtPosition:(CGPoint)point
 {
-    if(abs(point.x-_buttonPosition.x)<20&&abs(point.y-_buttonPosition.y)<20 )
+    if(abs(point.x-_buttonPosition.x)<HD_PIXELS(20)&&abs(point.y-_buttonPosition.y)<HD_PIXELS(20) )
     {
         return YES;
     }

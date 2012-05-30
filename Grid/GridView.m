@@ -25,7 +25,7 @@
 
 @implementation GridView
 @synthesize edgeIndicator=_edgeIndicator;
-@synthesize lable=_lable;
+//@synthesize lable=_lable;
 @synthesize edgeLayer=_edgeLayer;
 @synthesize blockLayer=_blockLayer;
 @synthesize orangeScoreBox=_orangeScoreBox;
@@ -34,19 +34,28 @@
 @synthesize theNewGameButton=_theNewGameButton;
 @synthesize secondBoxPositionX=_secondBoxPositionX;
 @synthesize secondBoxPositionY=_secondBoxPositionY;
-@synthesize waitToShowSecondBoxBlue=_waitToShowSecondBoxBlue;
-@synthesize waitToShowSecondBoxOrange=_waitToShowSecondBoxOrange;
+@synthesize waitToShowBlueIndicator=_waitToShowBlueIndicator;
+@synthesize waitToShowOrangeIndicator=_waitToShowOrangeIndicator;
+@synthesize gameoverWindow=_gameoverWindow;
 @synthesize treasureBoxArray=_treasureBoxArray;
 @synthesize cannonArray=_cannonArray;
 @synthesize boxArray=_boxArray;
 @synthesize edgeArray=_edgeArray;
 @synthesize shipArray=_shipArray;
 @synthesize mapArray=_mapArray;
+//@synthesize playerIndicator=_playerIndicator;
+//@synthesize playerIndicator2=_playerIndicator2;
+@synthesize blueIndicator=_blueIndicator;
+@synthesize orangeIndicator=_orangeIndicator;
 @synthesize parentController=_parentController;
 @synthesize lastEdge=_lastEdge;
+@synthesize dot1=_dot1;
+@synthesize dot2=_dot2;
 @synthesize dots=_dots;
 @synthesize soundButton=_soundButton;
+@synthesize helpButton=_helpButton;
 @synthesize isSoundOn=_isSoundOn;
+@synthesize howToPlayPage=_howToPlayPage;
 
 
 +(id)gridViewInController:(id)controller
@@ -66,7 +75,7 @@
         _dots=[CCLayer node];
         
        // [self loadDots];
-       [self loadDashLines];
+      // [self loadDashLines];
        
         
         
@@ -75,19 +84,43 @@
        // _waitToPlayTreasureBoxAnimation=0.3;
        // _waitToFadeOutTreasureBoxBlue=0;
         //_waitToFadeOutTreasureBoxOrange=0;
+       
+        NSString *islandNumber=[[GameSettings shared] getGlobalForKey:@"island"];
+        int newNumber=[islandNumber intValue];
+        NSString *newIslandNumber=[NSString stringWithFormat:@"%d",(newNumber+1)];
+        NSString *levelNumber=[[GameSettings shared] getGlobalForKey:@"levelNumberOnButton"];
         
-        _lable=[CCLabelTTF labelWithString:@"Please Start" fontName:@"Marker Felt" fontSize: HD_TEXT(24)];
-        [_lable setColor:ccBLACK];
-        _lable.position=ADJUST_CCP(ccp(160,415)) ;
+        
+        _lable=[CCLabelTTF labelWithString:[NSString stringWithFormat: @"Level %@-%@",newIslandNumber,levelNumber] fontName:@"Impact" fontSize: HD_TEXT(14)];
+        [_lable setColor:ccc3(25, 25, 25)];
+        _lable.position=ADJUST_CCP(ccp(160,465)) ;//FULL VERSION CHANGE BACK 110 to 415
+        
+        //_playerIndicator=[CCSprite spriteWithSpriteFrameName:@"Graphic_TextBlue.png"];
+        //[_playerIndicator setPosition:ADJUST_CCP(ccp(60,415))];
+        
+        //_playerIndicator2=[CCSprite spriteWithSpriteFrameName:@"Graphic_TextBlue.png"];
+        //[_playerIndicator2 setPosition:ADJUST_CCP(ccp(260,415))];
+       
+        _blueIndicator=[CCSprite spriteWithSpriteFrameName:@"Graphic_BluesTurn.png"];
+        [_blueIndicator setPosition:ADJUST_CCP(ccp(155,455))];
+        
+        _orangeIndicator=[CCSprite spriteWithSpriteFrameName:@"Graphic_OrangesTurn.png"];
+        [_orangeIndicator setPosition:ADJUST_CCP(ccp(155,455))];
+
+        CCSprite *levelNumBack=[CCSprite spriteWithSpriteFrameName:@"Graphic_LevelNumber.png"];
+        [levelNumBack setPosition:ADJUST_CCP(ccp(155,455))];
         
         _edgeLayer=[CCLayer node];
         _blockLayer=[CCLayer node];
         
-        _blueScoreBox=[ScoreBox ScoreBoxWithImage:@"Graphic_BlueScore.png" andPosition:ADJUST_CCP(ccp(50,70))]; 
-        _orangeScoreBox=[ScoreBox ScoreBoxWithImage:@"Graphic_OrangeScore.png" andPosition:ADJUST_CCP(ccp(270,70))];
+        _blueScoreBox=[ScoreBox ScoreBoxWithImage:@"Graphic_BlueScore.png" andPosition:ADJUST_CCP(ccp(50,96))]; //FULL VERSION 76
+
+        _orangeScoreBox=[ScoreBox ScoreBoxWithImage:@"Graphic_OrangeScore.png" andPosition:ADJUST_CCP(ccp(270,96))];//FULL VERSION 76
+
         
         _theNewGameButton=[CCSprite spriteWithSpriteFrameName:@"Button_NewGame.png"];
         _menuButton=[CCSprite spriteWithSpriteFrameName:@"Button_Menu.png"];
+        _helpButton=[CCSprite spriteWithSpriteFrameName:@"Button_HTP.png"];
         
         
         _isSoundOn=YES;
@@ -110,11 +143,14 @@
 
         [_soundButton setPosition:ADJUST_CCP(ccp(290,455))];
         
-
+        [_helpButton setPosition:ADJUST_CCP(ccp(240,455))];
         
-        [_theNewGameButton setPosition:ADJUST_CCP(ccp(50,455))];
-        [_menuButton setPosition:ADJUST_CCP(ccp(140,455))];
-        _window=[GameWindow GameWindowWithImage:@"Graphic_TBox_1.png" text:@"Treasure Points" number:@"+5" andPosition:ADJUST_CCP(ccp(160,70))];
+        
+        
+        [_theNewGameButton setPosition:ADJUST_CCP(ccp(30,455))];
+        [_menuButton setPosition:ADJUST_CCP(ccp(80,455))];
+        _window=[MessageWindow GameWindowWithImage:@"Graphic_TBox_1.png" text:@"Treasure Points" number:@"+5" andPosition:ADJUST_CCP(ccp(160,96))];//FULL VERSION CHANGE BACK 110 to 70
+
         [_window setOpacity:0];  
        
        
@@ -130,7 +166,7 @@
         _lineRightLayer=[tileMap layerNamed:@"Right"];
         _lineDownLayer=[tileMap layerNamed:@"Down"];
         
-        [tileMap setPosition:ADJUST_CCP(ccp(1,93.5))];
+        [tileMap setPosition:ADJUST_CCP(ccp(1,113.5))];//93.5  FULL VERSION CHANGE BACK
        // _powerUpsArray=[NSMutableArray arrayWithObjects:_treasureBox1, nil];
 
         
@@ -147,16 +183,79 @@
         
         [self addChild:_background];
         [self addChild:tileMap];
-        [self addChild:_dashLines];
+        //[self addChild:_dashLines];
         [self addChild:_blockLayer];
         [self addChild:_edgeLayer];
         [self addChild:_dots];
+        
+       // [self addChild:_playerIndicator];
+       // [self addChild:_playerIndicator2];
+        [self addChild:_blueIndicator];
+        [self addChild:_orangeIndicator];
+        [self addChild:levelNumBack];
         [self addChild:_lable];
         [self addChild:_blueScoreBox];
         [self addChild:_orangeScoreBox];
+        
+        [self blueIsOn];
+        //[_orangeIndicator setOpacity:51];
+        //[[GameSettings shared] getGlobalForKey:@""];
+        if( [_parentController.gameMode isEqualToString:@"solo"])
+        {
+            CCLabelTTF *player1= [CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"Player1Name"] dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentLeft fontName:@"Impact" fontSize:HD_TEXT(20)];
+           // CCLabelTTF *player1=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"Player1Name"] fontName:@"Impact" fontSize:HD_TEXT(20)];
+            //CCLabelTTF *player2=[CCLabelTTF labelWithString:@"CPU" fontName:@"Impact" fontSize:HD_TEXT(20)];
+            CCLabelTTF *player2=[CCLabelTTF labelWithString:@"CPU" dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentRight fontName:@"Impact" fontSize:HD_TEXT(20)];
+            [player1 setPosition:ADJUST_CCP(ccp(131,76))];
+            [player2 setPosition:ADJUST_CCP(ccp(189,76))];
+            [player1 setColor:ccc3(25, 25, 25)];
+            [player2 setColor:ccc3(25, 25, 25)];
+           // player1.fontSize=HD_TEXT([self getTextName:player1]);
+            // player2.fontSize=HD_TEXT([self getTextName:player2]);
+            player1.fontSize=HD_TEXT(16);
+            player2.fontSize=HD_TEXT(16);
+            [self addChild:player1];
+            [self addChild:player2];
+        }
+        
+        else if([_parentController.gameMode isEqualToString:@"oneDevice"])
+        {
+            CCLabelTTF *player1=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"Player1Name"] dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentLeft fontName:@"Impact" fontSize:HD_TEXT(20)];
+            CCLabelTTF *player2=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"Player2Name"] dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentRight fontName:@"Impact" fontSize:HD_TEXT(20)];
+            
+            [player1 setPosition:ADJUST_CCP(ccp(131,76))];
+            [player2 setPosition:ADJUST_CCP(ccp(189,76))];
+            [player1 setColor:ccc3(25, 25, 25)];
+            [player2 setColor:ccc3(25, 25, 25)];
+            //player1.fontSize=HD_TEXT([self getTextName:player1]);
+            //player2.fontSize=HD_TEXT([self getTextName:player2]);
+            player1.fontSize=HD_TEXT(16);
+             player2.fontSize=HD_TEXT(16);
+            
+            [self addChild:player1];
+            [self addChild:player2];
+        
+        }
+        
+        else if([_parentController.gameMode isEqualToString:@"blueTooth"])
+        {
+            CCLabelTTF *player1=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"BluePlayer"] dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentLeft fontName:@"Impact" fontSize:HD_TEXT(20)];
+            CCLabelTTF *player2=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"OrangePlayer"] dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentRight fontName:@"Impact" fontSize:HD_TEXT(20)];
+            [player1 setPosition:ADJUST_CCP(ccp(131,76))];
+            [player2 setPosition:ADJUST_CCP(ccp(189,76))];
+            [player1 setColor:ccc3(25, 25, 25)];
+            [player2 setColor:ccc3(25, 25, 25)];
+           // player1.fontSize=HD_TEXT([self getTextName:player1]);
+            //player2.fontSize=HD_TEXT([self getTextName:player2]);
+            player1.fontSize=HD_TEXT(16);
+            player2.fontSize=HD_TEXT(16);
+            [self addChild:player1];
+            [self addChild:player2];
+        }
         [self addChild:_menuButton];
         [self addChild:_theNewGameButton];
         [self addChild:_soundButton];
+        [self addChild:_helpButton];
          [self addChild:_window];
                
        [self loadEdgeIndicator];
@@ -166,8 +265,20 @@
         [_lastEdge setPosition:ADJUST_CCP(ccp(0,0))];
         [_lastEdge setVisible:NO];
         [_dots addChild:_lastEdge];
+        _dot1=[FlashDot spriteWithSpriteFrameName:@"TileGraphic_Dot_Red.png"];
+        [_dot1 setPosition:ADJUST_CCP(ccp(0,0))];
+        [_dot1 setVisible:NO];
+        [_dots addChild:_dot1];
+        
+        _dot2=[FlashDot spriteWithSpriteFrameName:@"TileGraphic_Dot_Red.png"];
+        [_dot2 setPosition:ADJUST_CCP(ccp(0,0))];
+        [_dot2 setVisible:NO];
+        [_dots addChild:_dot2];
+         
     
-        //[self loadiAd];
+       // [self loadiAd];
+        
+    
         }
         
     return self;
@@ -193,10 +304,15 @@
     
     adView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
     
+    CGRect adFrame = adView.frame;
+    adFrame.origin.y =  [CCDirector sharedDirector].view.frame.size.height-adView.frame.size.height;
+    adView.frame = adFrame;
+    adView.delegate=self;
     [controller.view addSubview:adView];
     
     //Then I add the adView to the openglview of cocos2d
-    [[[CCDirector sharedDirector] view] addSubview:controller.view];
+    //[[[CCDirector sharedDirector] view] addSubview:controller.view];
+    [[[CCDirector sharedDirector] view] addSubview:adView];
     
 }
 
@@ -206,7 +322,7 @@
 {
     for(int positionX = HD_PIXELS(27.5); positionX< X_BOUNDARY_RIGHT; positionX=positionX+EDGE_LENGTH )
     {
-        for (int positionY= HD_PIXELS(120); positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
+        for (int positionY= HD_PIXELS(140); positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
             //CCSprite *dot=[CCSprite spriteWithSpriteFrameName:@"Graphic_Dot.png"];
             //[dot setPosition:ccp(positionX,positionY)];
             //[_dots addChild:dot];
@@ -251,41 +367,55 @@
                     if (collision && [collision compare:@"TreasureBox"] == NSOrderedSame) {
                         Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
                         box.status=TREASUREBOX;
+                        [_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
                         [_parentController loadTreasureBoxAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
                     }
                     else if (collision && [collision compare:@"CannonLeft"] == NSOrderedSame) {
+                        [_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
                         Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
                         box.status=CANNON;
                         [_parentController loadCannonAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Flip:NO];
                     }
                     else if (collision && [collision compare:@"CannonRight"] == NSOrderedSame) {
+                        [_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
                         Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
                         box.status=CANNON;
                       [_parentController loadCannonAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Flip:YES];
                     }
                     else if (collision && [collision compare:@"ShipLeft"] == NSOrderedSame) {
+                        [_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
                         Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
                         box.status=SHIP;
                         [_parentController loadShipAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Flip:YES];
 
                     }
                     else if (collision && [collision compare:@"ShipRight"] == NSOrderedSame) {
+                        [_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
                         Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
                         box.status=SHIP;
                         [_parentController loadShipAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Flip:NO];
                     }
                     else if (collision && [collision compare:@"MapOne"] == NSOrderedSame) {
+                        [_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
                         Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
                         box.status=MAP;
                         [_parentController loadTreasureMapAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Part:TREASUREMAP_PART_ONE];
+                        CCSprite *mapIndicator1=[CCSprite spriteWithSpriteFrameName:@"Graphic_TmapBack.png"];
+                        [mapIndicator1 setPosition:ADJUST_CCP(ccp(50,45))];
+                        [_blockLayer addChild:mapIndicator1];
+                        CCSprite *mapIndicator2=[CCSprite spriteWithSpriteFrameName:@"Graphic_TmapBack.png"];
+                        [mapIndicator2 setPosition:ADJUST_CCP(ccp(270,45))];
+                        [_blockLayer addChild:mapIndicator2];
 
                     }
                     else if (collision && [collision compare:@"MapTwo"] == NSOrderedSame) {
+                        [_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
                         Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
                         box.status=MAP;
                         [_parentController loadTreasureMapAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Part:TREASUREMAP_PART_TWO];
                     }
                     else if (collision && [collision compare:@"Empty"] == NSOrderedSame) {
+                        [_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
                         Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
                         box.status=EMPTY_BOX;
                     }
@@ -342,7 +472,7 @@
     // int x = (position.x-X_MARGIN) / tileMap.tileSize.width;
     int x = (position.x+1-HD_PIXELS(27.5)) / HD_PIXELS(53);
     //int y = ((tileMap.mapSize.height * tileMap.tileSize.height) - position.y) / tileMap.tileSize.height;
-    int y=(HD_PIXELS(385) - position.y) / HD_PIXELS(53);
+    int y=(HD_PIXELS(405) - position.y) / HD_PIXELS(53);//385
     return ccp(x, y);
 }
 
@@ -445,13 +575,14 @@
 
 - (void)showMessageBoxForTreasureBox
 {
-    [_window setImage:@"Graphic_TBox_1.png" text:@"Treasure Box" number:@"+2"];
+    [_window setImage:@"Graphic_Box_Small.png" text:@"Treasure Box" number:@"+2"];
     _window.waitToFadeInTreasureBoxMessageBox=1.0;
 }
 
 - (void)showMessageBoxForTreasureMap
 {
-    [_window setImage:@"Graphic_TBox_Small.png" text:@"Treasure Map" number:@"+5"];
+    [_window setImage:@"Graphic_Map_Small.png" text:@"Treasure Map" number:@"+5"];
+    //[_window.Icon setScale:0.7];
     _window.waitToFadeInTreasureBoxMessageBox=1.0;
 
 }
@@ -500,6 +631,45 @@
     
 }
 
+-(void)blueIsOn
+{
+    //[_blueIndicator setOpacity:255];
+    //[_orangeIndicator setOpacity:51];
+   
+    _waitToShowBlueIndicator=0.8;
+    _waitToShowOrangeIndicator=-1;
+    
+}
+
+-(void)orangeIsOn
+{
+    //[_blueIndicator setOpacity:51];
+    //[_orangeIndicator setOpacity:250];
+    
+    _waitToShowOrangeIndicator=0.8;
+    _waitToShowBlueIndicator=-1;
+    
+}
+
+
+-(int)getTextName:(CCLabelTTF*)label
+{
+    
+    if(label.string.length>0&&label.string.length<6)
+    {
+        return 16;
+    }
+    else if(label.string.length>5&&label.string.length<7)
+    {
+        return 13;
+    }
+    else if(label.string.length>6&&label.string.length<9){
+        return 10;
+    }
+    else {
+        return 7;
+    }
+}
 
 
 
@@ -508,27 +678,34 @@
                            Vertical:(BOOL)isVertical
 {
     EdgeGraphic *edge=[EdgeGraphic spriteWithSpriteFrameName:edgeColor];
-    [edge setScale:0];
+    //[edge setScale:0];
     [edge setPosition:point];
-    [_lastEdge setScale:0];
+   // [_lastEdge setScale:0];
     [_lastEdge setPosition:point];
    
     if(isVertical)
     {
         edge.rotation=90;
         _lastEdge.rotation=90;
+        [_dot1 setPosition:ccp(point.x,(point.y+EDGE_LENGTH*0.5)) ];
+        [_dot2 setPosition:ccp(point.x,(point.y-EDGE_LENGTH*0.5)) ];
        
     }
     else {
         _lastEdge.rotation=0;
-      
+        [_dot1 setPosition:ccp((point.x-EDGE_LENGTH*0.5),point.y) ];
+        [_dot2 setPosition:ccp((point.x+EDGE_LENGTH*0.5),point.y) ];
     }
     [_lastEdge setVisible:YES];
-    _lastEdge.waitToShowEdge=0.2;
+   // _lastEdge.waitToShowEdge=0.2;
+    [_dot1 setVisible:YES];
+    [_dot2 setVisible:YES];
     
+    _dot1.waitToShowDot=1.5;
+    _dot2.waitToShowDot=1.5;
     [_edgeArray addObject:edge];
     [_edgeLayer addChild:edge];
-    edge.waitToShowEdge=0.2;
+    //edge.waitToShowEdge=0.2;
 }
 
 -(void)drawEdgeIndicatorAtPosition:(CGPoint)point
@@ -581,10 +758,14 @@
     // _gridView.waitToPlayTreasureBoxAnimation=0.3;
     //_gridView.treasureBox1.waitToPlayTreasureBoxAnimation=0.3;
    
-    [_lable setString:[NSString stringWithFormat:@"Please Start"]];
+    //[_lable setString:[NSString stringWithFormat:@"Please Start"]];
+    [self blueIsOn];
+    //[_orangeIndicator setOpacity:51];
     _edgeIndicator =[CCSprite spriteWithSpriteFrameName:[_parentController getEdgeIndicatorColor]];
     [_edgeIndicator setVisible:NO];
     [_lastEdge setVisible:NO];
+    [_dot1 setVisible:NO];
+    [_dot2 setVisible:NO];
     
     [_edgeLayer addChild:_edgeIndicator];
     [_treasureBoxArray removeAllObjects];
@@ -597,44 +778,49 @@
      [self loadPowerUpsAndsetupModel];
 }
 - (void)update:(ccTime)dt {
-    /*
-    if(_waitToShowBox>0)
+ 
+    if(_waitToShowBlueIndicator>0)
     {
-        _waitToShowBox=_waitToShowBox-dt;
-        [tempSprite setScale:(1-5*_waitToShowBox)];
-        if(_waitToShowBox<0)
+        _waitToShowBlueIndicator=_waitToShowBlueIndicator-dt;
+        if(_waitToShowBlueIndicator<=0.5 && _waitToShowBlueIndicator>=0.1)
         {
-            [tempSprite setScale:1];
-        }
-    }
-    */
-    /*
-    
-    
-    if(_waitToShowSecondBoxBlue>0)
-    {
-        _waitToShowSecondBoxBlue=_waitToShowSecondBoxBlue-dt;
-        if(_waitToShowSecondBoxBlue<0)
-        {
+            [_blueIndicator setOpacity:((0.6-_waitToShowBlueIndicator)*510) ];
             
-            //[self blueBlockAtPositionX:_secondBoxPositionX PositionY:_secondBoxPositionY];
-            [self fillBlockAtPositionX:_secondBoxPositionX PositionY:_secondBoxPositionY WithColor:BLUE_BOX];
+            if(_waitToShowBlueIndicator<0.5)
+            {
+            [_orangeIndicator setOpacity:(510*_waitToShowBlueIndicator)];
+            }
         }
+        
+        if(_waitToShowBlueIndicator<0)
+        {
+            [_blueIndicator setOpacity:255];
+            [_orangeIndicator setOpacity:51];
+        }
+        
     }
     
-    if(_waitToShowSecondBoxOrange>0)
+    if(_waitToShowOrangeIndicator>0)
     {
-        _waitToShowSecondBoxOrange=_waitToShowSecondBoxOrange-dt;
-        if(_waitToShowSecondBoxOrange<0)
+        _waitToShowOrangeIndicator=_waitToShowOrangeIndicator-dt;
+        if(_waitToShowOrangeIndicator<=0.5 && _waitToShowOrangeIndicator>=0.1)
         {
-            
-            //[self orangeBlockAtPositionX:_secondBoxPositionX PositionY:_secondBoxPositionY];
-             [self fillBlockAtPositionX:_secondBoxPositionX PositionY:_secondBoxPositionY WithColor:ORANGE_BOX];
+            [_orangeIndicator setOpacity:((0.6-_waitToShowOrangeIndicator)*510) ];
+            if(_waitToShowOrangeIndicator<0.5)
+            {
+            [_blueIndicator setOpacity:(510*_waitToShowOrangeIndicator)];
+            }
         }
+        
+        if(_waitToShowOrangeIndicator<0)
+        {
+           [_orangeIndicator setOpacity:255];
+            [_blueIndicator setOpacity:51];
+        }
+        
     }
-     */
-    //[_treasureBox1 update:dt];
-    //[_cannon1 update:dt];
+    
+    
     for (BoxIcon *obj in _boxArray)
     {
         [obj update:dt];
@@ -666,250 +852,21 @@
     }
     
     [_lastEdge update:dt];
+    [_gameoverWindow update:dt];
+    [_howToPlayPage update:dt];
+    [_dot1 update:dt];
+    [_dot2 update:dt];
     
-    
-    
-    /*
-    if(_waitToPlayTreasureBoxAnimation>0)
-    {
-        _waitToPlayTreasureBoxAnimation=_waitToPlayTreasureBoxAnimation-dt;
-        if(_waitToPlayTreasureBoxAnimation<0)
-        {
-            [_treasureBox1 playHalfOpenAnimation];
-            _waitToPlayTreasureBoxAnimation=2.0;
-        }
-    }
-    
-    if(_waitToFadeOutTreasureBoxBlue>0)
-    {
-        _waitToFadeOutTreasureBoxBlue=_waitToFadeOutTreasureBoxBlue-dt;
-       
-       if(_waitToFadeOutTreasureBoxBlue<0.5&&_waitToFadeOutTreasureBoxBlue>0)
-       {
-            [_treasureBox1.boxGraphic setOpacity:_waitToFadeOutTreasureBoxBlue*510];
-       }
-        if(_waitToFadeOutTreasureBoxBlue<0)
-        {
-            //[_treasureBox1 setVisible:NO];
-            // NSLog(@"opacity%c",_treasureBox1.boxGraphic.opacity);
-            [_treasureBox1.boxGraphic setOpacity:0];
-            [self fillBlockAtPositionX:_treasureBox1.boxPosition.x PositionY:_treasureBox1.boxPosition.y WithColor:BLUE_BOX];
-            
-        }
-    }
-    
-    if(_waitToFadeOutTreasureBoxOrange>0)
-    {
-        _waitToFadeOutTreasureBoxOrange=_waitToFadeOutTreasureBoxOrange-dt;
-        
-        
-        if(_waitToFadeOutTreasureBoxOrange<0.5 && _waitToFadeOutTreasureBoxOrange>0)
-        {
-            [_treasureBox1.boxGraphic setOpacity:_waitToFadeOutTreasureBoxOrange*510];
-        }
-        
-        if(_waitToFadeOutTreasureBoxOrange<0)
-        {
-            //[_treasureBox1 setVisible:NO];
-            //NSLog(@"opacity%c",_treasureBox1.boxGraphic.opacity);
-              [_treasureBox1.boxGraphic setOpacity:0];
-            [self fillBlockAtPositionX:_treasureBox1.boxPosition.x PositionY:_treasureBox1.boxPosition.y WithColor:ORANGE_BOX];
-            
-        }
-    }
-    */
-    /*
-    if(_waitToFadeOutCannonBlue>0)
-    {
-        _waitToFadeOutCannonBlue=_waitToFadeOutCannonBlue-dt;
-        
-        
-        if(_waitToFadeOutCannonBlue<2 && _waitToFadeOutCannonBlue>1.0)
-        {
-            [_cannon1.cannonGraphic setOpacity:(_waitToFadeOutCannonBlue-1.0)*255];
-            [_cannon1.cannonBallGraphic setOpacity:(_waitToFadeOutCannonBlue-1.0)*255];
-        }
-        
-        if(_waitToFadeOutCannonBlue<0)
-        {
-            [_cannon1.cannonGraphic setOpacity:0];
-            [_cannon1.cannonBallGraphic setOpacity:0];
-             [self fillBlockAtPositionX:_cannon1.cannonPosition.x PositionY:_cannon1.cannonPosition.y WithColor:BLUE_BOX];
-        }
-    }
-    
-    if(_waitToFadeOutCannonOrange>0)
-    {
-        _waitToFadeOutCannonOrange=_waitToFadeOutCannonOrange-dt;
-        
-        if(_waitToFadeOutCannonOrange<2 && _waitToFadeOutCannonOrange>1.0)
-        {
-            [_cannon1.cannonGraphic setOpacity:(_waitToFadeOutCannonOrange-1.0)*255];
-            [_cannon1.cannonBallGraphic setOpacity:(_waitToFadeOutCannonOrange-1.0)*255];
-        }
-        
-        if(_waitToFadeOutCannonOrange<0)
-        {
-            [_cannon1.cannonGraphic setOpacity:0];
-            [_cannon1.cannonBallGraphic setOpacity:0];
-            [self fillBlockAtPositionX:_cannon1.cannonPosition.x PositionY:_cannon1.cannonPosition.y WithColor:ORANGE_BOX];
-        }
-    }
-    */
-    /*
-    if(_waitToFadeInTreasureBoxMessageBox>0)
-    {
-        _waitToFadeInTreasureBoxMessageBox=_waitToFadeInTreasureBoxMessageBox-dt;
-        [_window setOpacity:(1.0-_waitToFadeInTreasureBoxMessageBox)*255]; 
-        if(_waitToFadeInTreasureBoxMessageBox<0)
-        {
-            [_window setOpacity:255];
-            _window.waitToFadeOutTreasureBoxMessageBox=3.0;
-        }
-    }
-    
-    if(_waitToFadeOutTreasureBoxMessageBox>0)
-    {
-        _waitToFadeOutTreasureBoxMessageBox=_waitToFadeOutTreasureBoxMessageBox-dt;
-        if(_waitToFadeOutTreasureBoxMessageBox<0.5 && _waitToFadeOutTreasureBoxMessageBox>0)
-        {
-            [_window setOpacity:_waitToFadeOutTreasureBoxMessageBox*510];
-        }
-        
-        if(_waitToFadeOutTreasureBoxMessageBox<0)
-        {
-            [_window setOpacity:0];
-        }
-        
-    }
-     */
+   
+
 }
-/*
- -(void)drawEdgeIndicatorAtRowIndex:(NSInteger)rowIndex EdgeIndex:(NSInteger)edgeIndex
- {
- Edge *edge= [self getEdgeAtRowIndex:rowIndex EdgeIndex:edgeIndex];
- if(![edge checkFiled])
- {
- //fill the edge
- NSLog(@"edge touched at row %d, number %d, an edge is drew",rowIndex,edgeIndex);
- 
- //[touchPoint setScale:0.5];
- _edgeIndicator.rotation=0;
- CGFloat pointY= edgeIndex * EDGE_LENGTH + Y_MARGIN;
- // CGFloat pointY= edgeIndex * EDGE_LENGTH + Y_MARGIN-0.5*EDGE_LENGTH;
- CGFloat pointX=0.5*EDGE_LENGTH+rowIndex*EDGE_LENGTH+X_MARGIN;
- //CGFloat pointX=rowIndex*EDGE_LENGTH+X_MARGIN;
- 
- [_edgeIndicator setPosition:ccp(pointX,pointY)];
- [_edgeIndicator setVisible:YES];
- 
- //_changeColor=YES;
- 
- } 
- else {
- //[_lable setString:[NSString stringWithFormat:@"edge touched at row %d, number %d, the edge has been drew",rowIndex,edgeIndex]];
- }   
- }
- 
- 
- 
- -(void)drawEdgeIndicatorAtLineIndex:(NSInteger)lineIndex EdgeIndex:(NSInteger)edgeIndex
- {
- Edge *edge= [self getEdgeAtLineIndex:lineIndex EdgeIndex:edgeIndex];
- if(![edge checkFiled])
- {
- //fill the edge
- 
- NSLog(@"edge touched at row %d, number %d, an edge is drew",lineIndex,edgeIndex);
- //NSLog(@"an edge is drew");
- //[_lable setString:[NSString stringWithFormat:@"edge touched at line %d, number %d, an edge is drew",lineIndex,edgeIndex]];
- 
- // [_edgeIndicator setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[self getEdgeColor]]];
- _edgeIndicator.rotation=90;
- // CGFloat pointX= edgeIndex * EDGE_LENGTH + X_MARGIN-0.5*EDGE_LENGTH;
- CGFloat pointX= edgeIndex * EDGE_LENGTH + X_MARGIN;
- CGFloat pointY=0.5*EDGE_LENGTH+lineIndex*EDGE_LENGTH+Y_MARGIN;
- [_edgeIndicator setPosition:ccp(pointX,pointY)];
- [_edgeIndicator setVisible:YES];
- //[_edgeLayer addChild:touchPoint];
- //_changeColor=YES;
- 
- 
- 
- }
- else {
- // [_lable setString:[NSString stringWithFormat:@"edge touched at line %d, number %d, the edge has been drew",lineIndex,edgeIndex]];
- } 
- }
- */
 
-/*
-
-
--(void)drawEdgeAtRowIndex:(NSInteger)rowIndex EdgeIndex:(NSInteger)edgeIndex
+- (void)bannerViewActionDidFinish:(ADBannerView *)banner
 {
     
-        //fill the edge
-        
-        NSLog(@"edge touched at row %d, number %d, an edge is drew",rowIndex,edgeIndex);
-        // [_lable setString:[NSString stringWithFormat:@"edge touched at row %d, number %d, an edge is drew",rowIndex,edgeIndex]];
-        
-        CCSprite *touchPoint=[CCSprite spriteWithSpriteFrameName:[self getEdgeColor]];
-        //[touchPoint setScale:0.5];
-        //CGFloat pointY= edgeIndex * EDGE_LENGTH + Y_MARGIN-0.5*EDGE_LENGTH; //old
-        
-        //CGFloat pointX=rowIndex*EDGE_LENGTH+X_MARGIN;
-        [touchPoint setPosition:ccp(pointX,pointY)];
-        [_edgeLayer addChild:touchPoint];
-        
-        _changeColor=YES;
-        
-        //[self checkIfSquareExistForEdgeOnARowAtIndex:rowIndex EdgeIndex:edgeIndex];
-        //if(!_twoPlayerOnOneDevice && _CPUTurn)
-       // {
-       //     [brain move:self];
-       // }
-    
-    
 }
 
-*/
-/*
--(void)drawEdgeAtLineIndex:(NSInteger)lineIndex EdgeIndex:(NSInteger)edgeIndex
-{
-    Edge *edge= [self getEdgeAtLineIndex:lineIndex EdgeIndex:edgeIndex];
-    if(![edge checkFiled])
-    {
-        //fill the edge
-        edge.isFilled=YES;
-        NSLog(@"edge touched at row %d, number %d, an edge is drew",lineIndex,edgeIndex);
-        //NSLog(@"an edge is drew");
-        //[_lable setString:[NSString stringWithFormat:@"edge touched at line %d, number %d, an edge is drew",lineIndex,edgeIndex]];
-        
-        CCSprite *touchPoint=[CCSprite spriteWithSpriteFrameName:[self getEdgeColor]];
-        touchPoint.rotation=90;
-        //CGFloat pointX= edgeIndex * EDGE_LENGTH + X_MARGIN-0.5*EDGE_LENGTH; //old
-        CGFloat pointX= edgeIndex * EDGE_LENGTH + X_MARGIN;
-        CGFloat pointY=0.5*EDGE_LENGTH+lineIndex*EDGE_LENGTH+Y_MARGIN;
-        [touchPoint setPosition:ccp(pointX,pointY)];
-        [_edgeLayer addChild:touchPoint];
-        _changeColor=YES;
-        
-        
-        [self checkIfSquareExistForEdgeOnALineAtIndex:lineIndex EdgeIndex:edgeIndex];
-        if(!_twoPlayerOnOneDevice &&_CPUTurn)
-        {
-            [brain move:self];
-        }
-         
-        
-        
-    }
-    else {
-        // [_lable setString:[NSString stringWithFormat:@"edge touched at line %d, number %d, the edge has been drew",lineIndex,edgeIndex]];
-    } 
-}
-*/
+
 -(void)dealloc
 {
     [_treasureBoxArray release];

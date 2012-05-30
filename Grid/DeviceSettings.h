@@ -58,7 +58,16 @@ __pixels__)
 
 #define HD_TEXT(__size__)   \
 (IS_IPAD() == YES ?         \
-( __size__ * 1.5 ) :            \
+( __size__ * 2.0 ) :            \
+__size__)
+#define HD_TEXT2(__size__)   \
+(IS_IPAD() == YES ?         \
+( __size__ * 2.5 ) :            \
+__size__)
+
+#define HD_TEXT3(__size__)   \
+(IS_IPAD() == YES ?         \
+( __size__ * 3.0 ) :            \
 __size__)
 
 #define SD_OR_HD(__filename__)  \

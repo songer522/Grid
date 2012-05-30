@@ -25,6 +25,7 @@
 #import "TreasureMap.h"
 #import "ChooseLevelMenu.h"
 #import "GameSettings.h"
+#import "GameoverWindow.h"
 #include <stdlib.h>
 #define WAIT_TO_FADE_OUT_TREASUREBOX 2.0
 #define WAIT_TO_FADE_OUT_CANNON 1.0
@@ -36,6 +37,8 @@
 // HelloWorldLayer implementation
 @implementation GameLayer
 @synthesize CPUTurn=_CPUTurn;
+@synthesize twoPlayerOnOneDevice=_twoPlayerOnOneDevice;
+@synthesize waitingAlert=_waitingAlert;
 @synthesize CPUThinking=_CPUThinking;
 @synthesize boxCount=_boxCount;
 @synthesize isNewGame=_isNewGame;
@@ -44,6 +47,7 @@
 @synthesize touchEnable=_touchEnable;
 @synthesize currentSession;
 @synthesize picker=_picker;
+@synthesize gameMode=_gameMode;
 // Helper class method that creates a Scene with the HelloWorldLayer as the only child.
 +(CCScene *) scene
 {
@@ -70,11 +74,14 @@
 		
 		// ask director the the window size
 		//CGSize size = [[CCDirector sharedDirector] winSize];
-	
+	  _gameMode=[[GameSettings shared] getGlobalForKey:@"gameMode"];
 		
 		[[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"spriteSheet.plist" ];
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"background.plist" ];
-     
+       [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"Black50.plist" ];
+        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"GameOverSprite.plist" ];
+              [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"howToPlaySprite.plist" ];
+
         // [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"animation.plist"];
         
         _gridModel=[GridModel GridWithNumOfLines:NUM_OF_LINES NumberOfRows:NUM_OF_ROWS];
@@ -101,10 +108,11 @@
         _touchEnable=YES;
         
         _CPUTurn=NO;
+        _otherPlayerTurn=NO;
         _CPUThinking=NO;
         _isNewGame=YES;
        
-        _gameMode=[[GameSettings shared] getGlobalForKey:@"gameMode"];
+      
         
         if([_gameMode isEqualToString:@"solo"])
         {
@@ -117,7 +125,10 @@
               }
         else if([_gameMode isEqualToString:@"blueTooth"])
         {
-            _twoPlayerOnOneDevice=NO;
+            _twoPlayerOnOneDevice=YES;
+          
+                [self setupBluetoothSession];
+            
         }
         if(!_twoPlayerOnOneDevice)
         {
@@ -125,6 +136,9 @@
             _brain.grid=self;
         }
         [self schedule:@selector(update:)];
+        
+ 
+        
         [self newGame];
         _boxCount=0;
          
@@ -138,7 +152,13 @@
                 }
             }
         }
-
+        NSString *leveNumber=[[GameSettings shared] getObjForKey:@"selectedLevel"];
+        if([leveNumber isEqualToString:@"1"]||[leveNumber isEqualToString:@"5"]||[leveNumber isEqualToString:@"9"]||[leveNumber isEqualToString:@"14"]||[leveNumber isEqualToString:@"21"])
+        {
+            _gridView.howToPlayPage=[HowToPlayPage HowToPlayPageInController:self];
+            [_gridView addChild:_gridView.howToPlayPage];
+            _gridView.howToPlayPage.waitToFadeInWindow=2.0;
+        }
       // [_brain fillRandomEdge];
         
        
@@ -206,7 +226,12 @@
 }
 */
 
-
+-(void)setupBluetoothSession
+{
+    currentSession=[[GameSettings shared] getObjForKey:@"session"];
+    currentSession.delegate=self;
+    [currentSession setDataReceiveHandler:self withContext:nil];
+}
 
 #pragma mark Load power-ups
 
@@ -274,20 +299,33 @@
     [_gridView.mapArray addObject:map];
 }
 
+-(void)loadBoxPatternAtRow:(int)rowIndex ItemIndex:(int)edgeIndex
+{
+    CCSprite *pattern=[CCSprite spriteWithSpriteFrameName:@"Graphic_Bones.png"];
+    [pattern setOpacity:51];
+    [pattern setPosition:[self generatePositionForItem:EMPTY_BOX AtRow:rowIndex ItemIndex:edgeIndex]];
+    [_gridView.blockLayer addChild: pattern];
+}
 
 #pragma mark Handle touch 
 -(BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event{
     CGPoint touchOrigin = [touch locationInView:[touch view]];
 	CGPoint touchOrigin2 = [[CCDirector sharedDirector] convertToGL:touchOrigin];
-    if(touchOrigin2.x>ADJUST_X(15) && touchOrigin2.x<ADJUST_X(90) && touchOrigin2.y>ADJUST_Y(440) && touchOrigin2.y<ADJUST_Y(470))
+    if(touchOrigin2.x>ADJUST_X(0) && touchOrigin2.x<ADJUST_X(50) && touchOrigin2.y>ADJUST_Y(440) && touchOrigin2.y<ADJUST_Y(470))
     {
         [self newButtonPressed];
     }
-   else if (touchOrigin2.x>ADJUST_X(110) && touchOrigin2.x<ADJUST_X(170) && touchOrigin2.y>ADJUST_Y(440) && touchOrigin2.y<ADJUST_Y(470))
+   else if (touchOrigin2.x>ADJUST_X(50) && touchOrigin2.x<ADJUST_X(100) && touchOrigin2.y>ADJUST_Y(440) && touchOrigin2.y<ADJUST_Y(470))
    {
        [self menuButtonPressed];
    }
-    else if (touchOrigin2.x>ADJUST_X(260) && touchOrigin2.x<ADJUST_X(320) && touchOrigin2.y>ADJUST_Y(425) && touchOrigin2.y<ADJUST_Y(480))
+   else if (touchOrigin2.x>ADJUST_X(220) && touchOrigin2.x<ADJUST_X(270) && touchOrigin2.y>ADJUST_Y(440) && touchOrigin2.y<ADJUST_Y(470))
+   {
+       _gridView.howToPlayPage=[HowToPlayPage HowToPlayWindowInController:self];
+       [_gridView addChild:_gridView.howToPlayPage];
+       //_gridView.howToPlayPage.waitToFadeInWindow=2.0;
+   }
+    else if (touchOrigin2.x>ADJUST_X(270) && touchOrigin2.x<ADJUST_X(320) && touchOrigin2.y>ADJUST_Y(425) && touchOrigin2.y<ADJUST_Y(480))
     {
         if(_gridView.isSoundOn)
         {
@@ -316,7 +354,7 @@
         }
         [self checkTouchOnEdgeAndDrawAtPosition:touchOrigin2];
         */
-    //[self showEdgeIndicatorAtPosition:touchOrigin2];
+    [self showEdgeIndicatorAtPosition:touchOrigin2];
      [self checkTouchOnEdgeAtPosition:touchOrigin2];    
         }
     
@@ -329,7 +367,7 @@
     {
     CGPoint touchOrigin = [touch locationInView:[touch view]];
 	CGPoint touchOrigin2 = [[CCDirector sharedDirector] convertToGL:touchOrigin];
-   //[self showEdgeIndicatorAtPosition:touchOrigin2];
+   [self showEdgeIndicatorAtPosition:touchOrigin2];
         [self checkTouchOnEdgeAtPosition:touchOrigin2];
     }
      
@@ -344,6 +382,7 @@
    
     [_gridView.edgeIndicator setVisible:NO];
     _CPUTurn=YES;
+        _otherPlayerTurn=YES;
     if(self.isNewGame)
     {
         self.isNewGame=NO;
@@ -727,6 +766,34 @@
     buttonAnimation.delayPerUnit=0.1/buttonAnimation.frames.count;
         [_gridView.theNewGameButton runAction:[[[CCAnimate alloc] initWithAnimation:buttonAnimation] autorelease]];
     _drawPosition=ccp(0,0);
+    if([_gameMode isEqualToString:@"blueTooth"])
+    {
+    //[self.currentSession release];
+   /*
+        currentSession = nil;
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+                                                    message:@"connection lost"
+                                                   delegate:self
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:@"Okay",nil];
+    [alert show];
+    [alert release];
+    
+    [[GameSettings shared] setGlobal:@"oneDevice" ForKey:@"gameMode"];
+    _gameMode=@"oneDevice";
+    */
+        
+        [self showMessage:[[GameSettings shared] getGlobalForKey:@"selectedLevel"]];
+        self.waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+                                                                    message:@"waiting for response...."
+                                                                   delegate:self
+                                                          cancelButtonTitle:nil
+                                                          otherButtonTitles:@"Cancel",nil];
+        [self.waitingAlert show];
+        [self.waitingAlert release];
+
+    }
     [self newGame];
 
 }
@@ -795,6 +862,7 @@
         if(_isBlueColor)
         {
             _changeColor=NO;
+            _otherPlayerTurn=NO;
             _CPUTurn=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
@@ -845,6 +913,7 @@
         }
         else {
             _changeColor=NO;
+            _otherPlayerTurn=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
             if([self checkIfThereIsATreasureBox:point])
@@ -914,6 +983,7 @@
         if(_isBlueColor)
         {
             _CPUTurn=NO;
+            _otherPlayerTurn=NO;
              _changeColor=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
@@ -972,6 +1042,7 @@
         }
         else {
               _changeColor=NO;
+            _otherPlayerTurn=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
             if([self checkIfThereIsATreasureBox:point])
@@ -1037,6 +1108,18 @@
         [_brain move];
     }
     
+    if(_twoPlayerOnOneDevice && [_gameMode isEqualToString:@"blueTooth"]&&_otherPlayerTurn&&!_isReceiving )
+    {
+        _touchEnable=NO;
+        //send the move to other player and wait for their move
+        [self sendMoveToTheOtherPlayer:@"row" RowOrLineIndex:rowIndex EdgeIndex:edgeIndex switchTurn:@"YES"];
+    }
+    
+    else if(_twoPlayerOnOneDevice && [_gameMode isEqualToString:@"blueTooth"]&&!_otherPlayerTurn&&!_isReceiving)
+    {
+        //send the move to other player
+        [self sendMoveToTheOtherPlayer:@"row" RowOrLineIndex:rowIndex EdgeIndex:edgeIndex switchTurn:@"NO"];
+    }
     
     [self showPlayerTurnInfo];
     
@@ -1074,6 +1157,7 @@
         if(_isBlueColor)
         {
             _CPUTurn=NO;
+            _otherPlayerTurn=NO;
             _changeColor=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
@@ -1124,6 +1208,7 @@
                      }
         else {
             _changeColor=NO;
+            _otherPlayerTurn=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
             if([self checkIfThereIsATreasureBox:point])
@@ -1195,6 +1280,7 @@
         {
             _changeColor=NO;
             _CPUTurn=NO;
+            _otherPlayerTurn=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
             if([self checkIfThereIsATreasureBox:point])
@@ -1248,6 +1334,7 @@
         }
         else {
           _changeColor=NO;
+            _otherPlayerTurn=NO;
             CGPoint point=ccp(pointX,pointY);
             /*
             if([self checkIfThereIsATreasureBox:point])
@@ -1310,6 +1397,19 @@
         _touchEnable=NO;
         [_brain move];
     }
+    
+    if(_twoPlayerOnOneDevice && [_gameMode isEqualToString:@"blueTooth"]&&_otherPlayerTurn &&!_isReceiving)
+    {
+        _touchEnable=NO;
+        //send the move to other player and wait for their move
+        [self sendMoveToTheOtherPlayer:@"line" RowOrLineIndex:lineIndex EdgeIndex:edgeIndex switchTurn:@"YES"];
+    }
+    
+    else if(_twoPlayerOnOneDevice && [_gameMode isEqualToString:@"blueTooth"]&&!_otherPlayerTurn&&!_isReceiving)
+    {
+        //send the move to other player
+        [self sendMoveToTheOtherPlayer:@"line" RowOrLineIndex:lineIndex EdgeIndex:edgeIndex switchTurn:@"NO"];
+    }
     [self showPlayerTurnInfo];
 }
 
@@ -1336,61 +1436,92 @@
         {
             if([_gameMode isEqualToString:@"solo"])
             {
-                [_gridView.lable setString:[NSString stringWithFormat:@"You Won!"]];
+                //[_gridView.lable setString:[NSString stringWithFormat:@"You Won!"]];
+                NSString *levelNumber=[[GameSettings shared] getGlobalForKey:@"selectedLevel"];
+                [[GameSettings shared] setGlobal:@"YES" ForKey:[NSString stringWithFormat:@"ClearLevel%@",levelNumber]];
+                
+                int levelNumberInt= [ [[GameSettings shared] getGlobalForKey:@"selectedLevel"] intValue];
+                int nextLevelNumber=levelNumberInt+1;
+                if(nextLevelNumber>60)
+                {
+                    nextLevelNumber=60;
+                }
+                
+                
+                NSString *nextLevelNumberString=[NSString stringWithFormat:@"%d",nextLevelNumber];
+                 [[GameSettings shared] setGlobal:@"YES" ForKey:[NSString stringWithFormat:@"level%@",nextLevelNumberString]];
+                
             }
             
             else if ([_gameMode isEqualToString:@"oneDevice"])
             {
-                [_gridView.lable setString:[NSString stringWithFormat:@"Player 1 Won!"]];
+                // [_gridView.lable setString:[NSString stringWithFormat:@"%@ Won!",[[GameSettings shared] getGlobalForKey:@"Player1Name"]]];
             }
             else if([_gameMode isEqualToString:@"blueTooth"])
             {
-                [_gridView.lable setString:[NSString stringWithFormat:@"You Won!"]];
+               // [_gridView.lable setString:[NSString stringWithFormat:@"%@ Won!",[[GameSettings shared] getGlobalForKey:@"BluePlayer"]]];
             }
 
-           
+            //[_gridView.playerIndicator  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextBlue.png"]]; 
+           // [_gridView.playerIndicator2  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextBlue.png"]];
+            
             
         }
         else if(_gridModel.blueScore==_gridModel.orangeScore)
         {
             if([_gameMode isEqualToString:@"solo"])
             {
-                [_gridView.lable setString:[NSString stringWithFormat:@"Tie Game!"]];
+               // [_gridView.lable setString:[NSString stringWithFormat:@"Tie Game!"]];
             }
             
             else if ([_gameMode isEqualToString:@"oneDevice"])
             {
-                [_gridView.lable setString:[NSString stringWithFormat:@"Tie Game!"]];
+              //  [_gridView.lable setString:[NSString stringWithFormat:@"Tie Game!"]];
             }
             else if([_gameMode isEqualToString:@"blueTooth"])
             {
-                [_gridView.lable setString:[NSString stringWithFormat:@"Tie Game!"]];
+              //  [_gridView.lable setString:[NSString stringWithFormat:@"Tie Game!"]];
             }
             
-            
+           // [_gridView.playerIndicator setVisible:NO];
+           // [_gridView.playerIndicator2 setVisible:NO];
             
         }
 
         else {
             if([_gameMode isEqualToString:@"solo"])
             {
-                [_gridView.lable setString:[NSString stringWithFormat:@"CPU Won!"]];
+               // [_gridView.lable setString:[NSString stringWithFormat:@"CPU Won!"]];
             }
             
             else if ([_gameMode isEqualToString:@"oneDevice"])
             {
-                [_gridView.lable setString:[NSString stringWithFormat:@"Player 2 Won!"]];
+              //  [_gridView.lable setString:[NSString stringWithFormat:@"%@ Won!",[[GameSettings shared] getGlobalForKey:@"Player2Name"]]];
             }
             else if([_gameMode isEqualToString:@"blueTooth"])
             {
-                [_gridView.lable setString:[NSString stringWithFormat:@"CPU Won!"]];
+               //  [_gridView.lable setString:[NSString stringWithFormat:@"%@ Won!",[[GameSettings shared] getGlobalForKey:@"OrangePlayer"]]];
             }
+            // [_gridView.playerIndicator  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextOrange.png"]];
+            //[_gridView.playerIndicator2  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextOrange.png"]];
         }
         //[self newGame];
         _touchEnable=YES;
         _isNewGame=YES;
-        
-    }
+        if(!_GameOver)
+        {
+            _GameOver=YES;
+            
+            _gridView.gameoverWindow=[GameoverWindow GameWindowInController:self];
+            [_gridView addChild:_gridView.gameoverWindow];
+            _gridView.gameoverWindow.waitToFadeInWindow=3.0;
+            
+            //GameoverWindow *gameoverWindow=[GameoverWindow GameWindowInController:self];
+            //[_gridView addChild:gameoverWindow];
+
+                }
+
+           }
     return hasWinner;
 }
 - (void)checkTreasureMapWinner
@@ -1410,74 +1541,19 @@
 }
 -(void)newGame
 {
-    /*
-    [_gridView.edgeLayer removeAllChildrenWithCleanup:YES];
-    [_gridView.blockLayer removeAllChildrenWithCleanup:YES];
-    [_gridView.orangeScoreBox reset];
-    [_gridView.blueScoreBox reset];
-    //[_gridView removeChild:_gridView.treasureBox1 cleanup:YES];
-    for(TreasureBox *obj in _gridView.treasureBoxArray)
-    {
-        [_gridView removeChild:obj cleanup:YES];
-    }
-    
-    for(Cannon *obj in _gridView.cannonArray)
-    {
-        [_gridView removeChild:obj cleanup:YES];
-    }
-    //[_gridView removeChild:_gridView.cannon1 cleanup:YES];
-   */
-        /*
-    _gridModel.blueScore=0;
-    _gridModel.orangeScore=0;
-    _gridModel.damageCount=0;
-     */
-   // _gridView.waitToPlayTreasureBoxAnimation=0.3;
-    //_gridView.treasureBox1.waitToPlayTreasureBoxAnimation=0.3;
-  
-    /*
-    [_gridView.lable setString:[NSString stringWithFormat:@"Please Start"]];
-    _gridView.edgeIndicator =[CCSprite spriteWithSpriteFrameName:[self getEdgeIndicatorColor]];
-    [_gridView.edgeIndicator setVisible:NO];
-    [_gridView.lastEdge setVisible:NO];
-    
-    [_gridView.edgeLayer addChild:_gridView.edgeIndicator];
-    [_gridView.treasureBoxArray removeAllObjects];
-    [_gridView.cannonArray removeAllObjects];
-    [_gridView.boxArray removeAllObjects];
-     */
-    /*
-    for(EdgeArray *array in _gridModel.lines)
-    {
-        for(Edge *edge in array)
-        {
-            edge.isFilled=NO;
-        }
-    }
-    
-    for(EdgeArray *array in _gridModel.rows)
-    {
-        for(Edge *edge in array)
-        {
-            edge.isFilled=NO;
-        }
-    }
-    
-    for(BoxArray *array in _gridModel.boxs)
-    {
-        for(Box *box in array)
-        {
-            box.status=EMPTY_BOX;
-        }
-    }
-    */
-     [_gridModel resetModel];
+    [_gridModel resetModel];
     [_gridView resetView];
-   
-    _changeColor=YES;
+    //[_gridView.playerIndicator setVisible:YES];
     
+   // [_gridView.playerIndicator  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextBlue.png"]];
+   // [_gridView.playerIndicator2 setVisible:YES];
+    
+   // [_gridView.playerIndicator2  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextBlue.png"]];
+    _changeColor=YES;
+    _GameOver=NO;
     _CPUThinking=NO;
     _CPUTurn=NO;
+    _otherPlayerTurn=NO;
     if(!_twoPlayerOnOneDevice)
     {
      int yesOrNo = arc4random() % 2;
@@ -1492,26 +1568,30 @@
         _isBlueColor=YES;
       
         _touchEnable=NO;
-        _brain.waitToCheckRandomEdge=0.5;
-      
+        _brain.waitToCheckRandomEdge=1.5;
+       // [_gridView.lable setString:[NSString stringWithFormat:@"CPU's Turn"]];
+        [_gridView orangeIsOn];
+       // [_gridView.playerIndicator  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextOrange.png"]];
+         //[_gridView.playerIndicator2  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextOrange.png"]];
     }
     }
     else {
         _touchEnable=YES;
         _isBlueColor=NO;
+        // [_gridView.lable setString:[NSString stringWithFormat:@"%@'s Turn",[[GameSettings shared] getGlobalForKey:@"Player1Name"]]];
+        [_gridView blueIsOn];
     }
     
+NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
+   if(_twoPlayerOnOneDevice && [touchEnable isEqualToString:@"NO"] && [_gameMode isEqualToString:@"blueTooth"])
+ {
+     _touchEnable=NO;
+   
+        // [_gridView.lable setString:@"Opponent's Turn"];
+    // [_gridView.lable setString:[NSString stringWithFormat:@"%@'s Turn",[[GameSettings shared] getGlobalForKey:@"BluePlayer"]]];
+     [_gridView blueIsOn];
      
-    /*
-    [self loadTreasureBoxAtRow:1 ItemIndex:3];
-    [self loadTreasureBoxAtRow:3 ItemIndex:3];
-    [self loadCannonAtRow:2 ItemIndex:4 Flip:NO];
-    [self loadCannonAtRow:2 ItemIndex:2 Flip:YES];
-    [self loadTreasureMapAtRow:0 ItemIndex:1 Part:TREASUREMAP_PART_ONE];
-    [self loadTreasureMapAtRow:4 ItemIndex:5 Part:TREASUREMAP_PART_TWO];
-     [self loadShipAtRow:0 ItemIndex:5 Flip:NO];
-     [self loadShipAtRow:4 ItemIndex:1 Flip:YES];
-  */
+ }
    }
 
 - (void)showPlayerTurnInfo
@@ -1520,64 +1600,89 @@
     {
         if([_gameMode isEqualToString:@"solo"])
         {
-            [_gridView.lable setString:[NSString stringWithFormat:@"CPU's Turn"]];
+         //   [_gridView.lable setString:[NSString stringWithFormat:@"CPU's Turn"]];
+            [_gridView orangeIsOn];
+            
         }
         
         else if ([_gameMode isEqualToString:@"oneDevice"])
         {
-            [_gridView.lable setString:[NSString stringWithFormat:@"Player 2's Turn"]];
+       //     [_gridView.lable setString:[NSString stringWithFormat:@"%@'s Turn",[[GameSettings shared] getGlobalForKey:@"Player2Name"]]]; 
+            [_gridView orangeIsOn];
         }
         else if([_gameMode isEqualToString:@"blueTooth"])
         {
-            [_gridView.lable setString:[NSString stringWithFormat:@"CPU's Turn"]];
-        }    }
+            //[_gridView.lable setString:[NSString stringWithFormat:@"Player 2's Turn"]];
+       //     [_gridView.lable setString:[NSString stringWithFormat:@"%@'s Turn",[[GameSettings shared] getGlobalForKey:@"OrangePlayer"]]];
+            [_gridView orangeIsOn];
+        }
+      //  [_gridView.playerIndicator  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextOrange.png"]];
+       // [_gridView.playerIndicator2  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextOrange.png"]];
+    }
     else if (_changeColor &&!_isBlueColor)
     {
         if([_gameMode isEqualToString:@"solo"])
         {
-            [_gridView.lable setString:[NSString stringWithFormat:@"Your Turn"]];
+    //        [_gridView.lable setString:[NSString stringWithFormat:@"Your Turn"]];
+            [_gridView blueIsOn];
         }
         
         else if ([_gameMode isEqualToString:@"oneDevice"])
         {
-            [_gridView.lable setString:[NSString stringWithFormat:@"Player 1's Turn"]];
+      //    [_gridView.lable setString:[NSString stringWithFormat:@"%@'s Turn",[[GameSettings shared] getGlobalForKey:@"Player1Name"]]];
+            [_gridView blueIsOn];
         }
         else if([_gameMode isEqualToString:@"blueTooth"])
         {
-            [_gridView.lable setString:[NSString stringWithFormat:@"Your Turn"]];
-        } 
+       //     [_gridView.lable setString:[NSString stringWithFormat:@"%@'s Turn",[[GameSettings shared] getGlobalForKey:@"BluePlayer"]]];
+            [_gridView blueIsOn];
+        }
+       // [_gridView.playerIndicator  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextBlue.png"]];
+       // [_gridView.playerIndicator2  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextBlue.png"]];
     }
     
     else if(!_changeColor && _isBlueColor){
         if([_gameMode isEqualToString:@"solo"])
         {
-            [_gridView.lable setString:[NSString stringWithFormat:@"Your Turn"]];
+       //     [_gridView.lable setString:[NSString stringWithFormat:@"Your Turn"]];
+            //[_gridView blueIsOn];
         }
         
         else if ([_gameMode isEqualToString:@"oneDevice"])
         {
-            [_gridView.lable setString:[NSString stringWithFormat:@"Player 1's Turn"]];
+      //       [_gridView.lable setString:[NSString stringWithFormat:@"%@'s Turn",[[GameSettings shared] getGlobalForKey:@"Player1Name"]]];
+            //[_gridView blueIsOn];
         }
         else if([_gameMode isEqualToString:@"blueTooth"])
         {
-            [_gridView.lable setString:[NSString stringWithFormat:@"Your Turn"]];
-        }         [self checkWinner];
+       //     [_gridView.lable setString:[NSString stringWithFormat:@"%@'s Turn",[[GameSettings shared] getGlobalForKey:@"BluePlayer"]]];
+            //[_gridView blueIsOn];
+        }
+       // [_gridView.playerIndicator  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextBlue.png"]];
+       // [_gridView.playerIndicator2  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextBlue.png"]];
+        [self checkWinner];
     }
     else if (!_changeColor &&!_isBlueColor)
     {
         if([_gameMode isEqualToString:@"solo"])
         {
-            [_gridView.lable setString:[NSString stringWithFormat:@"CPU's Turn"]];
+       //     [_gridView.lable setString:[NSString stringWithFormat:@"CPU's Turn"]];
+           // [_gridView orangeIsOn];
         }
         
         else if ([_gameMode isEqualToString:@"oneDevice"])
         {
-            [_gridView.lable setString:[NSString stringWithFormat:@"Player 2's Turn"]];
+       //      [_gridView.lable setString:[NSString stringWithFormat:@"%@'s Turn",[[GameSettings shared] getGlobalForKey:@"Player2Name"]]]; 
+           // [_gridView orangeIsOn];
         }
         else if([_gameMode isEqualToString:@"blueTooth"])
         {
-            [_gridView.lable setString:[NSString stringWithFormat:@"CPU's Turn"]];
+       //    [_gridView.lable setString:[NSString stringWithFormat:@"%@'s Turn",[[GameSettings shared] getGlobalForKey:@"OrangePlayer"]]];
+          //  [_gridView orangeIsOn];
         } 
+        
+       // [_gridView.playerIndicator  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextOrange.png"]];
+      //  [_gridView.playerIndicator2  setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TextOrange.png"]];
         [self checkWinner];
     }
     
@@ -1785,6 +1890,19 @@
     _gridModel.blueMapCount++;
     
     [_gridView.blueScoreBox changeScore:1];
+    
+    if(map.partNumber==TREASUREMAP_PART_ONE)
+    {
+        CCSprite *mapOne=[CCSprite spriteWithSpriteFrameName:@"Graphic_Tmap_1.png"];
+        [mapOne setPosition:ADJUST_CCP(ccp(50,30))];
+        [ _gridView.blockLayer addChild:mapOne];
+    }
+    else if (map.partNumber==TREASUREMAP_PART_TWO)
+    {
+        CCSprite *mapOne=[CCSprite spriteWithSpriteFrameName:@"Graphic_Tmap_2.png"];
+        [mapOne setPosition:ADJUST_CCP(ccp(50,30))];
+        [ _gridView.blockLayer addChild:mapOne];
+    }
     [self checkTreasureMapWinner];
         
     
@@ -1799,6 +1917,19 @@
     _gridModel.orangeScore=_gridModel.orangeScore+1;
     _gridModel.orangeMapCount++;
     [_gridView.orangeScoreBox changeScore:1];
+    
+    if(map.partNumber==TREASUREMAP_PART_ONE)
+    {
+        CCSprite *mapOne=[CCSprite spriteWithSpriteFrameName:@"Graphic_Tmap_1.png"];
+        [mapOne setPosition:ADJUST_CCP(ccp(270,30))];
+        [ _gridView.blockLayer addChild:mapOne];
+    }
+    else if (map.partNumber==TREASUREMAP_PART_TWO)
+    {
+        CCSprite *mapOne=[CCSprite spriteWithSpriteFrameName:@"Graphic_Tmap_2.png"];
+        [mapOne setPosition:ADJUST_CCP(ccp(270,30))];
+        [ _gridView.blockLayer addChild:mapOne];
+    }
     [self checkTreasureMapWinner];
     
 }
@@ -2026,6 +2157,257 @@
 	[[app navController] dismissModalViewControllerAnimated:YES];
 }
 
+#pragma mark
+
+
+
+
+
+
+
+
+- (void)session:(GKSession *)session
+           peer:(NSString *)peerID
+ didChangeState:(GKPeerConnectionState)state {
+    switch (state)
+    {
+        case GKPeerStateConnected:
+            NSLog(@"connected");
+            break;
+        case GKPeerStateDisconnected:
+            NSLog(@"disconnected");
+           // [self.currentSession release];
+            currentSession = nil;
+            
+             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+             message:@"connection lost"
+             delegate:self
+             cancelButtonTitle:nil
+             otherButtonTitles:@"Okay",nil];
+             [alert show];
+             [alert release];
+             
+            [[GameSettings shared] setGlobal:@"oneDevice" ForKey:@"gameMode"];
+            _gameMode=@"oneDevice";
+            [self newGame];
+
+            break;
+        case GKPeerStateAvailable:
+            NSLog(@"available");
+            break;
+        case GKPeerStateConnecting:
+            NSLog(@"connecting");
+            break;
+        case GKPeerStateUnavailable:
+            NSLog(@"unavailable");
+            break;
+    }
+}
+- (void) session:(GKSession *)session didFailWithError:(NSError *)error
+{
+    
+}
+
+- (void) mySendDataToPeers:(NSMutableData *) data
+{
+    if (currentSession)
+        [self.currentSession sendDataToAllPeers:data
+                                   withDataMode:GKSendDataReliable
+                                          error:nil];
+}
+
+
+-(void)sendMoveToTheOtherPlayer:(NSString *)RowOrLine
+                 RowOrLineIndex:(NSUInteger)rowOrLineIndex
+                      EdgeIndex:(NSUInteger)edgeIndex
+                      switchTurn:(NSString *)switchOrNot
+                 
+{
+    NSString *isSendingMove=@"YES";
+    NSString *_rowOrLineIndex=[NSString stringWithFormat:@"%d",rowOrLineIndex];
+    NSString *_edgeIndex=[NSString stringWithFormat:@"%d",edgeIndex];
+    NSArray *valueArray=[NSArray arrayWithObjects:isSendingMove,RowOrLine,_rowOrLineIndex,_edgeIndex,switchOrNot,nil];
+    NSArray *keyArray=[NSArray arrayWithObjects:[NSString stringWithFormat:@"isSendingMove"],[NSString stringWithFormat:@"RowOrLine"], [NSString stringWithFormat:@"rowOrLineIndex"],[NSString stringWithFormat:@"edgeIndex"],[NSString stringWithFormat:@"switchOrNot"],nil];
+    NSDictionary *infoList=[NSDictionary dictionaryWithObjects:valueArray forKeys:keyArray];
+    NSMutableData *data = [[NSMutableData alloc] init];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    [archiver encodeObject:infoList forKey:@"Data"];
+    [archiver finishEncoding];
+    [archiver release];
+    [self mySendDataToPeers:data];
+    [data release];
+
+}
+
+- (void)showMessage:(NSString *)buttonID
+{
+    
+    //NSString *str=@"hellohello";
+    NSString *playerName=[[GameSettings shared] getGlobalForKey:@"Player1Name"];
+    NSString *invatationText = [NSString stringWithFormat:  @"%@ would like to invite you play level%@", playerName,buttonID];
+    NSString *levelNumber=buttonID;
+    [[GameSettings shared] setGlobal:playerName ForKey:@"BluePlayer"];
+    [[GameSettings shared] setGlobal:@"YES" ForKey:@"touchEnable"];
+    NSString *isInvitation=@"YES";
+    NSString *isReply=@"NO";
+    NSArray *valueArray=[NSArray arrayWithObjects:playerName,levelNumber,invatationText,isInvitation,isReply,nil];
+    NSArray *keyArray=[NSArray arrayWithObjects:[NSString stringWithFormat:@"PlayerName"], [NSString stringWithFormat:@"LevelNumber"],[NSString stringWithFormat:@"Text"],[NSString stringWithFormat:@"isInvation"],[NSString stringWithFormat:@"isReply"],nil];
+    NSDictionary *infoList=[NSDictionary dictionaryWithObjects:valueArray forKeys:keyArray];
+    
+    //data = [str dataUsingEncoding: NSASCIIStringEncoding];
+    NSMutableData *data = [[NSMutableData alloc] init];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    [archiver encodeObject:infoList forKey:@"Data"];
+    [archiver finishEncoding];
+    [archiver release];
+    [self mySendDataToPeers:data];
+    [data release];
+}
+
+-(void)reply:(NSString *)yesOrNo
+{
+    NSString *playerName=[[GameSettings shared] getGlobalForKey:@"Player1Name"];
+    NSString *isInvitation=@"NO";
+    NSString *isReply=@"YES";
+    NSString *answer=yesOrNo;
+    NSArray *valueArray=[NSArray arrayWithObjects:isInvitation,isReply,answer,playerName, nil];
+    NSArray *keyArray=[NSArray arrayWithObjects:[NSString stringWithFormat:@"isInvation"],[NSString stringWithFormat:@"isReply"],[NSString stringWithFormat:@"answer"],[NSString stringWithFormat:@"PlayerName"],nil];
+    NSDictionary *infoList=[NSDictionary dictionaryWithObjects:valueArray forKeys:keyArray];
+    
+    //data = [str dataUsingEncoding: NSASCIIStringEncoding];
+    NSMutableData *data = [[NSMutableData alloc] init];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    [archiver encodeObject:infoList forKey:@"Data"];
+    [archiver finishEncoding];
+    [archiver release];
+    [self mySendDataToPeers:data];
+    [data release];
+    
+}
+
+
+
+
+- (void) receiveData:(NSMutableData *)data
+            fromPeer:(NSString *)peer
+           inSession:(GKSession *)session
+             context:(void *)context {
+    //---convert the NSData to NSString---
+    
+    NSMutableData *newData = data;
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:newData];
+    NSDictionary *infoList = [unarchiver decodeObjectForKey:@"Data"] ;
+    [unarchiver finishDecoding];
+    [unarchiver release];
+    //[newData release];
+    
+    
+    NSString *isSendingMove=[infoList objectForKey:@"isSendingMove"];
+   // NSString *isReply=[infoList objectForKey:@"isReply"];
+    
+    if([isSendingMove isEqualToString:@"YES"])
+    {
+        NSString *rowOrLine=[infoList objectForKey:@"RowOrLine"];
+         NSString *rowOrLineIndex=[infoList objectForKey:@"rowOrLineIndex"];
+        NSString *edgeIndex=[infoList objectForKey:@"edgeIndex"];
+        NSString *switchOrNot=[infoList objectForKey:@"switchOrNot"];
+        NSUInteger _rowOrLineIndex=[rowOrLineIndex integerValue];
+        NSUInteger _edgeIndex=[edgeIndex integerValue];
+        
+        if([switchOrNot isEqualToString:@"YES"])
+        {
+            _touchEnable=YES;
+        }
+        else {
+            _touchEnable=NO;
+        }
+        _isReceiving=YES;
+        if([rowOrLine isEqualToString:@"row"])
+        {
+            //_otherPlayerTurn=YES;
+            [self drawEdgeAtRowIndex:_rowOrLineIndex EdgeIndex:_edgeIndex];
+        }
+        
+        else if([rowOrLine isEqualToString:@"line"])
+        {
+            //_otherPlayerTurn=YES;
+            [self drawEdgeAtLineIndex:_rowOrLineIndex EdgeIndex:_edgeIndex];
+        }
+        
+        
+        _isReceiving=NO;
+            }
+    else 
+    {
+  
+    }
+    
+    NSString *isInvation=[infoList objectForKey:@"isInvation"];
+    NSString *isReply=[infoList objectForKey:@"isReply"];
+    
+    if([isInvation isEqualToString:@"YES"]&&[isReply isEqualToString:@"NO"])
+    {
+        NSString *text=[infoList objectForKey:@"Text"];
+        NSString *playerName=[infoList objectForKey:@"PlayerName"];
+        [[GameSettings shared] setGlobal:playerName ForKey:@"BluePlayer"];
+        NSString *levelNumber=[infoList objectForKey:@"LevelNumber"];
+        [[GameSettings shared] setGlobal:levelNumber ForKey:@"selectedLevel"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+                                                        message:text
+                                                       delegate:self
+                                              cancelButtonTitle:@"No"
+                                              otherButtonTitles:@"YES",nil];
+        [alert show];
+        [alert release];
+    }
+    else if([isInvation isEqualToString:@"NO"]&&[isReply isEqualToString:@"YES"])
+    {
+        NSString *answer=[infoList objectForKey:@"answer"];
+        
+        if([answer isEqualToString:@"YES"])
+        {
+            NSString *orangePlayerName=[infoList objectForKey:@"PlayerName"];
+            [[GameSettings shared] setGlobal:orangePlayerName ForKey:@"OrangePlayer"];
+            [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
+            //[myTextField1 removeFromSuperview];
+            //[myTextField2 removeFromSuperview];
+            CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
+            [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[GameLayer scene]]]; 
+            
+        }
+        else {
+            [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
+            /*
+             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+             message:@"invatition rejected"
+             delegate:self
+             cancelButtonTitle:nil
+             otherButtonTitles:@"Okay",nil];
+             [alert show];
+             [alert release];
+             */
+        }
+    }
+
+}
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==1) {
+        [[GameSettings shared] setGlobal:@"NO" ForKey:@"touchEnable"];
+        NSString *playerName=[[GameSettings shared] getGlobalForKey:@"Player1Name"];
+        [[GameSettings shared] setGlobal:playerName ForKey:@"OrangePlayer"];
+        CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
+        [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[GameLayer scene]]]; 
+        [self reply:@"YES"];
+        
+    }
+    else {
+        [self reply:@"NO"];
+    }
+    
+}
 
 
 
