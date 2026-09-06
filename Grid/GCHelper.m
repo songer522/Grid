@@ -449,7 +449,7 @@ static GCHelper *sharedHelper = nil;
             
             // process the score information.
             
-               int leaderboardscore=leaderboardRequest.localPlayerScore.value;
+               int leaderboardscore=(int)leaderboardRequest.localPlayerScore.value;
              NSLog(@"old score%d",leaderboardscore);
             if([GCState sharedInstance].pvpSocre<leaderboardscore)
             {
@@ -527,19 +527,15 @@ static GCHelper *sharedHelper = nil;
 {
     //NSLog(@"gc - showleaderboards");
     
-    GKLeaderboardViewController *leaderboardController = [[GKLeaderboardViewController alloc] init] ;
-    
+    // GKLeaderboardViewController was removed in iOS 14.
+    GKGameCenterViewController *leaderboardController =
+        [[GKGameCenterViewController alloc] initWithState:GKGameCenterViewControllerStateLeaderboards];
+
     if (leaderboardController!=NULL) {
-        
-        leaderboardController.timeScope = GKLeaderboardTimeScopeToday;
-        //leaderboardController.view.
-        leaderboardController.category=nil;
-        leaderboardController.timeScope=GKLeaderboardTimeScopeAllTime;
-        leaderboardController.leaderboardDelegate = self;
-      //  AppDelegate *delegate = [UIApplication sharedApplication].delegate;
-        
-     [  [CCDirector sharedDirector].parentViewController  presentModalViewController:leaderboardController animated:YES];          
-       // [delegate.viewController presentModalViewController:leaderboardController animated:YES];
+
+        leaderboardController.gameCenterDelegate = self;
+
+     [  [CCDirector sharedDirector].parentViewController  presentViewController:leaderboardController animated:YES completion:nil];          
     }
     
 }
@@ -551,23 +547,20 @@ static GCHelper *sharedHelper = nil;
     if (achievementController!=NULL) {
         achievementController.achievementDelegate = self;
         AppDelegate *delegate = [UIApplication sharedApplication].delegate;
-        [delegate.viewController presentModalViewController:achievementController animated:YES];
+        [delegate.viewController presentViewController:achievementController animated:YES completion:nil];
     }
 }
 */
-- (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController
 {
-    //AppDelegate *delegate = [UIApplication sharedApplication].delegate;
-    [  [CCDirector sharedDirector].parentViewController dismissModalViewControllerAnimated:YES];
-     
-    //[delegate.viewController dismissModalViewControllerAnimated:YES];
+    [  [CCDirector sharedDirector].parentViewController dismissViewControllerAnimated:YES completion:nil];
 }
 /*
 
 -(void)achievementViewControllerDidFinish:(GKAchievementViewController *)viewController
 {
     AppDelegate *delegate = [UIApplication sharedApplication].delegate;
-    [delegate.viewController dismissModalViewControllerAnimated:YES];
+    [delegate.viewController dismissViewControllerAnimated:YES completion:nil];
 }
 */
 

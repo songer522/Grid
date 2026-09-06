@@ -23,7 +23,7 @@
     if ((self=[super init])) {
       
         
-        self=[NSMutableArray arrayWithCapacity:numberOfEdges];
+        self=(EdgeArray *)[NSMutableArray arrayWithCapacity:numberOfEdges];
         
         for(int x=0;x<numberOfEdges; x++)
         {

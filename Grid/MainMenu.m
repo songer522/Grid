@@ -624,9 +624,8 @@
         
         if(_waitToSwitchToBluetoothMode<0)
         {
-            _picker = [[GKPeerPickerController alloc] init];
+            _picker = [[PeerPickerController alloc] init];
             _picker.delegate = self;
-            _picker.connectionTypesMask = GKPeerPickerConnectionTypeNearby;
             
             [_picker show];
 
@@ -647,7 +646,7 @@
             
             mmvc.matchmakerDelegate = self;
             
-            [  [CCDirector sharedDirector].parentViewController  presentModalViewController:mmvc animated:YES];          
+            [  [CCDirector sharedDirector].parentViewController  presentViewController:mmvc animated:YES completion:nil];          
         }
     } 
     
@@ -710,9 +709,9 @@
 
 
 
-- (void)peerPickerController:(GKPeerPickerController *)picker
+- (void)peerPickerController:(PeerPickerController *)picker
               didConnectPeer:(NSString *)peerID
-                   toSession:(GKSession *) session {
+                   toSession:(PeerSession *) session {
     //self.currentSession = session;
     //session.delegate = self;
     //[session setDataReceiveHandler:self withContext:nil];
@@ -729,7 +728,7 @@
 }
 
 
-- (void)peerPickerControllerDidCancel:(GKPeerPickerController *)picker
+- (void)peerPickerControllerDidCancel:(PeerPickerController *)picker
 {
     picker.delegate = nil;
     [picker autorelease];
@@ -738,48 +737,48 @@
 
 
 
-- (void)session:(GKSession *)session
+- (void)session:(PeerSession *)session
            peer:(NSString *)peerID
- didChangeState:(GKPeerConnectionState)state {
+ didChangeState:(PeerConnectionState)state {
     switch (state)
     {
-        case GKPeerStateConnected:
+        case PeerStateConnected:
             NSLog(@"connected");
             break;
-        case GKPeerStateDisconnected:
+        case PeerStateDisconnected:
             NSLog(@"disconnected");
           //  [self.currentSession release];
             //currentSession = nil;
             
             break;
-        case GKPeerStateAvailable:
+        case PeerStateAvailable:
             NSLog(@"available");
             break;
-        case GKPeerStateConnecting:
+        case PeerStateConnecting:
             NSLog(@"connecting");
             break;
-        case GKPeerStateUnavailable:
+        case PeerStateUnavailable:
             NSLog(@"unavailable");
             break;
     
     }
     
 }
-- (void) session:(GKSession *)session didFailWithError:(NSError *)error
+- (void) session:(PeerSession *)session didFailWithError:(NSError *)error
 {
     
 }
 - (void)matchmakerViewControllerWasCancelled:(GKMatchmakerViewController *)viewController
 {
-    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    [[[CCDirector sharedDirector] parentViewController] dismissViewControllerAnimated:YES completion:nil];
     // implement any specific code in your application here.
 }
 - (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFailWithError:(NSError *)error
 {
-    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    [[[CCDirector sharedDirector] parentViewController] dismissViewControllerAnimated:YES completion:nil];
     // Display the error to the user.
       NSLog(@"error");
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+    AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                     message:@"Can't find internet connection"
                                                    delegate:self
                                           cancelButtonTitle:nil
@@ -790,7 +789,7 @@
 }
 - (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFindMatch:(GKMatch *)match
 {
-    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    [[[CCDirector sharedDirector] parentViewController] dismissViewControllerAnimated:YES completion:nil];
     NSLog(@"find a match");
     myMatch = match; // Use a retaining property to retain the match.
     myMatch.delegate = self;
@@ -809,7 +808,7 @@
 }
 
 
-- (void)match:(GKMatch *)match didReceiveData:(NSData *)data fromPlayer:(NSString *)playerID
+- (void)match:(GKMatch *)match didReceiveData:(NSData *)data fromRemotePlayer:(GKPlayer *)player
 {
     
 }
@@ -822,7 +821,7 @@
     
     //[director_ pushScene: [CCTransitionFade transitionWithDuration:1.0f scene:[ChooseIslandMenu scene]]];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+    AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                     message:@"Purchases restored."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"
@@ -833,7 +832,7 @@
 }
 -(void)restoreFails
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+    AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                     message:@"Purchases restored."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"
@@ -844,7 +843,7 @@
 
 -(void)openErrorWindowCantConnectToStore
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ERROR!"
+    AlertView *alert = [[AlertView alloc] initWithTitle:@"ERROR!"
                                                     message:@"Cannot connect to the store at this time. Please try again later."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"
@@ -854,7 +853,7 @@
 }
 -(void)openErrorWindowCantMakePurchases
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ERROR!"
+    AlertView *alert = [[AlertView alloc] initWithTitle:@"ERROR!"
                                                     message:@"Cannot make purchase at this time. Please try again later or make sure to have in app purchases enabled in Settings>General>Restrictions."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"

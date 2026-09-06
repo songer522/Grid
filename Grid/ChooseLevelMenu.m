@@ -566,7 +566,7 @@ else {
                    // NSString *pageNumber=[NSString stringWithFormat:@"%d",_scroller.currentScreen];
                     //[[GameSettings shared] setGlobal:pageNumber ForKey:@"pageNumber"];
                     [self showMessage:[NSString stringWithFormat:@"%d", obj.buttonId]];
-                    _waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+                    _waitingAlert = [[AlertView alloc] initWithTitle:@""
                                                                message:@"waiting for response...."
                                                               delegate:self
                                                      cancelButtonTitle:nil
@@ -615,7 +615,7 @@ else {
                     // NSString *pageNumber=[NSString stringWithFormat:@"%d",_scroller.currentScreen];
                     //[[GameSettings shared] setGlobal:pageNumber ForKey:@"pageNumber"];
                     [self networkShowMessage:[NSString stringWithFormat:@"%d", obj.buttonId]];
-                    _waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+                    _waitingAlert = [[AlertView alloc] initWithTitle:@""
                                                                message:@"waiting for response...."
                                                               delegate:self
                                                      cancelButtonTitle:nil
@@ -804,7 +804,7 @@ else {
 
 
 
-- (void)peerPickerControllerDidCancel:(GKPeerPickerController *)picker
+- (void)peerPickerControllerDidCancel:(PeerPickerController *)picker
 {
     picker.delegate = nil;
     [picker autorelease];
@@ -817,21 +817,21 @@ else {
 }
 
 
-- (void)session:(GKSession *)session
+- (void)session:(PeerSession *)session
            peer:(NSString *)peerID
- didChangeState:(GKPeerConnectionState)state {
+ didChangeState:(PeerConnectionState)state {
     switch (state)
     {
-        case GKPeerStateConnected:
+        case PeerStateConnected:
             NSLog(@"connected");
             break;
-        case GKPeerStateDisconnected:
+        case PeerStateDisconnected:
             NSLog(@"disconnected");
               [currentSession disconnectFromAllPeers];
             currentSession = nil;
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"BluePlayer"]];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"OrangePlayer"]];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"The connection with the other player has been lost"
                                                            delegate:self
                                                   cancelButtonTitle:@"Okay"
@@ -840,19 +840,19 @@ else {
             [alert show];
             [alert release];
             break;
-        case GKPeerStateAvailable:
+        case PeerStateAvailable:
             NSLog(@"available");
             break;
-        case GKPeerStateConnecting:
+        case PeerStateConnecting:
             NSLog(@"connecting");
             break;
-        case GKPeerStateUnavailable:
+        case PeerStateUnavailable:
             NSLog(@"unavailable");
             break;
     
     }
 }
-- (void) session:(GKSession *)session didFailWithError:(NSError *)error
+- (void) session:(PeerSession *)session didFailWithError:(NSError *)error
 {
     
 }
@@ -861,7 +861,7 @@ else {
 {
     if (currentSession)
         [self.currentSession sendDataToAllPeers:data
-                                   withDataMode:GKSendDataReliable
+                                   withDataMode:PeerSendDataReliable
                                           error:nil];
 }
 
@@ -948,11 +948,11 @@ else {
 
 - (void) receiveData:(NSMutableData *)data
             fromPeer:(NSString *)peer
-           inSession:(GKSession *)session
+           inSession:(PeerSession *)session
              context:(void *)context {
     //---convert the NSData to NSString---
     
-    NSMutableData *newData = data;
+    NSData *newData = data;
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:newData];
     NSDictionary *infoList = [unarchiver decodeObjectForKey:@"Data"] ;
     [unarchiver finishDecoding];
@@ -974,7 +974,7 @@ else {
         [[GameSettings shared] setGlobal:levelNumberOnButton ForKey:@"levelNumberOnButton"];
     NSString *levelNumber=[infoList objectForKey:@"LevelNumber"];
    [[GameSettings shared] setGlobal:levelNumber ForKey:@"selectedLevel"];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+    AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                     message:text
                                                    delegate:self
                                           cancelButtonTitle:@"No"
@@ -1022,7 +1022,7 @@ else {
                 [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             }
            
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"Seems your opponent doesn't like that level, please select another one."
                                                            delegate:self
                                                   cancelButtonTitle:nil
@@ -1036,7 +1036,7 @@ else {
 }
 
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(AlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     
     if(alertView.tag==3)
@@ -1210,7 +1210,7 @@ else {
 }
 -(void)openErrorWindowCantConnectToStore
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ERROR!"
+    AlertView *alert = [[AlertView alloc] initWithTitle:@"ERROR!"
                                                     message:@"Cannot connect to the store at this time. Please try again later."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"
@@ -1220,7 +1220,7 @@ else {
 }
 -(void)openErrorWindowCantMakePurchases
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ERROR!"
+    AlertView *alert = [[AlertView alloc] initWithTitle:@"ERROR!"
                                                     message:@"Cannot make purchase at this time. Please try again later or make sure to have in app purchases enabled in Settings>General>Restrictions."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"
@@ -1238,10 +1238,12 @@ else {
     
 }
 
-- (void)match:(GKMatch *)match player:(NSString *)playerID didChangeState:(GKPlayerConnectionState)state
+- (void)match:(GKMatch *)match player:(GKPlayer *)player didChangeState:(GKPlayerConnectionState)state
 {
     switch (state)
     {
+        case GKPlayerStateUnknown:
+            break;
         case GKPlayerStateConnected:
             // handle a new player connection.
             break;
@@ -1250,7 +1252,7 @@ else {
              [[GameSettings shared] setGlobal:@"YES" ForKey:@"isHost"];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"BluePlayer"]];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"OrangePlayer"]];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"The connection with the other player has been lost"
                                                            delegate:self
                                                   cancelButtonTitle:@"Okay"
@@ -1263,13 +1265,13 @@ else {
     }
     
 }
-- (BOOL)match:(GKMatch *)match shouldReinvitePlayer:(NSString *)playerID
+- (BOOL)match:(GKMatch *)match shouldReinviteDisconnectedPlayer:(GKPlayer *)player
 {
     return NO;
 }
-- (void)match:(GKMatch *)match didReceiveData:(NSMutableData *)data fromPlayer:(NSString *)playerID
+- (void)match:(GKMatch *)match didReceiveData:(NSData *)data fromRemotePlayer:(GKPlayer *)player
 {
-    NSMutableData *newData = data;
+    NSData *newData = data;
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:newData];
     NSDictionary *infoList = [unarchiver decodeObjectForKey:@"Data"] ;
     [unarchiver finishDecoding];
@@ -1291,7 +1293,7 @@ else {
 
         NSString *levelNumber=[infoList objectForKey:@"LevelNumber"];
         [[GameSettings shared] setGlobal:levelNumber ForKey:@"selectedLevel"];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+        AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                         message:text
                                                        delegate:self
                                               cancelButtonTitle:@"No"
@@ -1339,7 +1341,7 @@ else {
                 [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             }
             
-             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+             AlertView *alert = [[AlertView alloc] initWithTitle:@""
              message:@"Seems your opponent doesn't like that level, please select another one."
              delegate:self
              cancelButtonTitle:nil

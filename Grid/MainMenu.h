@@ -8,12 +8,15 @@
 
 
 #import <GameKit/GameKit.h>
+#import "AlertView.h"
+#import "PeerSession.h"
+#import "PeerPickerController.h"
 #import "cocos2d.h"
 #import "InputNameWindow.h"
 #import "DlcLevelDelegate.h"
 
 @class Button;
-@interface MainMenu : CCLayer<GKPeerPickerControllerDelegate,GKSessionDelegate,GKMatchDelegate,GKMatchmakerViewControllerDelegate,DlcLevelDelegate>
+@interface MainMenu : CCLayer<AlertViewDelegate,PeerPickerControllerDelegate,PeerSessionDelegate,GKMatchDelegate,GKMatchmakerViewControllerDelegate,DlcLevelDelegate>
 {
      CCSprite *_soundButton;
     CCSprite *_light1;
@@ -61,13 +64,13 @@
     float _waitToShowSunshine3;
  
     float _waitToPlayLogoAnimation;
-    //GKSession *currentSession;
-    GKPeerPickerController *_picker;
+    //PeerSession *currentSession;
+    PeerPickerController *_picker;
     GKMatch *myMatch;
      InputNameWindow *nameWindow;
     
 }
-//@property (nonatomic, retain) GKSession *currentSession;
-@property (nonatomic, retain) GKPeerPickerController *picker;
+//@property (nonatomic, retain) PeerSession *currentSession;
+@property (nonatomic, retain) PeerPickerController *picker;
 +(CCScene *) scene;
 @end

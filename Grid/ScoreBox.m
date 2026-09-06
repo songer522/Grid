@@ -38,7 +38,7 @@
     _count=_count+amount;
     
     NSString *newScore=[NSString stringWithFormat:@"%d",_count];
-    [_score setString:[NSString stringWithFormat:newScore]];
+    [_score setString:newScore];
 }
 
 -(void)setPosition:(CGPoint)position

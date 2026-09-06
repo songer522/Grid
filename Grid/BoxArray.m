@@ -20,7 +20,7 @@
     if ((self=[super init])) {
         
         
-        self=[NSMutableArray arrayWithCapacity:numberOfBoxes];
+        self=(BoxArray *)[NSMutableArray arrayWithCapacity:numberOfBoxes];
         
         for(int x=0;x<numberOfBoxes; x++)
         {

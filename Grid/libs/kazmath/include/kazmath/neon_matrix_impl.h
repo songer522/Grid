@@ -28,6 +28,12 @@
 #include "arm/arch.h"
 #endif
 
+// The routines below are hand-written 32-bit ARM NEON assembly and do not
+// assemble under arm64, which uses a different register syntax.
+#if defined(__ARM_NEON__) && !defined(__aarch64__) && !defined(__arm64__)
+#define KM_USE_NEON_ASM 1
+#endif
+
 // Matrixes are assumed to be stored in column major format according to OpenGL
 // specification.
 

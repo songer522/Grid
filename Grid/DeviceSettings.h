@@ -9,11 +9,9 @@
 #import <UIKit/UIDevice.h>
 
 /*  DETERMINE THE DEVICE USED  */
-#ifdef UI_USER_INTERFACE_IDIOM //()
-#define IS_IPAD() (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-#else
-#define IS_IPAD() (NO)
-#endif
+// UI_USER_INTERFACE_IDIOM is no longer a preprocessor macro, so the #ifdef this
+// used to sit behind silently compiled the whole iPad layout out of existence.
+#define IS_IPAD() ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
 
 /*  NORMAL DETAILS */
 #define kScreenHeight       480

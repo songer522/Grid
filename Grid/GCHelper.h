@@ -23,7 +23,7 @@
 
 
 
-@interface GCHelper : NSObject <NSCoding,GKLeaderboardViewControllerDelegate> {
+@interface GCHelper : NSObject <NSCoding,GKGameCenterControllerDelegate> {
     BOOL gameCenterAvailable;
     BOOL userAuthenticated;
     NSMutableArray *leaderboardToReport;
@@ -49,6 +49,6 @@
 //- (void) showAchievements;
 
 //-(GKAchievement*)getAchievementByID:(NSString *)identifier;
-- (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController;
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController;
 
 @end

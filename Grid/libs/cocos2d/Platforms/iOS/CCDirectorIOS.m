@@ -102,9 +102,12 @@ CGFloat	__ccContentScaleFactor = 1;
 
 @interface CCDirectorIOS ()
 -(void) updateContentScaleFactor;
+-(void) updateViewport;
 @end
 
 @implementation CCDirectorIOS
+
+@synthesize viewportInPoints = viewportInPoints_;
 
 - (id) init
 {
@@ -179,7 +182,12 @@ CGFloat	__ccContentScaleFactor = 1;
 	CGSize size = winSizeInPixels_;
 	CGSize sizePoint = winSizeInPoints_;
 
-	glViewport(0, 0, size.width * CC_CONTENT_SCALE_FACTOR(), size.height * CC_CONTENT_SCALE_FACTOR() );
+	// The viewport is the on-screen region, in framebuffer pixels; the
+	// projection below stays in the scene's own coordinate space.
+	glViewport(viewportInPoints_.origin.x * __ccContentScaleFactor,
+			   viewportInPoints_.origin.y * __ccContentScaleFactor,
+			   viewportInPoints_.size.width * __ccContentScaleFactor,
+			   viewportInPoints_.size.height * __ccContentScaleFactor );
 
 	switch (projection) {
 		case kCCDirectorProjection2D:
@@ -188,7 +196,7 @@ CGFloat	__ccContentScaleFactor = 1;
 			kmGLLoadIdentity();
 
 			kmMat4 orthoMatrix;
-			kmMat4OrthographicProjection(&orthoMatrix, 0, size.width, 0, size.height, -1024, 1024 );
+			kmMat4OrthographicProjection(&orthoMatrix, 0, sizePoint.width, 0, sizePoint.height, -1024, 1024 );
 			kmGLMultMatrix( &orthoMatrix );
 
 			kmGLMatrixMode(KM_GL_MODELVIEW);
@@ -267,7 +275,7 @@ CGFloat	__ccContentScaleFactor = 1;
 	if( scaleFactor != __ccContentScaleFactor ) {
 
 		__ccContentScaleFactor = scaleFactor;
-		winSizeInPixels_ = CGSizeMake( winSizeInPoints_.width * scaleFactor, winSizeInPoints_.height * scaleFactor );
+		[self updateViewport];
 
 		if( view_ )
 			[self updateContentScaleFactor];
@@ -315,28 +323,66 @@ CGFloat	__ccContentScaleFactor = 1;
 // overriden, don't call super
 -(void) reshapeProjection:(CGSize)size
 {
-	winSizeInPoints_ = [view_ bounds].size;
-	winSizeInPixels_ = CGSizeMake(winSizeInPoints_.width * __ccContentScaleFactor, winSizeInPoints_.height *__ccContentScaleFactor);
-
+	[self updateViewport];
 	[self setProjection:projection_];
+}
+
+-(CGSize) designSize
+{
+	return designSize_;
+}
+
+-(void) setDesignSize:(CGSize)designSize
+{
+	designSize_ = designSize;
+	[self updateViewport];
+	[self setProjection:projection_];
+}
+
+// Works out the scene's coordinate space and the region of the view it maps
+// onto. Without a design size this reproduces the original behaviour of
+// treating the view's own size as the coordinate space.
+-(void) updateViewport
+{
+	CGSize viewSize = [view_ bounds].size;
+
+	if( designSize_.width <= 0 || designSize_.height <= 0 ) {
+		winSizeInPoints_ = viewSize;
+		viewportInPoints_ = CGRectMake(0, 0, viewSize.width, viewSize.height);
+	} else {
+		winSizeInPoints_ = designSize_;
+
+		CGFloat scale = MIN( viewSize.width / designSize_.width,
+							 viewSize.height / designSize_.height );
+		CGSize scaled = CGSizeMake( designSize_.width * scale, designSize_.height * scale );
+		viewportInPoints_ = CGRectMake( (viewSize.width - scaled.width) / 2,
+										(viewSize.height - scaled.height) / 2,
+										scaled.width, scaled.height );
+	}
+
+	winSizeInPixels_ = CGSizeMake(winSizeInPoints_.width * __ccContentScaleFactor,
+								  winSizeInPoints_.height * __ccContentScaleFactor);
 }
 
 #pragma mark Director Point Convertion
 
 -(CGPoint)convertToGL:(CGPoint)uiPoint
 {
-	CGSize s = winSizeInPoints_;
-	float newY = s.height - uiPoint.y;
+	// Undo the letterboxing so touches land in the scene's coordinate space.
+	CGFloat scale = viewportInPoints_.size.width / winSizeInPoints_.width;
+	CGPoint p = ccp( (uiPoint.x - viewportInPoints_.origin.x) / scale,
+					 (uiPoint.y - viewportInPoints_.origin.y) / scale );
 
-	return ccp( uiPoint.x, newY );
+	return ccp( p.x, winSizeInPoints_.height - p.y );
 }
 
 -(CGPoint)convertToUI:(CGPoint)glPoint
 {
-	CGSize winSize = winSizeInPoints_;
-	int oppositeY = winSize.height - glPoint.y;
+	CGFloat scale = viewportInPoints_.size.width / winSizeInPoints_.width;
+	CGPoint p = ccp( glPoint.x, winSizeInPoints_.height - glPoint.y );
 
-	return ccp(glPoint.x, oppositeY);
+	return ccp( p.x * scale + viewportInPoints_.origin.x,
+				p.y * scale + viewportInPoints_.origin.y);
 }
 
 -(void) end
@@ -368,18 +414,17 @@ CGFloat	__ccContentScaleFactor = 1;
 }
 
 // Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-	BOOL ret =YES;
-	if( [delegate_ respondsToSelector:_cmd] )
-		ret = (BOOL) [delegate_ shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+	if( [delegate_ respondsToSelector:@selector(supportedInterfaceOrientationsForDirector)] )
+		return [delegate_ supportedInterfaceOrientationsForDirector];
 
-	return ret;
+	return UIInterfaceOrientationMaskAll;
 }
 
--(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (BOOL)shouldAutorotate
 {
-	// do something ?
+	return YES;
 }
 
 

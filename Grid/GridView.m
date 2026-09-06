@@ -64,7 +64,6 @@
 @synthesize isSoundOn=_isSoundOn;
 @synthesize howToPlayPage=_howToPlayPage;
 @synthesize waitToPlayBackgroundMusic=_waitToPlayBackgroundMusic;
-@synthesize adView=_adView;
 
 +(id)gridViewInController:(id)controller
 {
@@ -323,53 +322,11 @@
         [_dots addChild:_dot2];
          
         _waitToPlayBackgroundMusic=2.0;
-        NSString *hasPurchased = [[GameSettings shared] getGlobalForKey:@"HasPurchased"];
-        if([hasPurchased isEqualToString:@"NO"])
-        {
-        //[self loadiAd];
-        }
     
         }
         
     return self;
 }
-
--(void)loadiAd
-{
-    /*
-    UIViewController *controller = [[UIViewController alloc] init];
-    
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-   {
-       controller.view.frame = CGRectMake(0,ADJUST_Y(463),HD_PIXELS(480),HD_PIXELS(32));
-   }
-   else {
-       controller.view.frame=CGRectMake(0, 430, 480, 32);
-   }
-       [controller.view setBackgroundColor:[UIColor clearColor]];
-    */
-    //From the official iAd programming guide
-    _adView = [[ADBannerView alloc] init];
-    [_adView setBackgroundColor:[UIColor clearColor]];
-   // _adView.requiredContentSizeIdentifiers = [NSSet setWithObject:ADBannerContentSizeIdentifierPortrait];
-    
-    //_adView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
- 
-    
-    CGRect adFrame = _adView.frame;
-    adFrame.origin.y =  [CCDirector sharedDirector].view.frame.size.height-_adView.frame.size.height;
-    //adFrame.origin.y =  _adView.frame.size.height;
-    
-    _adView.frame = adFrame;
-    _adView.delegate=self;
-    //[controller.view addSubview:_adView];
-    
-    //Then I add the adView to the openglview of cocos2d
-    //[[[CCDirector sharedDirector] view] addSubview:controller.view];
-    [[[CCDirector sharedDirector] view] addSubview:_adView];
-    
-}
-
 
 
 -(void)loadPowerUpsAndsetupModel
@@ -676,7 +633,7 @@
         [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
         [_parentController sendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"TreasureBox"];
          [_parentController updateBoxNumber];
-         _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+         _parentController.gridModel.skullLeft=(int)_parentController.gridView.skullArray.count;
         return;
     }
     else if(number>=20 && number<60) {
@@ -685,7 +642,7 @@
          [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
         [_parentController sendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"Skull"];
          [_parentController updateBoxNumber];
-        _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+        _parentController.gridModel.skullLeft=(int)_parentController.gridView.skullArray.count;
         return;
     }
     else if(number>=60 && number<70) {
@@ -694,7 +651,7 @@
          [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
         [_parentController sendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"Cannon"];
          [_parentController updateBoxNumber];
-        _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+        _parentController.gridModel.skullLeft=(int)_parentController.gridView.skullArray.count;
         return;
         
     }
@@ -704,7 +661,7 @@
          [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
         [_parentController sendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"YES" ItemName:@"Cannon"];
          [_parentController updateBoxNumber];
-        _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+        _parentController.gridModel.skullLeft=(int)_parentController.gridView.skullArray.count;
         return;
     }
     else if(number>=80 && number<90) {
@@ -713,7 +670,7 @@
          [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
         [_parentController sendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"YES" ItemName:@"Ship"];
          [_parentController updateBoxNumber];
-        _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+        _parentController.gridModel.skullLeft=(int)_parentController.gridView.skullArray.count;
         return;
     }
     else if (number>=90 && number <100) {
@@ -722,7 +679,7 @@
          [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
         [_parentController sendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"Ship"];
          [_parentController updateBoxNumber];
-        _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+        _parentController.gridModel.skullLeft=(int)_parentController.gridView.skullArray.count;
         return;
     }
     else {
@@ -747,7 +704,7 @@
             [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
             [_parentController networkSendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"TreasureBox"];
             [_parentController updateBoxNumber];
-            _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+            _parentController.gridModel.skullLeft=(int)_parentController.gridView.skullArray.count;
             return;
         }
         else if(number>=20 && number<60) {
@@ -756,7 +713,7 @@
             [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
             [_parentController networkSendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"Skull"];
             [_parentController updateBoxNumber];
-            _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+            _parentController.gridModel.skullLeft=(int)_parentController.gridView.skullArray.count;
             return;
         }
         else if(number>=60 && number<70) {
@@ -765,7 +722,7 @@
             [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
             [_parentController networkSendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"Cannon"];
             [_parentController updateBoxNumber];
-            _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+            _parentController.gridModel.skullLeft=(int)_parentController.gridView.skullArray.count;
             return;
             
         }
@@ -775,7 +732,7 @@
             [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
             [_parentController networkSendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"YES" ItemName:@"Cannon"];
             [_parentController updateBoxNumber];
-            _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+            _parentController.gridModel.skullLeft=(int)_parentController.gridView.skullArray.count;
             return;
         }
         else if(number>=80 && number<90) {
@@ -784,7 +741,7 @@
             [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
             [_parentController networkSendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"YES" ItemName:@"Ship"];
             [_parentController updateBoxNumber];
-            _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+            _parentController.gridModel.skullLeft=(int)_parentController.gridView.skullArray.count;
             return;
         }
         else if (number>=90 && number <100) {
@@ -793,7 +750,7 @@
             [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
             [_parentController networkSendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"Ship"];
             [_parentController updateBoxNumber];
-            _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+            _parentController.gridModel.skullLeft=(int)_parentController.gridView.skullArray.count;
             return;
         }
         else {
@@ -1397,12 +1354,6 @@ else {
 
 }
 
-- (void)bannerViewActionDidFinish:(ADBannerView *)banner
-{
-    
-}
-
-
 -(void)dealloc
 {
     [_treasureBoxArray release];
@@ -1413,7 +1364,6 @@ else {
     [_mapArray release];
     [_skullArray release];
     [_fogArray release];
-    [_adView release];
     [super dealloc];
     
     

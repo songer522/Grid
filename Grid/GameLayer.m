@@ -156,7 +156,7 @@
         
         [self newGame];
        [self updateBoxNumber];
-         _gridModel.skullLeft=_gridView.skullArray.count;
+         _gridModel.skullLeft=(int)_gridView.skullArray.count;
         NSString *leveNumber=[[GameSettings shared] getGlobalForKey:@"selectedLevel"];
         if(([leveNumber isEqualToString:@"1"]||[leveNumber isEqualToString:@"2"]||[leveNumber isEqualToString:@"3"]||[leveNumber isEqualToString:@"5"]||[leveNumber isEqualToString:@"8"]||[leveNumber isEqualToString:@"12"]||[leveNumber isEqualToString:@"17"]||[leveNumber isEqualToString:@"19"])&&[_gameMode isEqualToString:@"solo"])
         {
@@ -186,7 +186,7 @@
 			
 			AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
 			
-			[[app navController] presentModalViewController:achivementViewController animated:YES];
+			[[app navController] presentViewController:achivementViewController animated:YES completion:nil];
 			
 			[achivementViewController release];
 		}
@@ -201,7 +201,7 @@
 			
 			AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
 			
-			[[app navController] presentModalViewController:leaderboardViewController animated:YES];
+			[[app navController] presentViewController:leaderboardViewController animated:YES completion:nil];
 			
 			[leaderboardViewController release];
 		}
@@ -879,7 +879,7 @@
    /*
         currentSession = nil;
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+    AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                     message:@"connection lost"
                                                    delegate:self
                                           cancelButtonTitle:nil
@@ -892,7 +892,7 @@
     */
         
         [self showMessage:[[GameSettings shared] getGlobalForKey:@"selectedLevel"]];
-        self.waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+        self.waitingAlert = [[AlertView alloc] initWithTitle:@""
                                                                     message:@"waiting for response...."
                                                                    delegate:self
                                                           cancelButtonTitle:nil
@@ -904,7 +904,7 @@
     }
     else if([_gameMode isEqualToString:@"network"]) {
         [self networkShowMessage:[[GameSettings shared] getGlobalForKey:@"selectedLevel"]];
-        self.waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+        self.waitingAlert = [[AlertView alloc] initWithTitle:@""
                                                        message:@"waiting for response...."
                                                       delegate:self
                                              cancelButtonTitle:nil
@@ -935,7 +935,6 @@
      [[SimpleAudioEngine sharedEngine] playEffect:@"menuBack.wav"];
     
     [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"MenuMusic.mp3"];
-    [_gridView.adView removeFromSuperview];
     
     
     CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
@@ -945,9 +944,8 @@
     
     
     /*
-    _picker = [[GKPeerPickerController alloc] init];
+    _picker = [[PeerPickerController alloc] init];
     _picker.delegate = self;
-    _picker.connectionTypesMask = GKPeerPickerConnectionTypeNearby;
     
     [_picker show];
      */
@@ -1634,9 +1632,9 @@
 -(BOOL)checkWinner
 {
     BOOL hasWinner=NO;
-    int i= [_gridView.treasureBoxArray count];
-    int j=[_gridView.mapArray count];
-    int x=[_gridView.skullArray count];  
+    int i= (int)[_gridView.treasureBoxArray count];
+    int j=(int)[_gridView.mapArray count];
+    int x=(int)[_gridView.skullArray count];  
     
     
     
@@ -2228,7 +2226,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
      
  }
      */
-    _gridModel.skullLeft=_gridView.skullArray.count;
+    _gridModel.skullLeft=(int)_gridView.skullArray.count;
     
    }
 
@@ -2756,7 +2754,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         {
         for(Box *obj in array)
         {
-            int itemIndex=[array indexOfObject:obj];
+            int itemIndex=(int)[array indexOfObject:obj];
             if(itemIndex>boxIndex&&obj.status==ORANGE)
             {
                 BoxIcon *box=[_gridView getBoxAtPosition:[_gridView getItemPositionAtRowIndex:lineIndex ItemIndex:itemIndex]];
@@ -2775,7 +2773,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         {
             for(Box *obj in array)
             {
-                int itemIndex=[array indexOfObject:obj];
+                int itemIndex=(int)[array indexOfObject:obj];
                 if(itemIndex>boxIndex&&obj.status==BLUE)
                 {
                     BoxIcon *box=[_gridView getBoxAtPosition:[_gridView getItemPositionAtRowIndex:lineIndex ItemIndex:itemIndex]];
@@ -2800,7 +2798,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         {
             for(Box *obj in array)
             {
-                int itemIndex=[array indexOfObject:obj];
+                int itemIndex=(int)[array indexOfObject:obj];
                 if(itemIndex<boxIndex&&obj.status==ORANGE)
                 {
                     BoxIcon *box=[_gridView getBoxAtPosition:[_gridView getItemPositionAtRowIndex:lineIndex ItemIndex:itemIndex]];
@@ -2819,7 +2817,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         {
             for(Box *obj in array)
             {
-                int itemIndex=[array indexOfObject:obj];
+                int itemIndex=(int)[array indexOfObject:obj];
                 if(itemIndex<boxIndex&&obj.status==BLUE)
                 {
                     BoxIcon *box=[_gridView getBoxAtPosition:[_gridView getItemPositionAtRowIndex:lineIndex ItemIndex:itemIndex]];
@@ -2895,20 +2893,6 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
 
 
 
-#pragma mark GameKit delegate
-
--(void) achievementViewControllerDidFinish:(GKAchievementViewController *)viewController
-{
-	AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
-	[[app navController] dismissModalViewControllerAnimated:YES];
-}
-
--(void) leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController
-{
-	AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
-	[[app navController] dismissModalViewControllerAnimated:YES];
-}
-
 #pragma mark
 
 
@@ -2918,20 +2902,20 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
 
 
 
-- (void)session:(GKSession *)session
+- (void)session:(PeerSession *)session
            peer:(NSString *)peerID
- didChangeState:(GKPeerConnectionState)state {
+ didChangeState:(PeerConnectionState)state {
     switch (state)
     {
-        case GKPeerStateConnected:
+        case PeerStateConnected:
             NSLog(@"connected");
             break;
-        case GKPeerStateDisconnected:
+        case PeerStateDisconnected:
             NSLog(@"disconnected");
             [currentSession disconnectFromAllPeers];
         
             
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"The connection with the other player has been lost"
                                                            delegate:self
                                                   cancelButtonTitle:@"Okay"
@@ -2949,18 +2933,18 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"OrangePlayer"]];
             
             break;
-        case GKPeerStateAvailable:
+        case PeerStateAvailable:
             NSLog(@"available");
             break;
-        case GKPeerStateConnecting:
+        case PeerStateConnecting:
             NSLog(@"connecting");
             break;
-        case GKPeerStateUnavailable:
+        case PeerStateUnavailable:
             NSLog(@"unavailable");
             break;
     }
 }
-- (void) session:(GKSession *)session didFailWithError:(NSError *)error
+- (void) session:(PeerSession *)session didFailWithError:(NSError *)error
 {
     
 }
@@ -2969,7 +2953,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
 {
     if (currentSession)
         [self.currentSession sendDataToAllPeers:data
-                                   withDataMode:GKSendDataReliable
+                                   withDataMode:PeerSendDataReliable
                                           error:nil];
 }
 
@@ -3127,11 +3111,11 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
 
 - (void) receiveData:(NSMutableData *)data
             fromPeer:(NSString *)peer
-           inSession:(GKSession *)session
+           inSession:(PeerSession *)session
              context:(void *)context {
     //---convert the NSData to NSString---
     
-    NSMutableData *newData = data;
+    NSData *newData = data;
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:newData];
     NSDictionary *infoList = [unarchiver decodeObjectForKey:@"Data"] ;
     [unarchiver finishDecoding];
@@ -3227,7 +3211,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
              [self loadFogAtRow:RowIndex ItemIndex:ItemIndex];
          }
          [self updateBoxNumber];
-         _gridModel.skullLeft=_gridView.skullArray.count;
+         _gridModel.skullLeft=(int)_gridView.skullArray.count;
     }
     
     NSString *isDecideWhoStart=[infoList objectForKey:@"isDecideWhoStart"];
@@ -3265,7 +3249,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         [[GameSettings shared] setGlobal:levelNumberOnButton ForKey:@"levelNumberOnButton"];
         NSString *levelNumber=[infoList objectForKey:@"LevelNumber"];
         [[GameSettings shared] setGlobal:levelNumber ForKey:@"selectedLevel"];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+        AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                         message:text
                                                        delegate:self
                                               cancelButtonTitle:@"No"
@@ -3302,7 +3286,6 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
             [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             // [myTextField1 removeFromSuperview];
             // [myTextField2 removeFromSuperview];
-            [_gridView.adView removeFromSuperview];
             CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
             [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[GameLayer scene]]]; 
             [[SimpleAudioEngine sharedEngine] stopBackgroundMusic];
@@ -3310,7 +3293,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         else {
             [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             
-             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+             AlertView *alert = [[AlertView alloc] initWithTitle:@""
              message:@"Seems your opponent doesn't like that level, please select another one."
              delegate:self
              cancelButtonTitle:nil
@@ -3325,7 +3308,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
 }
 
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(AlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if(alertView.tag==3)
     {
@@ -3373,7 +3356,6 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
                 }
                 
             }
-            [_gridView.adView removeFromSuperview];
             CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
             [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[GameLayer scene]]]; 
             [[SimpleAudioEngine sharedEngine] stopBackgroundMusic];
@@ -3397,10 +3379,12 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
     }
     
 }
-- (void)match:(GKMatch *)match player:(NSString *)playerID didChangeState:(GKPlayerConnectionState)state
+- (void)match:(GKMatch *)match player:(GKPlayer *)player didChangeState:(GKPlayerConnectionState)state
 {
     switch (state)
     {
+        case GKPlayerStateUnknown:
+            break;
         case GKPlayerStateConnected:
             // handle a new player connection.
             break;
@@ -3410,7 +3394,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"BluePlayer"]];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"OrangePlayer"]];
             [[GameSettings shared] setGlobal:@"solo" ForKey:@"gameMode"];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"The connection with the other player has been lost"
                                                            delegate:self
                                                   cancelButtonTitle:@"Okay"
@@ -3424,14 +3408,14 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
     }
     
 }
-- (BOOL)match:(GKMatch *)match shouldReinvitePlayer:(NSString *)playerID
+- (BOOL)match:(GKMatch *)match shouldReinviteDisconnectedPlayer:(GKPlayer *)player
 {
     return NO;
 }
 
-- (void)match:(GKMatch *)match didReceiveData:(NSMutableData *)data fromPlayer:(NSString *)playerID
+- (void)match:(GKMatch *)match didReceiveData:(NSData *)data fromRemotePlayer:(GKPlayer *)player
 {
-    NSMutableData *newData = data;
+    NSData *newData = data;
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:newData];
     NSDictionary *infoList = [unarchiver decodeObjectForKey:@"Data"] ;
     [unarchiver finishDecoding];
@@ -3522,7 +3506,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
             [self loadFogAtRow:RowIndex ItemIndex:ItemIndex];
         }
         [self updateBoxNumber];
-         _gridModel.skullLeft=_gridView.skullArray.count;
+         _gridModel.skullLeft=(int)_gridView.skullArray.count;
     }
     
     NSString *isDecideWhoStart=[infoList objectForKey:@"isDecideWhoStart"];
@@ -3558,7 +3542,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         [[GameSettings shared] setGlobal:levelNumberOnButton ForKey:@"levelNumberOnButton"];
         NSString *levelNumber=[infoList objectForKey:@"LevelNumber"];
         [[GameSettings shared] setGlobal:levelNumber ForKey:@"selectedLevel"];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+        AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                         message:text
                                                        delegate:self
                                               cancelButtonTitle:@"No"
@@ -3596,7 +3580,6 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
             [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             // [myTextField1 removeFromSuperview];
             // [myTextField2 removeFromSuperview];
-            [_gridView.adView removeFromSuperview];
             CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
             [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[GameLayer scene]]]; 
             [[SimpleAudioEngine sharedEngine] stopBackgroundMusic];
@@ -3605,7 +3588,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         else {
             [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             
-             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+             AlertView *alert = [[AlertView alloc] initWithTitle:@""
              message:@"Seems your opponent doesn't like that level, please select another one."
              delegate:self
              cancelButtonTitle:nil

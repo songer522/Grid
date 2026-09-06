@@ -14,7 +14,8 @@
 #import "ChooseLevelMenu.h"
 #import "GameSettings.h"
 #import "ChooseIslandMenu.h"
-#import "Appirater.h"
+#import "DeviceSettings.h"
+#import "ReviewPrompt.h"
 
 @implementation AppController
 
@@ -37,8 +38,6 @@
 
 	director_ = (CCDirectorIOS*) [CCDirector sharedDirector];
 
-	director_.wantsFullScreenLayout = YES;
-
 	// Display FSP and SPF
 	[director_ setDisplayStats:NO];
 
@@ -50,6 +49,12 @@
 
 	// for rotation and other messages
 	[director_ setDelegate:self];
+
+	// The whole game is laid out against a fixed coordinate space: 320x480 on
+	// iPhone, and the same doubled plus the offsets in DeviceSettings.h on
+	// iPad. Declaring it lets the director letterbox the scene into whatever
+	// aspect ratio the device actually has.
+	[director_ setDesignSize:(IS_IPAD() ? CGSizeMake(768, 1024) : CGSizeMake(kScreenWidth, kScreenHeight))];
 
 	// 2D projection
 	[director_ setProjection:kCCDirectorProjection2D];
@@ -64,8 +69,7 @@
 	navController_.navigationBarHidden = YES;
 
 	// set the Navigation Controller as the root view controller
-//	[window_ setRootViewController:rootViewController_];
-	[window_ addSubview:navController_.view];
+	[window_ setRootViewController:navController_];
 
 	// make main window visible
 	[window_ makeKeyAndVisible];
@@ -89,15 +93,20 @@
    // [director_ pushScene: [ChooseLevelMenu scene]]; 
     [director_ pushScene: [MainMenu scene]]; 
     
-    [Appirater appLaunched:YES];
+    [ReviewPrompt appLaunched];
 
 	return YES;
 }
 
-// Supported orientations: Landscape. Customize it for your own needs
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+// Supported orientations: Portrait only.
+- (UIInterfaceOrientationMask)supportedInterfaceOrientationsForDirector
 {
-	return UIInterfaceOrientationIsPortrait(interfaceOrientation);
+	return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+	return UIInterfaceOrientationMaskPortrait;
 }
 
 
@@ -156,49 +165,55 @@
 
 - (void) authenticateLocalPlayer
 {
-    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
-    [localPlayer authenticateWithCompletionHandler:^(NSError *error) {
-        if (localPlayer.isAuthenticated)
+    GKLocalPlayer *localPlayer = [GKLocalPlayer local];
+
+    // authenticateWithCompletionHandler: was removed. The replacement hands
+    // back a sign-in view controller that the app has to present itself.
+    localPlayer.authenticateHandler = ^(UIViewController *viewController, NSError *error) {
+        if (viewController)
         {
-            // Perform additional tasks for the authenticated player.
+            [self->navController_ presentViewController:viewController animated:YES completion:nil];
         }
-    }];
-    
-    [GKMatchmaker sharedMatchmaker].inviteHandler = ^(GKInvite *acceptedInvite, NSArray *playersToInvite) {
-        // Insert application-specific code here to clean up any games in progress.
-        if (acceptedInvite)
+        else if (localPlayer.isAuthenticated)
         {
-            GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithInvite:acceptedInvite] autorelease];
-            mmvc.matchmakerDelegate = self;
-            [[[CCDirector sharedDirector] parentViewController] presentModalViewController:mmvc animated:YES];
-        }
-        else if (playersToInvite)
-        {
-            GKMatchRequest *request = [[[GKMatchRequest alloc] init] autorelease];
-            request.minPlayers = 2;
-            request.maxPlayers = 2;
-            request.playersToInvite = playersToInvite;
-            
-            GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithMatchRequest:request] autorelease];
-            mmvc.matchmakerDelegate = self;
-            [[[CCDirector sharedDirector] parentViewController] presentModalViewController:mmvc animated:YES];
+            [localPlayer registerListener:self];
         }
     };
 }
+
+// GKMatchmaker's inviteHandler was replaced by the local player listener API.
+- (void)player:(GKPlayer *)player didAcceptInvite:(GKInvite *)invite
+{
+    GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithInvite:invite] autorelease];
+    mmvc.matchmakerDelegate = self;
+    [navController_ presentViewController:mmvc animated:YES completion:nil];
+}
+
+- (void)player:(GKPlayer *)player didRequestMatchWithRecipients:(NSArray<GKPlayer *> *)recipientPlayers
+{
+    GKMatchRequest *request = [[[GKMatchRequest alloc] init] autorelease];
+    request.minPlayers = 2;
+    request.maxPlayers = 2;
+    request.recipients = recipientPlayers;
+
+    GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithMatchRequest:request] autorelease];
+    mmvc.matchmakerDelegate = self;
+    [navController_ presentViewController:mmvc animated:YES completion:nil];
+}
 - (void)matchmakerViewControllerWasCancelled:(GKMatchmakerViewController *)viewController
 {
-    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    [navController_ dismissViewControllerAnimated:YES completion:nil];
     // implement any specific code in your application here.
 }
 - (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFailWithError:(NSError *)error
 {
-    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    [navController_ dismissViewControllerAnimated:YES completion:nil];
     // Display the error to the user.
    // NSLog(@"error");
 }
 - (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFindMatch:(GKMatch *)match
 {
-    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    [navController_ dismissViewControllerAnimated:YES completion:nil];
    // NSLog(@"find a match");
    // myMatch = match; // Use a retaining property to retain the match.
     //myMatch.delegate = self;

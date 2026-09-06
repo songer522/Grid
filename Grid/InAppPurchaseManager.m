@@ -243,16 +243,22 @@ static InAppPurchaseManager *_shared = nil;
 
 
 //
-// saves a record of the transaction by storing the receipt to disk
+// saves a record of the transaction
 //
 - (void)recordTransaction:(SKPaymentTransaction *)transaction
 {
     //NSLog(@"RECORD TRANSACTION");
     if ([transaction.payment.productIdentifier isEqualToString:kInAppPurchaseUpgradeToFullVersion])
     {
-        // save the transaction receipt to disk
-        [[NSUserDefaults standardUserDefaults] setValue:transaction.transactionReceipt forKey:@"FullVersionTransactionReceipt" ];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        // SKPaymentTransaction.transactionReceipt was removed from StoreKit.
+        // The app-wide receipt is the supported replacement.
+        NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
+        NSData *receipt = receiptURL ? [NSData dataWithContentsOfURL:receiptURL] : nil;
+        if (receipt)
+            [[NSUserDefaults standardUserDefaults] setObject:receipt forKey:@"FullVersionTransactionReceipt"];
+
+        [[NSUserDefaults standardUserDefaults] setObject:transaction.transactionIdentifier
+                                                  forKey:@"FullVersionTransactionIdentifier"];
     } 
 }
 

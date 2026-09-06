@@ -164,7 +164,7 @@
 
 -(BOOL)checkTouchAtPosition:(CGPoint)point
 {
-    if(abs(point.x-_buttonPosition.x)<HD_PIXELS(20)&&abs(point.y-_buttonPosition.y)<HD_PIXELS(20) )
+    if(fabs(point.x-_buttonPosition.x)<HD_PIXELS(20)&&fabs(point.y-_buttonPosition.y)<HD_PIXELS(20) )
     {
         return YES;
     }
