@@ -227,6 +227,14 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 	[director performSelector:@selector(drawScene) onThread:thread withObject:nil waitUntilDone:YES];
 }
 
+- (void) safeAreaInsetsDidChange
+{
+	[super safeAreaInsetsDidChange];
+
+	CCDirector *director = [CCDirector sharedDirector];
+	[director reshapeProjection:size_];
+}
+
 - (void) swapBuffers
 {
 	// IMPORTANT:

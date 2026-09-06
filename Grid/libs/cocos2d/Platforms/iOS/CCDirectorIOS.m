@@ -339,25 +339,59 @@ CGFloat	__ccContentScaleFactor = 1;
 	[self setProjection:projection_];
 }
 
+-(CGPoint) contentOrigin
+{
+	return contentOrigin_;
+}
+
+-(UIEdgeInsets) safeAreaInsetsInPoints
+{
+	if( !view_ || winSizeInPoints_.width <= 0 )
+		return UIEdgeInsetsZero;
+
+	CGFloat scale = viewportInPoints_.size.width / winSizeInPoints_.width;
+	if( scale <= 0 )
+		return UIEdgeInsetsZero;
+
+	UIEdgeInsets insets = [view_ safeAreaInsets];
+	if( UIEdgeInsetsEqualToEdgeInsets(insets, UIEdgeInsetsZero) && view_.window )
+		insets = [view_.window safeAreaInsets];
+	return UIEdgeInsetsMake(insets.top / scale,
+							insets.left / scale,
+							insets.bottom / scale,
+							insets.right / scale);
+}
+
 // Works out the scene's coordinate space and the region of the view it maps
-// onto. Without a design size this reproduces the original behaviour of
-// treating the view's own size as the coordinate space.
+// onto. With a design size the scene is at least that large and the viewport
+// fills the view; extra space extends the coordinate space instead of
+// letterboxing. Without a design size this treats the view size as the
+// coordinate space.
 -(void) updateViewport
 {
-	CGSize viewSize = [view_ bounds].size;
+	CGSize viewSize = view_ ? [view_ bounds].size : CGSizeZero;
 
 	if( designSize_.width <= 0 || designSize_.height <= 0 ) {
 		winSizeInPoints_ = viewSize;
 		viewportInPoints_ = CGRectMake(0, 0, viewSize.width, viewSize.height);
-	} else {
+		contentOrigin_ = CGPointZero;
+	} else if( viewSize.width <= 0 || viewSize.height <= 0 ) {
 		winSizeInPoints_ = designSize_;
-
+		viewportInPoints_ = CGRectMake(0, 0, designSize_.width, designSize_.height);
+		contentOrigin_ = CGPointZero;
+	} else {
 		CGFloat scale = MIN( viewSize.width / designSize_.width,
 							 viewSize.height / designSize_.height );
-		CGSize scaled = CGSizeMake( designSize_.width * scale, designSize_.height * scale );
-		viewportInPoints_ = CGRectMake( (viewSize.width - scaled.width) / 2,
-										(viewSize.height - scaled.height) / 2,
-										scaled.width, scaled.height );
+		if( scale <= 0 ) {
+			winSizeInPoints_ = designSize_;
+			viewportInPoints_ = CGRectMake(0, 0, viewSize.width, viewSize.height);
+			contentOrigin_ = CGPointZero;
+		} else {
+			winSizeInPoints_ = CGSizeMake( viewSize.width / scale, viewSize.height / scale );
+			viewportInPoints_ = CGRectMake(0, 0, viewSize.width, viewSize.height);
+			contentOrigin_ = ccp( (winSizeInPoints_.width - designSize_.width) * 0.5f,
+								  (winSizeInPoints_.height - designSize_.height) * 0.5f );
+		}
 	}
 
 	winSizeInPixels_ = CGSizeMake(winSizeInPoints_.width * __ccContentScaleFactor,
@@ -437,6 +471,7 @@ CGFloat	__ccContentScaleFactor = 1;
 -(void) viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
+	[self reshapeProjection:[view_ bounds].size];
 //	[self startAnimation];
 }
 

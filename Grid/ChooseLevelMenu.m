@@ -18,6 +18,7 @@
 #import "ChooseIslandMenu.h"
 #import "SimpleAudioEngine.h"
 #import "InputNameWindow.h"
+#import "FullScreenBackground.h"
 #import "GCHelper.h"
 
 @implementation ChooseLevelMenu
@@ -54,10 +55,8 @@
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"upgradeSprite.plist" ];
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"Black50.plist" ];
       //[[InAppPurchaseManager shared] loadStoreWithDelegate:self];
-        CCSprite *background=[CCSprite spriteWithSpriteFrameName:@"Graphic_MainMenuBack.png"];
-         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"SeaSunshine.plist" ]; 
-        
-        [background setPosition:ADJUST_CCP(ccp(160,240))];
+        CCNode *background=[FullScreenBackground backgroundWithSpriteFrameName:@"Graphic_MainMenuBack.png"];
+         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"SeaSunshine.plist" ];
          [[GameSettings shared] setGlobal:@"YES" ForKey:@"level1"];
         /*
          [[GameSettings shared] setGlobal:@"YES" ForKey:@"level2"];
@@ -229,10 +228,10 @@
         {
            _waitToShowTextfield3=0.6;
         }
-        _nameButton=[Button buttonAtPosition:ADJUST_CCP(ccp(80,445)) andImage:@"Button_Credits.png"];
+        _nameButton=[Button buttonAtPosition:TOP_CCP(80, 35) andImage:@"Button_Credits.png"];
                 
         _goBackButton=[CCSprite spriteWithSpriteFrameName:@"Button_GoBack.png"];
-        [_goBackButton setPosition:ADJUST_CCP(ccp(30,445))];
+        [_goBackButton setPosition:TOP_CCP(30, 35)];
         if(_isSoundOn)
         {
             _soundButton=[CCSprite spriteWithSpriteFrameName:@"Button_SoundOn.png"];
@@ -240,7 +239,7 @@
         else {
             _soundButton=[CCSprite spriteWithSpriteFrameName:@"Button_SoundOff.png"];
         }
-        [_soundButton setPosition:ADJUST_CCP(ccp(290,445))];
+        [_soundButton setPosition:TOP_CCP(290, 35)];
         
         //[self addChild:_title];
         [self addChild:_goBackButton];
@@ -370,7 +369,7 @@
     }
     else {
         UpgradeMenu *menu=[UpgradeMenu UpgradeMenuLayer];
-         _upgradeButton=[Button buttonAtPosition:ADJUST_CCP(ccp(130,455)) andImage:@"Button_Upgrade.png"];
+         _upgradeButton=[Button buttonAtPosition:TOP_CCP(130, 25) andImage:@"Button_Upgrade.png"];
         [_upgradeButton setScale:0.8];
         [menu addChild:_upgradeButton];
         [_pages addObject:menu];
@@ -381,7 +380,7 @@ _scroller.minimumTouchLengthToChangePage = 30.0f;
     [_scroller moveToPage:pageNumber];
 [self addChild:_scroller];
 _scroller.showPagesIndicator=YES;
-    _scroller.pagesIndicatorPosition=ADJUST_CCP(ccp(160,20));
+    _scroller.pagesIndicatorPosition=BOTTOM_CCP(160,20);
 
 */
     
@@ -477,7 +476,7 @@ else {
 -(void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event{
     CGPoint touchOrigin = [touch locationInView:[touch view]];
 	CGPoint touchOrigin2 = [[CCDirector sharedDirector] convertToGL:touchOrigin];
-    if (touchOrigin2.x>ADJUST_X(0) && touchOrigin2.x<ADJUST_X(50) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(460))
+    if (touchOrigin2.x>ADJUST_X(0) && touchOrigin2.x<ADJUST_X(50) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(20))
     {
         
         //[myTextField1 removeFromSuperview];
@@ -489,7 +488,7 @@ else {
         
         
     }
-    if (touchOrigin2.x>ADJUST_X(50) && touchOrigin2.x<ADJUST_X(100) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(465))
+    if (touchOrigin2.x>ADJUST_X(50) && touchOrigin2.x<ADJUST_X(100) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(15))
     {
         if([gameMode isEqualToString:@"oneDevice"])
         {
@@ -503,7 +502,7 @@ else {
     
     }
     
-    if (touchOrigin2.x>ADJUST_X(50) && touchOrigin2.x<ADJUST_X(250) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(465))
+    if (touchOrigin2.x>ADJUST_X(50) && touchOrigin2.x<ADJUST_X(250) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(15))
     {
         NSString *hasPurchased = [[GameSettings shared] getGlobalForKey:@"HasPurchased"];
         
@@ -514,7 +513,7 @@ else {
          
         }
     }
-    if(touchOrigin2.x>ADJUST_X(260) && touchOrigin2.x<ADJUST_X(320) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(465))
+    if(touchOrigin2.x>ADJUST_X(260) && touchOrigin2.x<ADJUST_X(320) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(15))
     {
         
         if(_isSoundOn)
@@ -653,7 +652,7 @@ else {
         if(_waitToShowTextField1<0)
         {
             player1=[CCLabelTTF labelWithString:@"Player 1" fontName:@"Impact" fontSize:HD_TEXT(16)];
-            [player1 setPosition:ADJUST_CCP(ccp(100,467))];
+            [player1 setPosition:TOP_CCP(100, 13)];
             
             [self addChild:player1];
             
@@ -681,7 +680,7 @@ else {
         if(_waitToShowTextField2<0)
         {
             player2=[CCLabelTTF labelWithString:@"Player 2" fontName:@"Impact" fontSize:HD_TEXT(16)];
-            [player2 setPosition:ADJUST_CCP(ccp(220,467))];
+            [player2 setPosition:TOP_CCP(220, 13)];
             [self addChild:player2];
             
             myTextField2 = [[UITextField alloc] initWithFrame: CGRectMake(ADJUST_X(180) ,ADJUST_Y(25),HD_PIXELS(80), HD_PIXELS(25))];
@@ -706,7 +705,7 @@ else {
         if(_waitToShowTextfield3<0)
         {
             player2=[CCLabelTTF labelWithString:@"Your Name" fontName:@"Impact" fontSize:HD_TEXT(16)];
-            [player2 setPosition:ADJUST_CCP(ccp(160,467))];
+            [player2 setPosition:TOP_CCP(160, 13)];
             [self addChild:player2];
             
             myTextField1 = [[UITextField alloc] initWithFrame: CGRectMake(ADJUST_X(120) ,ADJUST_Y(25),HD_PIXELS(80), HD_PIXELS(25))];

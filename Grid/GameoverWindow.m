@@ -14,6 +14,7 @@
 #import "UpgradeMenu.h"
 #import "SimpleAudioEngine.h"
 #import "ChooseIslandMenu.h"
+#import "FullScreenBackground.h"
 @implementation GameoverWindow
 @synthesize waitToFadeInWindow=_waitToFadeInWindow;
 @synthesize waitToFadeOutTreasureBoxMessageBox=_waitToFadeOutWindow;
@@ -29,7 +30,7 @@
             
         _gameMode=[[GameSettings shared] getGlobalForKey:@"gameMode"];
         _background=[CCSprite spriteWithSpriteFrameName:@"Graphic_Black50.png"];
-        [_background setPosition:ADJUST_CCP(ccp(160,240))];
+        [FullScreenBackground stretchSpriteToFillScene:_background];
         _window=[CCSprite spriteWithSpriteFrameName:@"Graphic_MessageWindow.png"];
         [_window setPosition:ADJUST_CCP(ccp(160,240))];
         _scoreWindow=[CCSprite spriteWithSpriteFrameName:@"Graphic_FinalScoreBack.png"];

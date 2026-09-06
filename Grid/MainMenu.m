@@ -17,6 +17,7 @@
 #import "GCHelper.h"
 #import "CreditsMenu.h"
 #import "InAppPurchaseManager.h"
+#import "FullScreenBackground.h"
 @implementation MainMenu
 //@synthesize currentSession;
 @synthesize picker=_picker;
@@ -98,8 +99,7 @@
 
 - (void)loadUI
 {
-    CCSprite *background=[CCSprite spriteWithSpriteFrameName:@"Graphic_MainMenuBack.png"];
-    [background setPosition:ADJUST_CCP(ccp(160,240))];
+    CCNode *background=[FullScreenBackground backgroundWithSpriteFrameName:@"Graphic_MainMenuBack.png"];
     
     [self addChild: background];
     
@@ -128,7 +128,7 @@
         [_soundButton setOpacity:0];
     }
  
-    [_soundButton setPosition:ADJUST_CCP(ccp(290,445))];
+    [_soundButton setPosition:TOP_CCP(290, 35)];
     /*
     _light1=[CCSprite spriteWithSpriteFrameName:@"Graphic_Light_1.png"];
     [_light1 setOpacity:0];
@@ -139,13 +139,13 @@
    // [self addChild:_light1];
     //[self addChild:_light2];
     */
-    _creditsButton=[Button buttonAtPosition:ADJUST_CCP(ccp(240,445)) andImage:@"Button_CreditsList.png"];
+    _creditsButton=[Button buttonAtPosition:TOP_CCP(240, 35) andImage:@"Button_CreditsList.png"];
     [_creditsButton.buttonGraphic setOpacity:0];
     _creditsButton.waitToFadeInButton=1.5;
-    _leaderboardButton=[Button buttonAtPosition:ADJUST_CCP(ccp(30,445)) andImage:@"Button_LeaderBoard.png"];
+    _leaderboardButton=[Button buttonAtPosition:TOP_CCP(30, 35) andImage:@"Button_LeaderBoard.png"];
     [_leaderboardButton.buttonGraphic setOpacity:0];
     _leaderboardButton.waitToFadeInButton=1.5;
-    _nameButton=[Button buttonAtPosition:ADJUST_CCP(ccp(80,445)) andImage:@"Button_Credits.png"];
+    _nameButton=[Button buttonAtPosition:TOP_CCP(80, 35) andImage:@"Button_Credits.png"];
     [_nameButton.buttonGraphic setOpacity:0];
     _nameButton.waitToFadeInButton=1.5;
      _waitToShowSoundButton=1.5;
@@ -194,7 +194,7 @@
     //_faceBookIcon=[Button buttonAtPosition:ADJUST_CCP(ccp(30,455)) andImage:@"Button_Facebook.png"];
     //_twitterIcon=[Button buttonAtPosition:ADJUST_CCP(ccp(85,455)) andImage:@"Button_Twitter.png"];
     
-    _goBackButton=[Button buttonAtPosition:ADJUST_CCP(ccp(30,445)) andImage:@"Button_GoBack.png"];
+    _goBackButton=[Button buttonAtPosition:TOP_CCP(30, 35) andImage:@"Button_GoBack.png"];
     [_oneDeviceButton.buttonGraphic setOpacity:0];
     [_blueToothButton.buttonGraphic setOpacity:0];
     [_networkButton.buttonGraphic setOpacity:0];
@@ -375,7 +375,7 @@
              
          }
     }
-    if (touchOrigin2.x>ADJUST_X(10) && touchOrigin2.x<ADJUST_X(50) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(465))
+    if (touchOrigin2.x>ADJUST_X(10) && touchOrigin2.x<ADJUST_X(50) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(15))
     {
         if(_singleAndTwoPlayerButtonShowing)
         {
@@ -409,14 +409,14 @@
         }
     }
     
-    if (touchOrigin2.x>ADJUST_X(220) && touchOrigin2.x<ADJUST_X(260) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(465))
+    if (touchOrigin2.x>ADJUST_X(220) && touchOrigin2.x<ADJUST_X(260) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(15))
     {
         [_creditsButton playbuttonAnimation];
         CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
         
         [director_ pushScene: [CCTransitionFade transitionWithDuration:1.0f scene:[CreditsMenu scene]]];
     }
-    if (touchOrigin2.x>ADJUST_X(50) && touchOrigin2.x<ADJUST_X(100) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(465))
+    if (touchOrigin2.x>ADJUST_X(50) && touchOrigin2.x<ADJUST_X(100) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(15))
     {
        
             [_nameButton playbuttonAnimation];
@@ -430,7 +430,7 @@
     }
 
     
-    if (touchOrigin2.x>ADJUST_X(50) && touchOrigin2.x<ADJUST_X(90) && touchOrigin2.y>ADJUST_Y(445) && touchOrigin2.y<ADJUST_Y(465))
+    if (touchOrigin2.x>ADJUST_X(50) && touchOrigin2.x<ADJUST_X(90) && touchOrigin2.y>TOP_Y(35) && touchOrigin2.y<TOP_Y(15))
     {
         if(_OneDeviceAndBlueToothButtonShowing)
         {
@@ -438,7 +438,7 @@
                     }
     }
     
-    if (touchOrigin2.x>ADJUST_X(260) && touchOrigin2.x<ADJUST_X(320) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(465))
+    if (touchOrigin2.x>ADJUST_X(260) && touchOrigin2.x<ADJUST_X(320) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(15))
     {
         if(_isSoundOn)
         {

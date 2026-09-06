@@ -71,42 +71,39 @@
 {
     NSMutableArray *nonThirdEdgeArray=[[NSMutableArray alloc] init];
     
-    for(EdgeArray *array in _grid.gridModel.lines)
+    NSUInteger lineCount=[_grid.gridModel.lines count];
+    for(NSUInteger lineIndex=0; lineIndex<lineCount; lineIndex++)
     {
-        for(Edge *obj in array)
+        EdgeArray *array=[_grid.gridModel.lines objectAtIndex:lineIndex];
+        NSUInteger edgeCount=[array count];
+        for(NSUInteger edgeIndex=0; edgeIndex<edgeCount; edgeIndex++)
         {
-            if(obj.rowOrLine ==ON_LINE)
+            Edge *obj=[array objectAtIndex:edgeIndex];
+            if(!obj.isFilled)
             {
-               // BoxStatus status= [self getEdgeInfoOnALineAtIndex:obj.rowOrLineIndex EdgeIndex:obj.edgeIndex];
-                if(!obj.isFilled)
-                {
-                    [nonThirdEdgeArray addObject:obj];
-                }
-                
-                
+                obj.rowOrLine=ON_LINE;
+                obj.rowOrLineIndex=(int)lineIndex;
+                obj.edgeIndex=(int)edgeIndex;
+                [nonThirdEdgeArray addObject:obj];
             }
-            
         }
     }
     
-    for(EdgeArray *array in _grid.gridModel.rows)
+    NSUInteger rowCount=[_grid.gridModel.rows count];
+    for(NSUInteger rowIndex=0; rowIndex<rowCount; rowIndex++)
     {
-        for(Edge *obj in array)
+        EdgeArray *array=[_grid.gridModel.rows objectAtIndex:rowIndex];
+        NSUInteger edgeCount=[array count];
+        for(NSUInteger edgeIndex=0; edgeIndex<edgeCount; edgeIndex++)
         {
-            if(obj.rowOrLine==ON_ROW)
+            Edge *obj=[array objectAtIndex:edgeIndex];
+            if(!obj.isFilled)
             {
-                
-              //  BoxStatus status= [self getEdgeInfoOnARowAtIndex:obj.rowOrLineIndex EdgeIndex:obj.edgeIndex];
-                if(!obj.isFilled)
-                {
-                    [nonThirdEdgeArray addObject:obj];
-                }
-                
-                
-                
-                
+                obj.rowOrLine=ON_ROW;
+                obj.rowOrLineIndex=(int)rowIndex;
+                obj.edgeIndex=(int)edgeIndex;
+                [nonThirdEdgeArray addObject:obj];
             }
-            
         }
     }
     
@@ -123,6 +120,7 @@
             {
                 [_grid drawEdgeAtRowIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
                 _waitToCheckRandomEdge=1.0;
+                [nonThirdEdgeArray release];
                 return;
             }
             else {
@@ -136,26 +134,23 @@
             {
                 [_grid drawEdgeAtLineIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
                 _waitToCheckRandomEdge=1.0;
+                [nonThirdEdgeArray release];
                 return;
             }
             else {
                 [_grid drawEdgeAtLineIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
             }
         }
-        //filledAnEdge=YES;
         _grid.touchEnable=YES;
-        // _countForSearchingNonThreeEdgeBox=0;
         
-        [nonThirdEdgeArray removeObject:edge];
         [nonThirdEdgeArray release];
         return;
     }
-    else {
-       // [self fillRandomEdge];
-       // [self fillRandomEdge];
-    }
-    
-    
+
+    _grid.CPUTurn=NO;
+    _grid.CPUThinking=NO;
+    _grid.touchEnable=YES;
+    [nonThirdEdgeArray release];
     return;
 }
 
@@ -483,12 +478,13 @@
             if( [self getEdgeInfoOnALineAtIndex:lineIndex EdgeIndex:edgeIndex] == FILLED_WITH_THREE_EDGES && !edge.isFilled)
            {
                [_grid drawEdgeAtLineIndex:lineIndex EdgeIndex:edgeIndex];
-               
-               //[self fillRandomEdge:grid];
-               //hasThreeEdgesBox=YES;
+               if(!edge.isFilled)
+               {
+                   [self checkNonThreeEdgesfilledBox];
+                   return;
+               }
                _waitToCheckThreeEdgeBox=1.0;
                return;
-               //return hasThreeEdgesBox;
            }
         }
     }
@@ -506,11 +502,13 @@
                  if( [self getEdgeInfoOnARowAtIndex:rowIndex EdgeIndex:edgeIndex]== FILLED_WITH_THREE_EDGES && !edge.isFilled)
             {
                 [_grid drawEdgeAtRowIndex:rowIndex EdgeIndex:edgeIndex];
-                 //[self fillRandomEdge:grid];
-                //hasThreeEdgesBox=YES;
+                if(!edge.isFilled)
+                {
+                    [self checkNonThreeEdgesfilledBox];
+                    return;
+                }
                 _waitToCheckThreeEdgeBox=1.0;
                 return;
-                //return hasThreeEdgesBox;
             }
         }
     }
@@ -622,12 +620,7 @@
  //   {
     CGPoint tileCoord = [_grid.gridView tileCoordForPosition:ccp(pointX1,pointY1)];
     
-    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        tileCoord=[_grid.gridView tileCoordForPosition:ccp(pointX1-64,pointY1-32)];
-    }
-    
-    int tileGid3 = [_grid.gridView.itemLayer tileGIDAt:tileCoord];
+    int tileGid3 = [_grid.gridView safeTileGIDAt:tileCoord inLayer:_grid.gridView.itemLayer];
     if (tileGid3) {
         NSDictionary *properties = [_grid.gridView.tileMap propertiesForGID:tileGid3];
         if (properties) {
@@ -660,11 +653,7 @@
   //  if(pointX2<X_BOUNDARY_RIGHT&&pointY2<Y_BOUNDARY_TOP)
   //  {
     CGPoint tileCoord2 = [_grid.gridView tileCoordForPosition:ccp(pointX2,pointY2)];
-    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        tileCoord2=[_grid.gridView tileCoordForPosition:ccp(pointX2-64,pointY2-32)];
-    }
-    int tileGid2 = [_grid.gridView.itemLayer tileGIDAt:tileCoord2];
+    int tileGid2 = [_grid.gridView safeTileGIDAt:tileCoord2 inLayer:_grid.gridView.itemLayer];
     if (tileGid2) {
         NSDictionary *properties = [_grid.gridView.tileMap propertiesForGID:tileGid2];
         if (properties) {
@@ -748,11 +737,7 @@
  //   if(pointX1<X_BOUNDARY_RIGHT&&pointY1<Y_BOUNDARY_TOP)
   //  {
     CGPoint tileCoord = [_grid.gridView tileCoordForPosition:ccp(pointX1,pointY1)];
-    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        tileCoord=[_grid.gridView tileCoordForPosition:ccp(pointX1-64,pointY1-32)];
-    }
-    int tileGid3 = [_grid.gridView.itemLayer tileGIDAt:tileCoord];
+    int tileGid3 = [_grid.gridView safeTileGIDAt:tileCoord inLayer:_grid.gridView.itemLayer];
     if (tileGid3) {
         NSDictionary *properties = [_grid.gridView.tileMap propertiesForGID:tileGid3];
         if (properties) {
@@ -783,11 +768,7 @@
   //  if(pointX2<X_BOUNDARY_RIGHT&&pointY2<Y_BOUNDARY_TOP)
    // {
     CGPoint tileCoord2 = [_grid.gridView tileCoordForPosition:ccp(pointX2,pointY2)];
-    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        tileCoord2=[_grid.gridView tileCoordForPosition:ccp(pointX2-64,pointY2-32)];
-    }
-    int tileGid2 = [_grid.gridView.itemLayer tileGIDAt:tileCoord2];
+    int tileGid2 = [_grid.gridView safeTileGIDAt:tileCoord2 inLayer:_grid.gridView.itemLayer];
     
     if (tileGid2) {
         NSDictionary *properties = [_grid.gridView.tileMap propertiesForGID:tileGid2];
@@ -871,7 +852,12 @@ if(_waitToCheckThreeEdgeBox>0)
         }
     }
 
-    
+    if(_grid.CPUTurn && _grid.CPUThinking
+       && _waitToStartBrain<=0 && _waitToCheckThreeEdgeBox<=0
+       && _waitToCheckRandomEdge<=0 && _waitToCheckNonThreeEdgeBox<=0)
+    {
+        [self fillRandomEdge];
+    }
 }
 
 -(void)dealloc

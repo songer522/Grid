@@ -36,7 +36,7 @@ typedef enum {
 @interface GridView : CCLayer {
     CCLabelTTF *_lable;
     CCLabelTTF *_lable2;
-    CCSprite *_background;
+    CCNode *_background;
     CCSprite *_dashLines;
     CCSprite *_dots;
     CCSprite *_edgeIndicator;
@@ -153,6 +153,7 @@ typedef enum {
 - (id)getSkullAtPosition:(CGPoint)point;
 - (id)getFogAtPosition:(CGPoint)point;
 - (CGPoint)tileCoordForPosition:(CGPoint)position;
+- (uint32_t)safeTileGIDAt:(CGPoint)tileCoord inLayer:(CCTMXLayer *)layer;
 -(void)blueIsOn;
 -(void)orangeIsOn;
 - (CGPoint)getBoxPositionAt:(Direction)direction From:(CGPoint)point;

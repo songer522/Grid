@@ -31,6 +31,7 @@
 
 #import "../../CCDirector.h"
 #import "kazmath/mat4.h"
+#import <UIKit/UIKit.h>
 
 @class CCTouchDispatcher;
 
@@ -77,20 +78,29 @@
 	
 	CCTouchDispatcher	*touchDispatcher_;
 
-	/* Fixed coordinate space the scene is authored in. The scene is scaled
-	   uniformly into the view and centred, so aspect ratios the game was never
-	   designed for get letterboxed instead of stretched or clipped. */
+	/* Minimum content size the scene is authored in. The view is mapped onto a
+	   scene at least this large; extra space extends the coordinate space so
+	   the scene fills the screen instead of letterboxing. */
 	CGSize	designSize_;
 	CGRect	viewportInPoints_;
+	CGPoint	contentOrigin_;
 }
 
-/** The coordinate space scenes are laid out in, in points. Setting CGSizeZero
- restores the legacy behaviour of using the view's own size.
+/** Minimum content size scenes are laid out against, in points. The actual
+ scene size may be larger so the view is filled. Setting CGSizeZero restores
+ the legacy behaviour of using the view's own size.
  */
 @property (nonatomic, assign) CGSize designSize;
 
-/** The centred, aspect-fitted region of the view the scene is drawn into, in view points. */
+/** The region of the view the scene is drawn into, in view points. In extend
+ mode this is the full view. */
 @property (nonatomic, readonly) CGRect viewportInPoints;
+
+/** Origin of the authored design box inside the (possibly larger) scene. */
+@property (nonatomic, readonly) CGPoint contentOrigin;
+
+/** The view's safe-area insets converted into scene points. */
+@property (nonatomic, readonly) UIEdgeInsets safeAreaInsetsInPoints;
 @end
 
 /** DisplayLinkDirector is a Director that synchronizes timers with the refresh rate of the display.

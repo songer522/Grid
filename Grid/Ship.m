@@ -65,11 +65,11 @@
 {
     if(!_isFlip)
     {
-    id moveAction=[CCMoveTo actionWithDuration:2.5 position:ccp(_shipPosition.x+ADJUST_X(350),_shipPosition.y)];
+    id moveAction=[CCMoveTo actionWithDuration:2.5 position:ccp(_shipPosition.x+ADJUST_LEN_X(350),_shipPosition.y)];
         [_shipGraphic runAction:moveAction];
     }
     else {
-        id moveAction=[CCMoveTo actionWithDuration:2.5 position:ccp(_shipPosition.x-ADJUST_X(350),_shipPosition.y)];
+        id moveAction=[CCMoveTo actionWithDuration:2.5 position:ccp(_shipPosition.x-ADJUST_LEN_X(350),_shipPosition.y)];
         [_shipGraphic runAction:moveAction];
     }
 }

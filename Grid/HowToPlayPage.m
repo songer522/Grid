@@ -13,6 +13,7 @@
 #import "GameSettings.h"
 #import "InAppPurchaseManager.h"
 #import "SimpleAudioEngine.h"
+#import "FullScreenBackground.h"
 @implementation HowToPlayPage
 @synthesize waitToFadeInWindow=_waitToFadeInWindow;
 @synthesize waitToFadeOutTreasureBoxMessageBox=_waitToFadeOutWindow;
@@ -32,7 +33,7 @@
         _parentController=gamelayer;
          
         _background=[CCSprite spriteWithSpriteFrameName:@"Graphic_Black50.png"];
-        [_background setPosition:ADJUST_CCP(ccp(160,240))];
+        [FullScreenBackground stretchSpriteToFillScene:_background];
         _page=[CCSprite spriteWithSpriteFrameName:[self getPageName]];
         [_page setPosition:ADJUST_CCP(ccp(160,240))];
                 _touchEnable=NO;
@@ -56,7 +57,7 @@
          _parentController=gamelayer;
          
          _background=[CCSprite spriteWithSpriteFrameName:@"Graphic_Black50.png"];
-         [_background setPosition:ADJUST_CCP(ccp(160,240))];
+         [FullScreenBackground stretchSpriteToFillScene:_background];
          //_closeButton=[CCSprite spriteWithSpriteFrameName:@"Graphic_HTP_6_Delete.png"];
          //[_closeButton setPosition:ADJUST_CCP(ccp(160,240))];
           _touchEnable=YES;
@@ -132,8 +133,8 @@
          //[_scroller moveToPage:pageNumber];
         
          _scroller.showPagesIndicator=NO;
-         _scroller.pagesIndicatorPosition=ADJUST_CCP(ccp(160,20));
-         _dotIndicator =[skullDotIndicator skullDotIndicatorWithNumberOfDots:8 AndPosition:ADJUST_CCP(ccp(160,40)) CurrentPage:_scroller.currentScreen];
+         _scroller.pagesIndicatorPosition=BOTTOM_CCP(160,20);
+         _dotIndicator =[skullDotIndicator skullDotIndicatorWithNumberOfDots:8 AndPosition:BOTTOM_CCP(160,40) CurrentPage:_scroller.currentScreen];
          //[_scroller setPosition:ADJUST_CCP(ccp(0,60))];
          //[self setOpacity:0];
          [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES]; 
