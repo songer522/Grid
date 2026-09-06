@@ -1,7 +1,7 @@
 # Pirate Lines
 
 一款 2012 年发布的 iOS 益智策略游戏，基于 cocos2d-iphone 2.0 与 Objective-C 开发。
-本文档记录项目的原始技术栈现状，作为现代化改造的参照基线。
+项目已完成现代化改造，可在 Xcode 27 / iOS 27 SDK 下构建，支持 64 位与现代设备屏幕。
 
 - **产品名**：Pirate Lines
 - **Bundle ID**：`com.xecudev.Grid`
@@ -19,11 +19,11 @@
 | 音频 | CocosDenshion（OpenAL + AVFoundation） |
 | 数学库 | kazmath（含 32 位 ARM NEON 内联汇编） |
 | 语言 | Objective-C，**手动引用计数（MRR）**，未启用 ARC |
-| 工程格式 | `objectVersion 46`，Xcode 3.2 兼容格式 |
-| 部署目标 | iOS 4.3 |
-| 架构 | `ARCHS_STANDARD_32_BIT`（仅 armv7） |
+| 部署目标 | iOS 16.0 |
+| 架构 | `$(ARCHS_STANDARD)`（arm64） |
 | 设备 | iPhone + iPad 通用（`TARGETED_DEVICE_FAMILY = "1,2"`），仅竖屏 |
-| UI 层 | 纯代码，无 xib / storyboard / asset catalog |
+| UI 层 | 游戏画面纯代码；图标走 asset catalog，启动图走 LaunchScreen.storyboard |
+| 坐标系 | 固定设计分辨率（iPhone 320×480 / iPad 768×1024），等比居中适配 |
 
 ### 代码规模
 
@@ -34,7 +34,7 @@
 ### 系统框架依赖
 
 `UIKit`、`Foundation`、`CoreGraphics`、`QuartzCore`、`OpenGLES`、`OpenAL`、`AudioToolbox`、
-`AVFoundation`、`GameKit`、`StoreKit`、`CFNetwork`、`SystemConfiguration`、`iAd`
+`AVFoundation`、`GameKit`、`StoreKit`、`CFNetwork`、`SystemConfiguration`
 
 ---
 
@@ -46,15 +46,15 @@
 ├── Grid/
 │   ├── *.m / *.h             游戏逻辑（88 个文件）
 │   ├── Art/                  386 个 TMX 关卡地图
-│   ├── Resources/Info.plist  应用配置
+│   ├── Resources/            Info.plist、Assets.xcassets、LaunchScreen、
+│   │                         PrivacyInfo.xcprivacy、Grid.entitlements
 │   ├── Sounds and Music/     背景音乐与音效
 │   └── libs/
 │       ├── cocos2d/          cocos2d-iphone 2.0 引擎源码
 │       ├── CocosDenshion/    音频引擎
 │       ├── kazmath/          矩阵与向量数学库
 │       └── Extensions/       cocos2d-extensions 扩展集
-├── Default*.png              旧式启动图
-└── Icon_*.png                旧式应用图标
+└── README.md
 ```
 
 ### 核心模块
@@ -70,7 +70,8 @@
 | `Database` | 基于 `NSKeyedArchiver` 的本地存档（写入 Documents 目录） |
 | `GCHelper` | Game Center 认证与排行榜上报 |
 | `InAppPurchaseManager` | StoreKit 内购（解锁完整版） |
-| `Appirater` | 第三方评分提示库 |
+| `AlertView` | `UIAlertView` 的兼容替代，底层为 `UIAlertController` |
+| `ReviewPrompt` | 评分提示，底层为 `SKStoreReviewController` |
 
 ### 资源与分辨率体系
 
@@ -90,78 +91,85 @@
 #define ADJUST_X(__x__) (IS_IPAD() == YES ? (__x__ * 2) + kXoffsetiPad : __x__)
 ```
 
-这意味着**全部布局都硬绑定在 320×480 的设计基准上**，通过整数倍缩放加固定偏移适配 iPad。
-现代设备的 19.5:9 长宽比与安全区完全不在这套体系的考虑范围内。
+也就是说，全部布局都硬绑定在 320×480 的设计基准上，通过整数倍缩放加固定偏移适配 iPad。
+这套体系本身保留了下来；现代设备千差万别的长宽比由 `CCDirectorIOS` 的设计分辨率机制
+统一吸收（见下文「屏幕适配」）。
 
 ---
 
-## 已知障碍
+## 改造记录
 
-按严重程度排列。以下问题在现代 Xcode 下会直接导致编译失败或运行时崩溃。
+原项目在现代 Xcode 下无法编译，也无法在 64 位设备上运行。以下是逐项处理的结果。
 
-### 1. 架构：仅 32 位
+### 64 位化
 
-- `ARCHS = ARCHS_STANDARD_32_BIT` 产出的二进制在现代 iOS 上无法运行
-- `Grid/libs/kazmath/src/neon_matrix_impl.c` 使用 32 位 ARM NEON 内联汇编，在 arm64 下编译失败
-- 应用层约 94 处 `int` 强制转换需核对 64 位下的类型宽度
+- `ARCHS` 从 `ARCHS_STANDARD_32_BIT` 改为 `$(ARCHS_STANDARD)`
+- kazmath 的 32 位 ARM NEON 内联汇编改由 `KM_USE_NEON_ASM` 控制。原先的
+  `#if defined(__ARM_NEON__)` 在 arm64 上同样成立，但那段汇编是 32 位语法，
+  收窄条件后 arm64 自动走纯 C 的矩阵乘法实现
+- `__ccContentScaleFactor` 在两处头文件里分别声明为 `float` 和 `CGFloat`，
+  64 位下 `CGFloat` 是 `double`，类型不再一致，统一为 `CGFloat`
+- `CCRotateTo`/`CCRotateBy` 里 `[target_ rotation]` 的 `target_` 是 `id`，
+  现代 SDK 中存在返回 `CGVector` 的同名方法，加了显式类型转换
+- 修正应用层的整型截断、浮点 `abs()` 与格式化字符串问题
 
-### 2. 已从 SDK 删除的 API
+### 已删除 API 的替换
 
-| API | 状态 | 影响位置 |
-| --- | --- | --- |
-| `iAd.framework` / `ADBannerView` | iOS 10 起废弃，SDK 已移除 | `GridView.h` / `GridView.m` |
-| `GKLeaderboardViewController` | iOS 14 删除 | `GCHelper.h` / `GCHelper.m` |
-| `UIViewController.wantsFullScreenLayout` | 已移除 | `AppDelegate.m` |
-| `UIAlertView` | iOS 9 起废弃，已移除 | 7 个文件共 48 处 |
-| `presentModalViewController:` / `dismissModalViewControllerAnimated:` | 已移除 | `AppDelegate.m` |
-| `shouldAutorotateToInterfaceOrientation:` | 已移除 | `AppDelegate.m` |
-| `SKPaymentTransaction.transactionReceipt` | 已移除 | `InAppPurchaseManager.m` |
-| `authenticateWithCompletionHandler:` | 已移除 | `GCHelper.m` |
-| `MPMoviePlayerController` | 已移除 | `libs/Extensions/CCVideoPlayer`（未被引用） |
-
-### 3. 启动流程过时
-
-`AppDelegate.m` 用 `[window_ addSubview:navController_.view]` 而非设置 `rootViewController`，
-这是 iOS 5 之前的写法，在 iOS 13+ 会导致视图控制器生命周期与旋转事件异常。
-
-### 4. 屏幕适配
-
-最宽只适配到 iPhone 5 的 1136×640。现代设备存在刘海、灵动岛与 home indicator，
-且长宽比达到 19.5:9，直接运行会出现黑边、拉伸或 UI 被系统组件遮挡。
-
-### 5. 上架合规缺失
-
-- 无 `PrivacyInfo.xcprivacy`（Privacy Manifest），当前为 App Store 强制要求
-- 无 `LaunchScreen.storyboard`，仍使用已不受支持的 `Default.png` 系列启动图
-- 无 asset catalog，图标最大只到 144×144，缺 1024×1024 marketing icon
-- Info.plist 缺 `ITSAppUsesNonExemptEncryption` 声明
-
-### 6. 其他
-
-- `Database.m` 使用已废弃的 `NSKeyedUnarchiver initForReadingWithData:`，未启用 secure coding
-- 工程内残留 `_sconsign.dblite`、`Song.pbxuser`、`Song.mode1v3.xml`、`xcuserdata` 等历史文件
-
-### 好消息
-
-- `iAd` 的实际调用早已被注释（`//[self loadiAd];`），只剩 header 引用与空 delegate，**可直接删除而无需接入新广告 SDK**
-- `CCVideoPlayer` 扩展未被任何代码引用，可整体移除
-- 游戏核心逻辑（棋盘模型、AI、关卡数据）与平台 API 解耦良好，改造过程中无需改动
-
----
-
-## 现代化路线
-
-保留全部 Objective-C 游戏逻辑与 cocos2d 2.x 引擎，仅修复平台兼容性问题，目标是重新上架 App Store。
-
-| 阶段 | 内容 |
+| 原 API | 替换方案 |
 | --- | --- |
-| 0 | 建立基线：现代 Xcode 打开工程，全量编译获取真实错误清单，清理历史文件 |
-| 1 | 64 位化：切到 `ARCHS_STANDARD`，处理 NEON 汇编与类型宽度问题 |
-| 2 | 工程现代化：抬高部署目标，建 asset catalog 与 LaunchScreen，移除 iAd 与 CCVideoPlayer |
-| 3 | 替换已删除 API：重写启动流程与旋转逻辑，48 处 `UIAlertView` 迁移 |
-| 4 | 服务层：重写 IAP 收据校验、Game Center 认证与排行榜，评分提示换 `SKStoreReviewController` |
-| 5 | 屏幕适配：现代长宽比与安全区，修正硬编码坐标 |
-| 6 | 上架合规：Privacy Manifest、加密声明、签名与 archive，真机全量回归 |
+| `UIAlertView`（48 处） | `AlertView` 兼容类，底层 `UIAlertController` |
+| `iAd` / `ADBannerView` | 直接移除（调用早已被注释） |
+| `GKLeaderboardViewController` | `GKGameCenterViewController` |
+| `authenticateWithCompletionHandler:` | `GKLocalPlayer.authenticateHandler` |
+| `GKMatchmaker.inviteHandler` | `GKLocalPlayerListener` |
+| `SKPaymentTransaction.transactionReceipt` | `NSBundle.appStoreReceiptURL` |
+| `presentModalViewController:` | `presentViewController:animated:completion:` |
+| `shouldAutorotateToInterfaceOrientation:` | `supportedInterfaceOrientations` |
+| `UIViewController.wantsFullScreenLayout` | 直接移除 |
+| `UIAccelerometer` | 直接移除（游戏未使用重力感应） |
+| `Appirater` | `ReviewPrompt`，底层 `SKStoreReviewController` |
+
+`AlertView` 保留了 `UIAlertView` 的 delegate 与 tag 接口，48 个调用点和它们的
+分发逻辑一行未改。它额外做了两件原来没有的事：把并发的弹窗排队，以及强制在主线程
+present —— `UIAlertView` 能容忍从后台线程调用，`UIAlertController` 会直接崩溃。
+
+### 屏幕适配
+
+游戏的全部坐标都写死在固定的设计空间里，而 cocos2d 2.0 直接把视图尺寸当作场景的
+坐标系，没有"设计分辨率"的概念。原版 iPhone 上两者恰好相等，现代设备上场景就只画
+在了视图的一角。
+
+`CCDirectorIOS` 现在接受一个设计尺寸，把场景等比放大居中到视图中，多余部分留黑边。
+`convertToGL:` / `convertToUI:` 做了对应的逆变换，触摸位置仍然准确。
+
+同时修复了 `IS_IPAD()`：它原本写在 `#ifdef UI_USER_INTERFACE_IDIOM` 里，而这个符号
+在现代 SDK 中已不是预处理宏，导致条件不成立、宏被固定成 `NO`，**整个 iPad 布局分支
+被静默地编译掉了**。
+
+### 上架合规
+
+- 新增 `PrivacyInfo.xcprivacy`，声明 `NSUserDefaults` 与文件时间戳的使用理由
+- 新增 `Grid.entitlements` 声明 Game Center 权限
+- Info.plist 补 `ITSAppUsesNonExemptEncryption`，移除已不再需要的 `accelerometer` 硬件要求
+- asset catalog 提供 1024×1024 图标，`LaunchScreen.storyboard` 取代 `Default.png` 系列
+
+---
+
+## 遗留事项
+
+改造未覆盖以下几点，需要在提交前另行处理。
+
+- **应用图标精度**：现有最大的原始素材是 512×512 的 `iTunesArtwork.png`，
+  当前的 1024×1024 图标由它放大而来。上架前应替换为原始设计稿导出的版本。
+- **联机对战**：多人对战基于 `GKSession` / `GKPeerPickerController`，
+  这两者自 iOS 7 起废弃，虽仍可编译但运行时功能已不可用。
+  要恢复联机需迁移到 MultipeerConnectivity 或 GameKit 的现代 match API。
+- **存档与联机消息的序列化**：约 30 处使用已废弃的
+  `NSKeyedArchiver initForWritingWithMutableData:`。这些 API 仍然可用，
+  且直接决定存档格式与联机线格式，贸然迁移会破坏老玩家的存档，因此保持原样。
+- **App Store Connect 配置**：需确认原有的 IAP product ID 与排行榜 ID 仍然有效。
+- **真机回归**：模拟器上已验证 iPhone 与 iPad 的启动、渲染、弹窗与触摸映射，
+  但 IAP 购买与恢复、Game Center 登录与排行榜必须在真机加签名后才能完整验证。
 
 ---
 
@@ -171,4 +179,15 @@
 open Grid.xcodeproj
 ```
 
-改造完成前，本工程无法在现代 Xcode 上成功构建。
+命令行构建与归档：
+
+```sh
+xcodebuild -project Grid.xcodeproj -scheme Grid \
+  -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' build
+
+xcodebuild -project Grid.xcodeproj -scheme Grid \
+  -sdk iphoneos -configuration Release \
+  -archivePath build/Grid.xcarchive archive
+```
+
+归档需要有效的签名身份与包含 Game Center 能力的 provisioning profile。

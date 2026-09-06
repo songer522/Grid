@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA0000000000000000000017 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000007 /* PrivacyInfo.xcprivacy */; };
 		AA0000000000000000000015 /* ReviewPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000005 /* ReviewPrompt.m */; };
 		AA0000000000000000000013 /* AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000003 /* AlertView.m */; };
 		AA0000000000000000000011 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000001 /* Assets.xcassets */; };
@@ -680,6 +681,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AA0000000000000000000007 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		AA0000000000000000000008 /* Grid.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Grid.entitlements; path = Resources/Grid.entitlements; sourceTree = "<group>"; };
 		AA0000000000000000000005 /* ReviewPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReviewPrompt.m; sourceTree = "<group>"; };
 		AA0000000000000000000006 /* ReviewPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReviewPrompt.h; sourceTree = "<group>"; };
 		AA0000000000000000000003 /* AlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertView.m; sourceTree = "<group>"; };
@@ -1815,6 +1818,8 @@
 		614BA0B815460DFD00A3568C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				AA0000000000000000000007 /* PrivacyInfo.xcprivacy */,
+				AA0000000000000000000008 /* Grid.entitlements */,
 				AA0000000000000000000001 /* Assets.xcassets */,
 				AA0000000000000000000002 /* LaunchScreen.storyboard */,
 				E491450A157DB66200F81E03 /* Font */,
@@ -2929,6 +2934,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA0000000000000000000017 /* PrivacyInfo.xcprivacy in Resources */,
 				AA0000000000000000000011 /* Assets.xcassets in Resources */,
 				AA0000000000000000000012 /* LaunchScreen.storyboard in Resources */,
 				614BA0BC15460DFD00A3568C /* fps_images.png in Resources */,
@@ -3661,6 +3667,7 @@
 				GCC_PREFIX_HEADER = Grid/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"Grid/libs/kazmath/include\"";
 				INFOPLIST_FILE = Grid/Resources/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = Grid/Resources/Grid.entitlements;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				OTHER_LDFLAGS = (
@@ -3685,6 +3692,7 @@
 				GCC_PREFIX_HEADER = Grid/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"Grid/libs/kazmath/include\"";
 				INFOPLIST_FILE = Grid/Resources/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = Grid/Resources/Grid.entitlements;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				OTHER_LDFLAGS = (
@@ -3732,6 +3740,7 @@
 				GCC_PREFIX_HEADER = Grid/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"Grid/libs/kazmath/include\"";
 				INFOPLIST_FILE = Grid/Resources/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = Grid/Resources/Grid.entitlements;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				OTHER_LDFLAGS = (
