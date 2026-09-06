@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA0000000000000000000015 /* ReviewPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000005 /* ReviewPrompt.m */; };
 		AA0000000000000000000013 /* AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000003 /* AlertView.m */; };
 		AA0000000000000000000011 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000001 /* Assets.xcassets */; };
 		AA0000000000000000000012 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000002 /* LaunchScreen.storyboard */; };
@@ -426,7 +427,6 @@
 		E400B074157F1E9100784739 /* DAL_Level96.tmx in Resources */ = {isa = PBXBuildFile; fileRef = E400AFF4157F1E9100784739 /* DAL_Level96.tmx */; };
 		E404CC2815800D3300818610 /* InputNameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = E404CC2715800D3300818610 /* InputNameWindow.m */; };
 		E42D90BF1590ED9100CB4A67 /* GKInvite.wav in Resources */ = {isa = PBXBuildFile; fileRef = E42D90BE1590ED9100CB4A67 /* GKInvite.wav */; };
-		E42D90C315916B4900CB4A67 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = E42D90C215916B4800CB4A67 /* Appirater.m */; };
 		E42D90C615916B9300CB4A67 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42D90C415916B7D00CB4A67 /* CFNetwork.framework */; };
 		E42D90C915916BCB00CB4A67 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42D90C715916B9E00CB4A67 /* SystemConfiguration.framework */; };
 		E43AB368159047DE002D2EC3 /* treasuremap2.wav in Resources */ = {isa = PBXBuildFile; fileRef = E43AB367159047DE002D2EC3 /* treasuremap2.wav */; };
@@ -680,6 +680,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AA0000000000000000000005 /* ReviewPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReviewPrompt.m; sourceTree = "<group>"; };
+		AA0000000000000000000006 /* ReviewPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReviewPrompt.h; sourceTree = "<group>"; };
 		AA0000000000000000000003 /* AlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertView.m; sourceTree = "<group>"; };
 		AA0000000000000000000004 /* AlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertView.h; sourceTree = "<group>"; };
 		AA0000000000000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
@@ -1276,8 +1278,6 @@
 		E404CC2615800D3200818610 /* InputNameWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputNameWindow.h; sourceTree = "<group>"; };
 		E404CC2715800D3300818610 /* InputNameWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputNameWindow.m; sourceTree = "<group>"; };
 		E42D90BE1590ED9100CB4A67 /* GKInvite.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = GKInvite.wav; sourceTree = "<group>"; };
-		E42D90C115916B4800CB4A67 /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
-		E42D90C215916B4800CB4A67 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
 		E42D90C415916B7D00CB4A67 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		E42D90C715916B9E00CB4A67 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		E43AB367159047DE002D2EC3 /* treasuremap2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = treasuremap2.wav; sourceTree = "<group>"; };
@@ -1634,8 +1634,6 @@
 		612218A01558299900903A72 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				E42D90C115916B4800CB4A67 /* Appirater.h */,
-				E42D90C215916B4800CB4A67 /* Appirater.m */,
 				E4DB83DF158D2AC10039B41C /* GCHelper.h */,
 				E4DB83E0158D2AC10039B41C /* GCHelper.m */,
 				E4DB83E1158D2AC10039B41C /* GCState.h */,
@@ -1802,6 +1800,8 @@
 				614BA23E15460EA400A3568C /* GameLayer.h */,
 				AA0000000000000000000004 /* AlertView.h */,
 				AA0000000000000000000003 /* AlertView.m */,
+				AA0000000000000000000006 /* ReviewPrompt.h */,
+				AA0000000000000000000005 /* ReviewPrompt.m */,
 				614BA23F15460EA400A3568C /* GameLayer.m */,
 				614BA22515460DFF00A3568C /* AppDelegate.h */,
 				614BA22615460DFF00A3568C /* AppDelegate.m */,
@@ -3551,6 +3551,7 @@
 				614BA24915460EA400A3568C /* Edge.m in Sources */,
 				614BA24A15460EA400A3568C /* EdgeArray.m in Sources */,
 				AA0000000000000000000013 /* AlertView.m in Sources */,
+				AA0000000000000000000015 /* ReviewPrompt.m in Sources */,
 				614BA24B15460EA400A3568C /* GameLayer.m in Sources */,
 				614BA24C15460EA400A3568C /* GridModel.m in Sources */,
 				614BA24D15460EA400A3568C /* GridView.m in Sources */,
@@ -3596,7 +3597,6 @@
 				E4DB83E3158D2AC10039B41C /* GCHelper.m in Sources */,
 				E4DB83E4158D2AC10039B41C /* GCState.m in Sources */,
 				E43FB38E158EE6A300C5E2AA /* CreditsMenu.m in Sources */,
-				E42D90C315916B4900CB4A67 /* Appirater.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

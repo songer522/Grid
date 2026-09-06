@@ -14,7 +14,7 @@
 #import "ChooseLevelMenu.h"
 #import "GameSettings.h"
 #import "ChooseIslandMenu.h"
-#import "Appirater.h"
+#import "ReviewPrompt.h"
 
 @implementation AppController
 
@@ -86,7 +86,7 @@
    // [director_ pushScene: [ChooseLevelMenu scene]]; 
     [director_ pushScene: [MainMenu scene]]; 
     
-    [Appirater appLaunched:YES];
+    [ReviewPrompt appLaunched];
 
 	return YES;
 }
@@ -158,34 +158,40 @@
 
 - (void) authenticateLocalPlayer
 {
-    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
-    [localPlayer authenticateWithCompletionHandler:^(NSError *error) {
-        if (localPlayer.isAuthenticated)
+    GKLocalPlayer *localPlayer = [GKLocalPlayer local];
+
+    // authenticateWithCompletionHandler: was removed. The replacement hands
+    // back a sign-in view controller that the app has to present itself.
+    localPlayer.authenticateHandler = ^(UIViewController *viewController, NSError *error) {
+        if (viewController)
         {
-            // Perform additional tasks for the authenticated player.
+            [self->navController_ presentViewController:viewController animated:YES completion:nil];
         }
-    }];
-    
-    [GKMatchmaker sharedMatchmaker].inviteHandler = ^(GKInvite *acceptedInvite, NSArray *playersToInvite) {
-        // Insert application-specific code here to clean up any games in progress.
-        if (acceptedInvite)
+        else if (localPlayer.isAuthenticated)
         {
-            GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithInvite:acceptedInvite] autorelease];
-            mmvc.matchmakerDelegate = self;
-            [navController_ presentViewController:mmvc animated:YES completion:nil];
-        }
-        else if (playersToInvite)
-        {
-            GKMatchRequest *request = [[[GKMatchRequest alloc] init] autorelease];
-            request.minPlayers = 2;
-            request.maxPlayers = 2;
-            request.playersToInvite = playersToInvite;
-            
-            GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithMatchRequest:request] autorelease];
-            mmvc.matchmakerDelegate = self;
-            [navController_ presentViewController:mmvc animated:YES completion:nil];
+            [localPlayer registerListener:self];
         }
     };
+}
+
+// GKMatchmaker's inviteHandler was replaced by the local player listener API.
+- (void)player:(GKPlayer *)player didAcceptInvite:(GKInvite *)invite
+{
+    GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithInvite:invite] autorelease];
+    mmvc.matchmakerDelegate = self;
+    [navController_ presentViewController:mmvc animated:YES completion:nil];
+}
+
+- (void)player:(GKPlayer *)player didRequestMatchWithRecipients:(NSArray<GKPlayer *> *)recipientPlayers
+{
+    GKMatchRequest *request = [[[GKMatchRequest alloc] init] autorelease];
+    request.minPlayers = 2;
+    request.maxPlayers = 2;
+    request.recipients = recipientPlayers;
+
+    GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithMatchRequest:request] autorelease];
+    mmvc.matchmakerDelegate = self;
+    [navController_ presentViewController:mmvc animated:YES completion:nil];
 }
 - (void)matchmakerViewControllerWasCancelled:(GKMatchmakerViewController *)viewController
 {

@@ -527,19 +527,15 @@ static GCHelper *sharedHelper = nil;
 {
     //NSLog(@"gc - showleaderboards");
     
-    GKLeaderboardViewController *leaderboardController = [[GKLeaderboardViewController alloc] init] ;
-    
+    // GKLeaderboardViewController was removed in iOS 14.
+    GKGameCenterViewController *leaderboardController =
+        [[GKGameCenterViewController alloc] initWithState:GKGameCenterViewControllerStateLeaderboards];
+
     if (leaderboardController!=NULL) {
-        
-        leaderboardController.timeScope = GKLeaderboardTimeScopeToday;
-        //leaderboardController.view.
-        leaderboardController.category=nil;
-        leaderboardController.timeScope=GKLeaderboardTimeScopeAllTime;
-        leaderboardController.leaderboardDelegate = self;
-      //  AppDelegate *delegate = [UIApplication sharedApplication].delegate;
-        
+
+        leaderboardController.gameCenterDelegate = self;
+
      [  [CCDirector sharedDirector].parentViewController  presentViewController:leaderboardController animated:YES completion:nil];          
-       // [delegate.viewController presentViewController:leaderboardController animated:YES completion:nil];
     }
     
 }
@@ -555,12 +551,9 @@ static GCHelper *sharedHelper = nil;
     }
 }
 */
-- (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController
 {
-    //AppDelegate *delegate = [UIApplication sharedApplication].delegate;
     [  [CCDirector sharedDirector].parentViewController dismissViewControllerAnimated:YES completion:nil];
-     
-    //[delegate.viewController dismissViewControllerAnimated:YES completion:nil];
 }
 /*
 

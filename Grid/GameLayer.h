@@ -19,7 +19,7 @@
 
 // HelloWorldLayer
 @class CPUBrain;
-@interface GameLayer : CCLayer <GKAchievementViewControllerDelegate, GKLeaderboardViewControllerDelegate,GKSessionDelegate,GKMatchDelegate>
+@interface GameLayer : CCLayer <GKSessionDelegate,GKMatchDelegate>
 {
     GridView *_gridView;
     GridModel *_gridModel;
