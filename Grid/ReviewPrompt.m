@@ -10,6 +10,7 @@
 
 // Matches the threshold Appirater used.
 static NSString * const kLaunchCountKey = @"ReviewPromptLaunchCount";
+static NSString * const kAppiraterLaunchCountKey = @"kAppiraterUseCount";
 static const NSInteger kLaunchesUntilPrompt = 3;
 
 @implementation ReviewPrompt
@@ -17,6 +18,15 @@ static const NSInteger kLaunchesUntilPrompt = 3;
 + (void)appLaunched
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+	// Carry over the count Appirater kept, so players who already have the game
+	// aren't treated as first-time users.
+	if (![defaults objectForKey:kLaunchCountKey]) {
+		NSInteger inherited = [defaults integerForKey:kAppiraterLaunchCountKey];
+		if (inherited > 0)
+			[defaults setInteger:inherited forKey:kLaunchCountKey];
+	}
+
 	NSInteger launches = [defaults integerForKey:kLaunchCountKey] + 1;
 	[defaults setInteger:launches forKey:kLaunchCountKey];
 

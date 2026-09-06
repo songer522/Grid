@@ -687,7 +687,7 @@
 		AA0000000000000000000009 /* PeerSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerSession.m; sourceTree = "<group>"; };
 		AA000000000000000000000F /* PeerSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerSession.h; sourceTree = "<group>"; };
 		AA000000000000000000000A /* PeerPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerPickerController.m; sourceTree = "<group>"; };
-		AA000000000000000000000F /* PeerPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPickerController.h; sourceTree = "<group>"; };
+		AA000000000000000000000E /* PeerPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPickerController.h; sourceTree = "<group>"; };
 		AA000000000000000000000B /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
 		AA0000000000000000000007 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA0000000000000000000008 /* Grid.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Grid.entitlements; path = Resources/Grid.entitlements; sourceTree = "<group>"; };
@@ -1815,9 +1815,9 @@
 				AA0000000000000000000003 /* AlertView.m */,
 				AA0000000000000000000006 /* ReviewPrompt.h */,
 				AA0000000000000000000005 /* ReviewPrompt.m */,
-								AA000000000000000000000F /* PeerSession.h */,
+				AA000000000000000000000F /* PeerSession.h */,
 				AA0000000000000000000009 /* PeerSession.m */,
-				AA000000000000000000000F /* PeerPickerController.h */,
+				AA000000000000000000000E /* PeerPickerController.h */,
 				AA000000000000000000000A /* PeerPickerController.m */,
 				614BA23F15460EA400A3568C /* GameLayer.m */,
 				614BA22515460DFF00A3568C /* AppDelegate.h */,
@@ -3629,8 +3629,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yang Song (9B4C2R2M4Z)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yang Song (9B4C2R2M4Z)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -3642,8 +3640,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				PROVISIONING_PROFILE = "8B067A54-D388-46D7-80D7-60270E80E57B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8B067A54-D388-46D7-80D7-60270E80E57B";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3653,8 +3649,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: XecuDev LLC";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: XecuDev LLC";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					NDEBUG,
@@ -3664,8 +3658,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				PROVISIONING_PROFILE = "FB86A48B-60AF-467E-A236-5A4DF07D06BA";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "35ED4005-3B0A-4F4C-9DC4-CA5FA685FCF1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3675,14 +3667,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yang Song (9B4C2R2M4Z)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yang Song (9B4C2R2M4Z)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Grid/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"Grid/libs/kazmath/include\"";
 				INFOPLIST_FILE = Grid/Resources/Info.plist;
+				CODE_SIGN_STYLE = Automatic;
 				CODE_SIGN_ENTITLEMENTS = Grid/Resources/Grid.entitlements;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -3691,8 +3682,6 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8B067A54-D388-46D7-80D7-60270E80E57B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8B067A54-D388-46D7-80D7-60270E80E57B";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -3701,13 +3690,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: XecuDev LLC";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: XecuDev LLC";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Grid/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"Grid/libs/kazmath/include\"";
 				INFOPLIST_FILE = Grid/Resources/Info.plist;
+				CODE_SIGN_STYLE = Automatic;
 				CODE_SIGN_ENTITLEMENTS = Grid/Resources/Grid.entitlements;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -3716,8 +3704,6 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "35ED4005-3B0A-4F4C-9DC4-CA5FA685FCF1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "35ED4005-3B0A-4F4C-9DC4-CA5FA685FCF1";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -3727,8 +3713,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: XecuDev LLC";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: XecuDev LLC";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					NDEBUG,
@@ -3738,8 +3722,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				PROVISIONING_PROFILE = "BE3DDCB5-153B-411F-941B-E38177FD7AA3";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BE3DDCB5-153B-411F-941B-E38177FD7AA3";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3749,13 +3731,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: XecuDev LLC";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: XecuDev LLC";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Grid/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"Grid/libs/kazmath/include\"";
 				INFOPLIST_FILE = Grid/Resources/Info.plist;
+				CODE_SIGN_STYLE = Automatic;
 				CODE_SIGN_ENTITLEMENTS = Grid/Resources/Grid.entitlements;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -3764,8 +3745,6 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "BE3DDCB5-153B-411F-941B-E38177FD7AA3";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BE3DDCB5-153B-411F-941B-E38177FD7AA3";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

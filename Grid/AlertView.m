@@ -98,8 +98,13 @@ static AlertView *sVisibleAlert = nil;
 		return;
 
 	UIViewController *host = [self topmostViewController];
-	if (!host)
+	if (!host) {
+		// No key window yet. Retry rather than return, or the queued alert
+		// would sit there and block every alert behind it.
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)),
+					   dispatch_get_main_queue(), ^{ [AlertView presentNextAlert]; });
 		return;
+	}
 
 	AlertView *next = [[sPendingAlerts objectAtIndex:0] retain];
 	[sPendingAlerts removeObjectAtIndex:0];

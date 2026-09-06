@@ -8,6 +8,7 @@
 
 
 #import <GameKit/GameKit.h>
+#import "AlertView.h"
 #import "PeerSession.h"
 #import "PeerPickerController.h"
 #import "cocos2d.h"
