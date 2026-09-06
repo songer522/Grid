@@ -45,7 +45,7 @@
     CCAnimation *OpenAnimation=[CCAnimation animation];
     
     NSString *suffix=@"_Pressed.png";
-    NSString *tempString=[NSString stringWithFormat:_imageName];
+    NSString *tempString=_imageName;
     NSString *aString=[tempString stringByDeletingPathExtension];
 
      //NSLog(@"%@",aString);
@@ -68,7 +68,7 @@
     CCAnimation *OpenAnimation=[CCAnimation animation];
     
     NSString *suffix=@"_Pressed.png";
-    NSString *tempString=[NSString stringWithFormat:_imageName];
+    NSString *tempString=_imageName;
     NSString *aString=[tempString stringByDeletingPathExtension];
     
     //NSLog(@"%@",aString);

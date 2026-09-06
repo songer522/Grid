@@ -96,8 +96,8 @@
     }
     Edge *edge=[(EdgeArray*)[_lines objectAtIndex:lineIndex] objectAtIndex:edgeIndex];
     edge.rowOrLine=ON_LINE;
-    edge.rowOrLineIndex=lineIndex;
-    edge.edgeIndex=edgeIndex;
+    edge.rowOrLineIndex=(int)lineIndex;
+    edge.edgeIndex=(int)edgeIndex;
     return  edge;
     
 }
@@ -116,8 +116,8 @@
     }
     Edge  *edge=[(EdgeArray*)[_rows objectAtIndex:rowIndex] objectAtIndex:edgeIndex];
     edge.rowOrLine=ON_ROW;
-    edge.rowOrLineIndex=rowIndex;
-    edge.edgeIndex=edgeIndex;
+    edge.rowOrLineIndex=(int)rowIndex;
+    edge.edgeIndex=(int)edgeIndex;
     return edge;
 }
 -(void)resetModel

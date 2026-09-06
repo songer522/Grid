@@ -156,7 +156,7 @@
         
         [self newGame];
        [self updateBoxNumber];
-         _gridModel.skullLeft=_gridView.skullArray.count;
+         _gridModel.skullLeft=(int)_gridView.skullArray.count;
         NSString *leveNumber=[[GameSettings shared] getGlobalForKey:@"selectedLevel"];
         if(([leveNumber isEqualToString:@"1"]||[leveNumber isEqualToString:@"2"]||[leveNumber isEqualToString:@"3"]||[leveNumber isEqualToString:@"5"]||[leveNumber isEqualToString:@"8"]||[leveNumber isEqualToString:@"12"]||[leveNumber isEqualToString:@"17"]||[leveNumber isEqualToString:@"19"])&&[_gameMode isEqualToString:@"solo"])
         {
@@ -935,7 +935,6 @@
      [[SimpleAudioEngine sharedEngine] playEffect:@"menuBack.wav"];
     
     [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"MenuMusic.mp3"];
-    [_gridView.adView removeFromSuperview];
     
     
     CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
@@ -1634,9 +1633,9 @@
 -(BOOL)checkWinner
 {
     BOOL hasWinner=NO;
-    int i= [_gridView.treasureBoxArray count];
-    int j=[_gridView.mapArray count];
-    int x=[_gridView.skullArray count];  
+    int i= (int)[_gridView.treasureBoxArray count];
+    int j=(int)[_gridView.mapArray count];
+    int x=(int)[_gridView.skullArray count];  
     
     
     
@@ -2228,7 +2227,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
      
  }
      */
-    _gridModel.skullLeft=_gridView.skullArray.count;
+    _gridModel.skullLeft=(int)_gridView.skullArray.count;
     
    }
 
@@ -2756,7 +2755,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         {
         for(Box *obj in array)
         {
-            int itemIndex=[array indexOfObject:obj];
+            int itemIndex=(int)[array indexOfObject:obj];
             if(itemIndex>boxIndex&&obj.status==ORANGE)
             {
                 BoxIcon *box=[_gridView getBoxAtPosition:[_gridView getItemPositionAtRowIndex:lineIndex ItemIndex:itemIndex]];
@@ -2775,7 +2774,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         {
             for(Box *obj in array)
             {
-                int itemIndex=[array indexOfObject:obj];
+                int itemIndex=(int)[array indexOfObject:obj];
                 if(itemIndex>boxIndex&&obj.status==BLUE)
                 {
                     BoxIcon *box=[_gridView getBoxAtPosition:[_gridView getItemPositionAtRowIndex:lineIndex ItemIndex:itemIndex]];
@@ -2800,7 +2799,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         {
             for(Box *obj in array)
             {
-                int itemIndex=[array indexOfObject:obj];
+                int itemIndex=(int)[array indexOfObject:obj];
                 if(itemIndex<boxIndex&&obj.status==ORANGE)
                 {
                     BoxIcon *box=[_gridView getBoxAtPosition:[_gridView getItemPositionAtRowIndex:lineIndex ItemIndex:itemIndex]];
@@ -2819,7 +2818,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         {
             for(Box *obj in array)
             {
-                int itemIndex=[array indexOfObject:obj];
+                int itemIndex=(int)[array indexOfObject:obj];
                 if(itemIndex<boxIndex&&obj.status==BLUE)
                 {
                     BoxIcon *box=[_gridView getBoxAtPosition:[_gridView getItemPositionAtRowIndex:lineIndex ItemIndex:itemIndex]];
@@ -3227,7 +3226,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
              [self loadFogAtRow:RowIndex ItemIndex:ItemIndex];
          }
          [self updateBoxNumber];
-         _gridModel.skullLeft=_gridView.skullArray.count;
+         _gridModel.skullLeft=(int)_gridView.skullArray.count;
     }
     
     NSString *isDecideWhoStart=[infoList objectForKey:@"isDecideWhoStart"];
@@ -3302,7 +3301,6 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
             [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             // [myTextField1 removeFromSuperview];
             // [myTextField2 removeFromSuperview];
-            [_gridView.adView removeFromSuperview];
             CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
             [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[GameLayer scene]]]; 
             [[SimpleAudioEngine sharedEngine] stopBackgroundMusic];
@@ -3373,7 +3371,6 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
                 }
                 
             }
-            [_gridView.adView removeFromSuperview];
             CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
             [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[GameLayer scene]]]; 
             [[SimpleAudioEngine sharedEngine] stopBackgroundMusic];
@@ -3522,7 +3519,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
             [self loadFogAtRow:RowIndex ItemIndex:ItemIndex];
         }
         [self updateBoxNumber];
-         _gridModel.skullLeft=_gridView.skullArray.count;
+         _gridModel.skullLeft=(int)_gridView.skullArray.count;
     }
     
     NSString *isDecideWhoStart=[infoList objectForKey:@"isDecideWhoStart"];
@@ -3596,7 +3593,6 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
             [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             // [myTextField1 removeFromSuperview];
             // [myTextField2 removeFromSuperview];
-            [_gridView.adView removeFromSuperview];
             CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
             [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[GameLayer scene]]]; 
             [[SimpleAudioEngine sharedEngine] stopBackgroundMusic];

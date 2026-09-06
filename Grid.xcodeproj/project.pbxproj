@@ -60,7 +60,6 @@
 		614BA0C815460DFD00A3568C /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 614BA0C715460DFD00A3568C /* Icon-Small@2x.png */; };
 		614BA0CA15460DFD00A3568C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 614BA0C915460DFD00A3568C /* Icon.png */; };
 		614BA0CC15460DFD00A3568C /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 614BA0CB15460DFD00A3568C /* Icon@2x.png */; };
-		614BA0CF15460DFD00A3568C /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 614BA0CE15460DFD00A3568C /* iTunesArtwork */; };
 		614BA0D415460DFD00A3568C /* CCAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 614BA0D315460DFD00A3568C /* CCAction.m */; };
 		614BA0D715460DFD00A3568C /* CCActionCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 614BA0D615460DFD00A3568C /* CCActionCamera.m */; };
 		614BA0DA15460DFD00A3568C /* CCActionEase.m in Sources */ = {isa = PBXBuildFile; fileRef = 614BA0D915460DFD00A3568C /* CCActionEase.m */; };
@@ -184,7 +183,6 @@
 		614BA26C15460F0900A3568C /* spriteSheet-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = 614BA25C15460F0900A3568C /* spriteSheet-ipadhd.png */; };
 		614BA26D15460F0900A3568C /* spriteSheet.plist in Resources */ = {isa = PBXBuildFile; fileRef = 614BA25D15460F0900A3568C /* spriteSheet.plist */; };
 		614BA26E15460F0900A3568C /* spriteSheet.png in Resources */ = {isa = PBXBuildFile; fileRef = 614BA25E15460F0900A3568C /* spriteSheet.png */; };
-		615A29C715630F5B00E2D465 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 615A29C415630F2D00E2D465 /* iAd.framework */; };
 		618490C115753B7100418C4E /* ChooseIslandMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 618490C015753B7000418C4E /* ChooseIslandMenu.m */; };
 		618490C515753DC900418C4E /* IslandWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 618490C415753DC900418C4E /* IslandWindow.m */; };
 		618490CE1575520C00418C4E /* chooseIslandSprite-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = 618490C61575520C00418C4E /* chooseIslandSprite-hd.plist */; };
@@ -764,7 +762,6 @@
 		614BA0C915460DFD00A3568C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		614BA0CB15460DFD00A3568C /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
 		614BA0CD15460DFD00A3568C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
-		614BA0CE15460DFD00A3568C /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = Resources/iTunesArtwork; sourceTree = "<group>"; };
 		614BA0D215460DFD00A3568C /* CCAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CCAction.h; path = libs/cocos2d/CCAction.h; sourceTree = "<group>"; };
 		614BA0D315460DFD00A3568C /* CCAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CCAction.m; path = libs/cocos2d/CCAction.m; sourceTree = "<group>"; };
 		614BA0D515460DFD00A3568C /* CCActionCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CCActionCamera.h; path = libs/cocos2d/CCActionCamera.h; sourceTree = "<group>"; };
@@ -1028,7 +1025,6 @@
 		614BA25D15460F0900A3568C /* spriteSheet.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = spriteSheet.plist; sourceTree = "<group>"; };
 		614BA25E15460F0900A3568C /* spriteSheet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spriteSheet.png; sourceTree = "<group>"; };
 		6154B1A11603D3890045AAB9 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		615A29C415630F2D00E2D465 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		618490BF15753B7000418C4E /* ChooseIslandMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseIslandMenu.h; sourceTree = "<group>"; };
 		618490C015753B7000418C4E /* ChooseIslandMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseIslandMenu.m; sourceTree = "<group>"; };
 		618490C315753DC900418C4E /* IslandWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IslandWindow.h; sourceTree = "<group>"; };
@@ -1579,7 +1575,6 @@
 				E42D90C915916BCB00CB4A67 /* SystemConfiguration.framework in Frameworks */,
 				E42D90C615916B9300CB4A67 /* CFNetwork.framework in Frameworks */,
 				61F76C45156ED556007CC901 /* StoreKit.framework in Frameworks */,
-				615A29C715630F5B00E2D465 /* iAd.framework in Frameworks */,
 				614BA0A615460DFD00A3568C /* QuartzCore.framework in Frameworks */,
 				614BA0A815460DFD00A3568C /* OpenGLES.framework in Frameworks */,
 				614BA0AA15460DFD00A3568C /* OpenAL.framework in Frameworks */,
@@ -1822,7 +1817,6 @@
 				E42D90C715916B9E00CB4A67 /* SystemConfiguration.framework */,
 				E42D90C415916B7D00CB4A67 /* CFNetwork.framework */,
 				61F76C43156ED536007CC901 /* StoreKit.framework */,
-				615A29C415630F2D00E2D465 /* iAd.framework */,
 				614BA0A515460DFD00A3568C /* QuartzCore.framework */,
 				614BA0A715460DFD00A3568C /* OpenGLES.framework */,
 				614BA0A915460DFD00A3568C /* OpenAL.framework */,
@@ -1876,7 +1870,6 @@
 				614BA0C915460DFD00A3568C /* Icon.png */,
 				614BA0CB15460DFD00A3568C /* Icon@2x.png */,
 				614BA0CD15460DFD00A3568C /* Info.plist */,
-				614BA0CE15460DFD00A3568C /* iTunesArtwork */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -2990,7 +2983,6 @@
 				614BA0C815460DFD00A3568C /* Icon-Small@2x.png in Resources */,
 				614BA0CA15460DFD00A3568C /* Icon.png in Resources */,
 				614BA0CC15460DFD00A3568C /* Icon@2x.png in Resources */,
-				614BA0CF15460DFD00A3568C /* iTunesArtwork in Resources */,
 				614BA20515460DFF00A3568C /* ChangeLog in Resources */,
 				614BA25F15460F0900A3568C /* background-hd.plist in Resources */,
 				614BA26015460F0900A3568C /* background-hd.png in Resources */,
@@ -3674,7 +3666,7 @@
 		614BA22B15460DFF00A3568C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Yang Song (9B4C2R2M4Z)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yang Song (9B4C2R2M4Z)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -3698,7 +3690,7 @@
 		614BA22C15460DFF00A3568C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: XecuDev LLC";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: XecuDev LLC";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -3768,7 +3760,7 @@
 		614BA2731546173A00A3568C /* Adhoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: XecuDev LLC";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: XecuDev LLC";
 				GCC_C_LANGUAGE_STANDARD = gnu99;

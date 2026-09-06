@@ -15,7 +15,6 @@
 #import "GameoverWindow.h"
 #import "HowToPlayPage.h"
 #import "FlashDot.h"
-#import <iAd/iAd.h>
 
 typedef enum {
    BLUE_BOX,
@@ -34,7 +33,7 @@ typedef enum {
 @class GameoverWindow;
 @class HowToPlayPage;
 @class FlashDot;
-@interface GridView : CCLayer<ADBannerViewDelegate> {
+@interface GridView : CCLayer {
     CCLabelTTF *_lable;
     CCLabelTTF *_lable2;
     CCSprite *_background;
@@ -64,7 +63,6 @@ typedef enum {
     float _waitToPlayOrangeIndicatorAnimation;
     float _waitToLoadFog;
    
-    ADBannerView *_adView ;
 
   
     EdgeGraphic *_lastEdge;
@@ -104,7 +102,6 @@ typedef enum {
 @property (retain,nonatomic) CCSprite *helpButton;
 //@property (retain,nonatomic) CCSprite *playerIndicator;
 //@property (retain,nonatomic) CCSprite *playerIndicator2;
-@property (retain,nonatomic)ADBannerView *adView;
 @property (retain,nonatomic)CCSprite *blueIndicator;
 @property (retain,nonatomic)CCSprite *orangeIndicator;
 @property (retain, nonatomic)CCLayer *edgeLayer;

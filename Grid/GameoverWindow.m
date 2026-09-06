@@ -291,7 +291,6 @@
             NSString *hasPurchased=[[GameSettings shared] getGlobalForKey:@"HasPurchased"];
             if(nextLevelNumber==49 && [hasPurchased isEqualToString:@"NO"])
             {
-                [_parentController.gridView.adView removeFromSuperview];
                 [[GameSettings shared] setGlobal:@"3" ForKey:@"pageNumber"];
                 CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
                 [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[ChooseIslandMenu scene]]]; 
@@ -304,7 +303,6 @@
         
         if([_parentController.gameMode isEqualToString:@"solo"]||[_parentController.gameMode isEqualToString:@"oneDevice"])
         {
-             [_parentController.gridView.adView removeFromSuperview];
         CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
         [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[GameLayer scene]]]; 
         }
@@ -361,7 +359,6 @@
         else if ([_parentController.gameMode isEqualToString:@"blueTooth"]){
             
             [_parentController showMessage:[[GameSettings shared] getGlobalForKey:@"selectedLevel"]];
-             [_parentController.gridView.adView removeFromSuperview];
             
             _parentController.waitingAlert = [[UIAlertView alloc] initWithTitle:@""
                                                                         message:@"waiting for response...."
@@ -375,7 +372,6 @@
         else if ([_parentController.gameMode isEqualToString:@"network"]){
             
             [_parentController networkShowMessage:[[GameSettings shared] getGlobalForKey:@"selectedLevel"]];
-             [_parentController.gridView.adView removeFromSuperview];
             
             _parentController.waitingAlert = [[UIAlertView alloc] initWithTitle:@""
                                                                         message:@"waiting for response...."
@@ -398,7 +394,6 @@
          [[SimpleAudioEngine sharedEngine] playEffect:@"menuForward.mp3"];
         [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"MenuMusic.mp3"];
          //[[[CCDirector sharedDirector] touchDispatcher] removeDelegate:self];
-        [_parentController.gridView.adView removeFromSuperview];
         CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
         [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[ChooseLevelMenu scene]]]; 
 
@@ -498,7 +493,6 @@
         [[GameSettings shared] setGlobal:@"NO" ForKey:@"touchEnable"];
         NSString *playerName=[[GameSettings shared] getGlobalForKey:@"Player1Name"];
         [[GameSettings shared] setGlobal:playerName ForKey:@"OrangePlayer"];
-         [_parentController.gridView.adView removeFromSuperview];
         CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
         [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[GameLayer scene]]]; 
         [_parentController reply:@"YES"];

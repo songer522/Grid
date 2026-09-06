@@ -128,12 +128,12 @@ NSString *templateReviewURL = @"itms-apps://ax.itunes.apple.com/WebObjects/MZSto
 		return NO;
 	
 	// check if the app has been used enough
-	int useCount = [userDefaults integerForKey:kAppiraterUseCount];
+	int useCount = (int)[userDefaults integerForKey:kAppiraterUseCount];
 	if (useCount <= APPIRATER_USES_UNTIL_PROMPT)
 		return NO;
 	
 	// check if the user has done enough significant events
-	int sigEventCount = [userDefaults integerForKey:kAppiraterSignificantEventCount];
+	int sigEventCount = (int)[userDefaults integerForKey:kAppiraterSignificantEventCount];
 	if (sigEventCount <= APPIRATER_SIG_EVENTS_UNTIL_PROMPT)
 		return NO;
 	
@@ -182,7 +182,7 @@ NSString *templateReviewURL = @"itms-apps://ax.itunes.apple.com/WebObjects/MZSto
 		}
 		
 		// increment the use count
-		int useCount = [userDefaults integerForKey:kAppiraterUseCount];
+		int useCount = (int)[userDefaults integerForKey:kAppiraterUseCount];
 		useCount++;
 		[userDefaults setInteger:useCount forKey:kAppiraterUseCount];
 		if (APPIRATER_DEBUG)
@@ -230,7 +230,7 @@ NSString *templateReviewURL = @"itms-apps://ax.itunes.apple.com/WebObjects/MZSto
 		}
 		
 		// increment the significant event count
-		int sigEventCount = [userDefaults integerForKey:kAppiraterSignificantEventCount];
+		int sigEventCount = (int)[userDefaults integerForKey:kAppiraterSignificantEventCount];
 		sigEventCount++;
 		[userDefaults setInteger:sigEventCount forKey:kAppiraterSignificantEventCount];
 		if (APPIRATER_DEBUG)

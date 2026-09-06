@@ -449,7 +449,7 @@ static GCHelper *sharedHelper = nil;
             
             // process the score information.
             
-               int leaderboardscore=leaderboardRequest.localPlayerScore.value;
+               int leaderboardscore=(int)leaderboardRequest.localPlayerScore.value;
              NSLog(@"old score%d",leaderboardscore);
             if([GCState sharedInstance].pvpSocre<leaderboardscore)
             {

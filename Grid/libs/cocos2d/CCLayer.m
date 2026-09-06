@@ -91,17 +91,11 @@
 	return isAccelerometerEnabled_;
 }
 
+// UIAccelerometer was removed from the SDK. Accelerometer input is unused by
+// this game, so the flag is kept only for source compatibility.
 -(void) setIsAccelerometerEnabled:(BOOL)enabled
 {
-	if( enabled != isAccelerometerEnabled_ ) {
-		isAccelerometerEnabled_ = enabled;
-		if( isRunning_ ) {
-			if( enabled )
-				[[UIAccelerometer sharedAccelerometer] setDelegate:self];
-			else
-				[[UIAccelerometer sharedAccelerometer] setDelegate:nil];
-		}
-	}
+	isAccelerometerEnabled_ = enabled;
 }
 
 -(BOOL) isTouchEnabled
@@ -238,11 +232,6 @@
 // Can't register mouse, touches here because of #issue #1018, and #1021
 -(void) onEnterTransitionDidFinish
 {
-#ifdef __CC_PLATFORM_IOS
-	if( isAccelerometerEnabled_ )
-		[[UIAccelerometer sharedAccelerometer] setDelegate:self];
-#endif
-
 	[super onEnterTransitionDidFinish];
 }
 
@@ -254,9 +243,6 @@
 #ifdef __CC_PLATFORM_IOS
 	if( isTouchEnabled_ )
 		[[director touchDispatcher] removeDelegate:self];
-
-	if( isAccelerometerEnabled_ )
-		[[UIAccelerometer sharedAccelerometer] setDelegate:nil];
 
 #elif defined(__CC_PLATFORM_MAC)
 	CCEventDispatcher *eventDispatcher = [director eventDispatcher];
