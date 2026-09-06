@@ -14,6 +14,7 @@
 #import "ChooseLevelMenu.h"
 #import "GameSettings.h"
 #import "ChooseIslandMenu.h"
+#import "DeviceSettings.h"
 #import "ReviewPrompt.h"
 
 @implementation AppController
@@ -48,6 +49,12 @@
 
 	// for rotation and other messages
 	[director_ setDelegate:self];
+
+	// The whole game is laid out against a fixed coordinate space: 320x480 on
+	// iPhone, and the same doubled plus the offsets in DeviceSettings.h on
+	// iPad. Declaring it lets the director letterbox the scene into whatever
+	// aspect ratio the device actually has.
+	[director_ setDesignSize:(IS_IPAD() ? CGSizeMake(768, 1024) : CGSizeMake(kScreenWidth, kScreenHeight))];
 
 	// 2D projection
 	[director_ setProjection:kCCDirectorProjection2D];

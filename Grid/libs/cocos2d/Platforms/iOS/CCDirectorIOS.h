@@ -76,7 +76,21 @@
 	BOOL	isContentScaleSupported_;
 	
 	CCTouchDispatcher	*touchDispatcher_;
+
+	/* Fixed coordinate space the scene is authored in. The scene is scaled
+	   uniformly into the view and centred, so aspect ratios the game was never
+	   designed for get letterboxed instead of stretched or clipped. */
+	CGSize	designSize_;
+	CGRect	viewportInPoints_;
 }
+
+/** The coordinate space scenes are laid out in, in points. Setting CGSizeZero
+ restores the legacy behaviour of using the view's own size.
+ */
+@property (nonatomic, assign) CGSize designSize;
+
+/** The centred, aspect-fitted region of the view the scene is drawn into, in view points. */
+@property (nonatomic, readonly) CGRect viewportInPoints;
 @end
 
 /** DisplayLinkDirector is a Director that synchronizes timers with the refresh rate of the display.
