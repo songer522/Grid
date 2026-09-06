@@ -8,6 +8,8 @@
 
 
 #import <GameKit/GameKit.h>
+#import "PeerSession.h"
+#import "PeerPickerController.h"
 #import "AlertView.h"
 
 #import "GridModel.h"
@@ -19,7 +21,7 @@
 
 // HelloWorldLayer
 @class CPUBrain;
-@interface GameLayer : CCLayer <GKSessionDelegate,GKMatchDelegate>
+@interface GameLayer : CCLayer <AlertViewDelegate,PeerSessionDelegate,PeerSessionDataReceiveHandler,GKMatchDelegate>
 {
     GridView *_gridView;
     GridModel *_gridModel;
@@ -43,7 +45,7 @@
     NSString *_gameMode;
     AlertView *_waitingAlert;
     CGPoint _drawPosition;
-    GKSession *currentSession;
+    PeerSession *currentSession;
     GKMatch *myMatch;
     
 }
@@ -57,9 +59,9 @@
 @property (retain,nonatomic)GridModel *gridModel;
 @property BOOL touchEnable;
 @property (nonatomic,retain)NSString *gameMode;
-@property (nonatomic, retain) GKSession *currentSession;
+@property (nonatomic, retain) PeerSession *currentSession;
 @property (nonatomic,retain) AlertView *waitingAlert;
-@property (nonatomic, retain) GKPeerPickerController *picker;
+@property (nonatomic, retain) PeerPickerController *picker;
 // returns a CCScene that contains the HelloWorldLayer as the only child
 +(CCScene *) scene;
 -(void)checkTouchOnEdgeAndDrawAtPosition:(CGPoint)point;

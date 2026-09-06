@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA0000000000000000000019 /* PeerSession.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000009 /* PeerSession.m */; };
+		AA000000000000000000001A /* PeerPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000000A /* PeerPickerController.m */; };
+		AA000000000000000000001B /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA000000000000000000000B /* MultipeerConnectivity.framework */; };
 		AA0000000000000000000017 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000007 /* PrivacyInfo.xcprivacy */; };
 		AA0000000000000000000015 /* ReviewPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000005 /* ReviewPrompt.m */; };
 		AA0000000000000000000013 /* AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000003 /* AlertView.m */; };
@@ -681,6 +684,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AA0000000000000000000009 /* PeerSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerSession.m; sourceTree = "<group>"; };
+		AA000000000000000000000F /* PeerSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerSession.h; sourceTree = "<group>"; };
+		AA000000000000000000000A /* PeerPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerPickerController.m; sourceTree = "<group>"; };
+		AA000000000000000000000F /* PeerPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPickerController.h; sourceTree = "<group>"; };
+		AA000000000000000000000B /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
 		AA0000000000000000000007 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA0000000000000000000008 /* Grid.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Grid.entitlements; path = Resources/Grid.entitlements; sourceTree = "<group>"; };
 		AA0000000000000000000005 /* ReviewPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReviewPrompt.m; sourceTree = "<group>"; };
@@ -1556,6 +1564,7 @@
 				614BA0B015460DFD00A3568C /* UIKit.framework in Frameworks */,
 				614BA0B215460DFD00A3568C /* Foundation.framework in Frameworks */,
 				614BA0B415460DFD00A3568C /* CoreGraphics.framework in Frameworks */,
+				AA000000000000000000001B /* MultipeerConnectivity.framework in Frameworks */,
 				614BA0B615460DFD00A3568C /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1784,6 +1793,7 @@
 				614BA0AF15460DFD00A3568C /* UIKit.framework */,
 				614BA0B115460DFD00A3568C /* Foundation.framework */,
 				614BA0B315460DFD00A3568C /* CoreGraphics.framework */,
+				AA000000000000000000000B /* MultipeerConnectivity.framework */,
 				614BA0B515460DFD00A3568C /* GameKit.framework */,
 			);
 			name = Frameworks;
@@ -1805,6 +1815,10 @@
 				AA0000000000000000000003 /* AlertView.m */,
 				AA0000000000000000000006 /* ReviewPrompt.h */,
 				AA0000000000000000000005 /* ReviewPrompt.m */,
+								AA000000000000000000000F /* PeerSession.h */,
+				AA0000000000000000000009 /* PeerSession.m */,
+				AA000000000000000000000F /* PeerPickerController.h */,
+				AA000000000000000000000A /* PeerPickerController.m */,
 				614BA23F15460EA400A3568C /* GameLayer.m */,
 				614BA22515460DFF00A3568C /* AppDelegate.h */,
 				614BA22615460DFF00A3568C /* AppDelegate.m */,
@@ -3558,6 +3572,8 @@
 				614BA24A15460EA400A3568C /* EdgeArray.m in Sources */,
 				AA0000000000000000000013 /* AlertView.m in Sources */,
 				AA0000000000000000000015 /* ReviewPrompt.m in Sources */,
+								AA0000000000000000000019 /* PeerSession.m in Sources */,
+				AA000000000000000000001A /* PeerPickerController.m in Sources */,
 				614BA24B15460EA400A3568C /* GameLayer.m in Sources */,
 				614BA24C15460EA400A3568C /* GridModel.m in Sources */,
 				614BA24D15460EA400A3568C /* GridView.m in Sources */,

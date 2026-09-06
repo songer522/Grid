@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
 #import "DlcLevelDelegate.h"
+#import "AlertView.h"
 #import "Button.h"
 @class Button;
 
-@interface UpgradeMenu : CCLayer <DlcLevelDelegate>
+@interface UpgradeMenu : CCLayer <DlcLevelDelegate,AlertViewDelegate>
 {
     Button *_goBackButton;
     Button *_upgradeButton;

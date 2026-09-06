@@ -24,6 +24,13 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_piratelines._tcp</string>
+		<string>_piratelines._udp</string>
+	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Pirate Lines uses the local network to find nearby devices for two-player games.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Impact.ttf</string>

@@ -944,9 +944,8 @@
     
     
     /*
-    _picker = [[GKPeerPickerController alloc] init];
+    _picker = [[PeerPickerController alloc] init];
     _picker.delegate = self;
-    _picker.connectionTypesMask = GKPeerPickerConnectionTypeNearby;
     
     [_picker show];
      */
@@ -2903,15 +2902,15 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
 
 
 
-- (void)session:(GKSession *)session
+- (void)session:(PeerSession *)session
            peer:(NSString *)peerID
- didChangeState:(GKPeerConnectionState)state {
+ didChangeState:(PeerConnectionState)state {
     switch (state)
     {
-        case GKPeerStateConnected:
+        case PeerStateConnected:
             NSLog(@"connected");
             break;
-        case GKPeerStateDisconnected:
+        case PeerStateDisconnected:
             NSLog(@"disconnected");
             [currentSession disconnectFromAllPeers];
         
@@ -2934,18 +2933,18 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"OrangePlayer"]];
             
             break;
-        case GKPeerStateAvailable:
+        case PeerStateAvailable:
             NSLog(@"available");
             break;
-        case GKPeerStateConnecting:
+        case PeerStateConnecting:
             NSLog(@"connecting");
             break;
-        case GKPeerStateUnavailable:
+        case PeerStateUnavailable:
             NSLog(@"unavailable");
             break;
     }
 }
-- (void) session:(GKSession *)session didFailWithError:(NSError *)error
+- (void) session:(PeerSession *)session didFailWithError:(NSError *)error
 {
     
 }
@@ -2954,7 +2953,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
 {
     if (currentSession)
         [self.currentSession sendDataToAllPeers:data
-                                   withDataMode:GKSendDataReliable
+                                   withDataMode:PeerSendDataReliable
                                           error:nil];
 }
 
@@ -3112,11 +3111,11 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
 
 - (void) receiveData:(NSMutableData *)data
             fromPeer:(NSString *)peer
-           inSession:(GKSession *)session
+           inSession:(PeerSession *)session
              context:(void *)context {
     //---convert the NSData to NSString---
     
-    NSMutableData *newData = data;
+    NSData *newData = data;
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:newData];
     NSDictionary *infoList = [unarchiver decodeObjectForKey:@"Data"] ;
     [unarchiver finishDecoding];
@@ -3380,10 +3379,12 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
     }
     
 }
-- (void)match:(GKMatch *)match player:(NSString *)playerID didChangeState:(GKPlayerConnectionState)state
+- (void)match:(GKMatch *)match player:(GKPlayer *)player didChangeState:(GKPlayerConnectionState)state
 {
     switch (state)
     {
+        case GKPlayerStateUnknown:
+            break;
         case GKPlayerStateConnected:
             // handle a new player connection.
             break;
@@ -3407,14 +3408,14 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
     }
     
 }
-- (BOOL)match:(GKMatch *)match shouldReinvitePlayer:(NSString *)playerID
+- (BOOL)match:(GKMatch *)match shouldReinviteDisconnectedPlayer:(GKPlayer *)player
 {
     return NO;
 }
 
-- (void)match:(GKMatch *)match didReceiveData:(NSMutableData *)data fromPlayer:(NSString *)playerID
+- (void)match:(GKMatch *)match didReceiveData:(NSData *)data fromRemotePlayer:(GKPlayer *)player
 {
-    NSMutableData *newData = data;
+    NSData *newData = data;
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:newData];
     NSDictionary *infoList = [unarchiver decodeObjectForKey:@"Data"] ;
     [unarchiver finishDecoding];

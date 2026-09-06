@@ -180,7 +180,7 @@
 {
     myMatch=[[GameSettings shared] getObjForKey:@"GKMatch"];
     myMatch.delegate=self;
-   // NSLog(@"%@",[myMatch.playerIDs objectAtIndex:0]);
+   // NSLog(@"%@",[myMatch.players objectAtIndex:0]);
     //[currentSession setDataReceiveHandler:self withContext:nil];
 
 }
@@ -462,7 +462,7 @@
     
         if(touchOrigin2.x>ADJUST_X(260) && touchOrigin2.x<ADJUST_X(320) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(465))
     {
-        NSLog(@"%@",myMatch.playerIDs);
+        NSLog(@"%@",myMatch.players);
         if(_isSoundOn)
         {
             [_soundButton setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Button_SoundOff.png"]];
@@ -637,18 +637,18 @@
 {
     if (currentSession)
         [self.currentSession sendDataToAllPeers:data
-                                   withDataMode:GKSendDataReliable
+                                   withDataMode:PeerSendDataReliable
                                           error:nil];
 }
-- (void)session:(GKSession *)session
+- (void)session:(PeerSession *)session
            peer:(NSString *)peerID
- didChangeState:(GKPeerConnectionState)state {
+ didChangeState:(PeerConnectionState)state {
     switch (state)
     {
-        case GKPeerStateConnected:
+        case PeerStateConnected:
             NSLog(@"connected");
             break;
-        case GKPeerStateDisconnected:
+        case PeerStateDisconnected:
             NSLog(@"disconnected");
             //[self.currentSession release];
             [currentSession disconnectFromAllPeers];
@@ -665,13 +665,13 @@
 
             
             break;
-        case GKPeerStateAvailable:
+        case PeerStateAvailable:
             NSLog(@"available");
             break;
-        case GKPeerStateConnecting:
+        case PeerStateConnecting:
             NSLog(@"connecting");
             break;
-        case GKPeerStateUnavailable:
+        case PeerStateUnavailable:
             NSLog(@"unavailable");
             break;
             
@@ -751,11 +751,11 @@
 
 - (void) receiveData:(NSMutableData *)data
             fromPeer:(NSString *)peer
-           inSession:(GKSession *)session
+           inSession:(PeerSession *)session
              context:(void *)context {
     //---convert the NSData to NSString---
     
-    NSMutableData *newData = data;
+    NSData *newData = data;
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:newData];
     NSDictionary *infoList = [unarchiver decodeObjectForKey:@"Data"] ;
     [unarchiver finishDecoding];
@@ -934,10 +934,12 @@ else {
 
 
 
-- (void)match:(GKMatch *)match player:(NSString *)playerID didChangeState:(GKPlayerConnectionState)state
+- (void)match:(GKMatch *)match player:(GKPlayer *)player didChangeState:(GKPlayerConnectionState)state
 {
     switch (state)
     {
+        case GKPlayerStateUnknown:
+            break;
         case GKPlayerStateConnected:
             // handle a new player connection.
          coinNumber = arc4random() % 10000;
@@ -964,12 +966,10 @@ else {
     
 }
 
-- (void)match:(GKMatch *)match didReceiveData:(NSMutableData *)data fromPlayer:(NSString *)playerID
+- (void)match:(GKMatch *)match didReceiveData:(NSData *)data fromRemotePlayer:(GKPlayer *)player
 {
-    NSLog(@"%@",match.playerIDs); 
-    NSLog(@"%@",playerID);
     
-    NSMutableData *newData = data;
+    NSData *newData = data;
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:newData];
     NSDictionary *infoList = [unarchiver decodeObjectForKey:@"Data"] ;
     [unarchiver finishDecoding];
@@ -1086,7 +1086,7 @@ else {
     }
 
 }
-- (BOOL)match:(GKMatch *)match shouldReinvitePlayer:(NSString *)playerID
+- (BOOL)match:(GKMatch *)match shouldReinviteDisconnectedPlayer:(GKPlayer *)player
 {
     return NO;
 }

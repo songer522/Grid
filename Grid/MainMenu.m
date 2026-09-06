@@ -624,9 +624,8 @@
         
         if(_waitToSwitchToBluetoothMode<0)
         {
-            _picker = [[GKPeerPickerController alloc] init];
+            _picker = [[PeerPickerController alloc] init];
             _picker.delegate = self;
-            _picker.connectionTypesMask = GKPeerPickerConnectionTypeNearby;
             
             [_picker show];
 
@@ -710,9 +709,9 @@
 
 
 
-- (void)peerPickerController:(GKPeerPickerController *)picker
+- (void)peerPickerController:(PeerPickerController *)picker
               didConnectPeer:(NSString *)peerID
-                   toSession:(GKSession *) session {
+                   toSession:(PeerSession *) session {
     //self.currentSession = session;
     //session.delegate = self;
     //[session setDataReceiveHandler:self withContext:nil];
@@ -729,7 +728,7 @@
 }
 
 
-- (void)peerPickerControllerDidCancel:(GKPeerPickerController *)picker
+- (void)peerPickerControllerDidCancel:(PeerPickerController *)picker
 {
     picker.delegate = nil;
     [picker autorelease];
@@ -738,34 +737,34 @@
 
 
 
-- (void)session:(GKSession *)session
+- (void)session:(PeerSession *)session
            peer:(NSString *)peerID
- didChangeState:(GKPeerConnectionState)state {
+ didChangeState:(PeerConnectionState)state {
     switch (state)
     {
-        case GKPeerStateConnected:
+        case PeerStateConnected:
             NSLog(@"connected");
             break;
-        case GKPeerStateDisconnected:
+        case PeerStateDisconnected:
             NSLog(@"disconnected");
           //  [self.currentSession release];
             //currentSession = nil;
             
             break;
-        case GKPeerStateAvailable:
+        case PeerStateAvailable:
             NSLog(@"available");
             break;
-        case GKPeerStateConnecting:
+        case PeerStateConnecting:
             NSLog(@"connecting");
             break;
-        case GKPeerStateUnavailable:
+        case PeerStateUnavailable:
             NSLog(@"unavailable");
             break;
     
     }
     
 }
-- (void) session:(GKSession *)session didFailWithError:(NSError *)error
+- (void) session:(PeerSession *)session didFailWithError:(NSError *)error
 {
     
 }
@@ -809,7 +808,7 @@
 }
 
 
-- (void)match:(GKMatch *)match didReceiveData:(NSData *)data fromPlayer:(NSString *)playerID
+- (void)match:(GKMatch *)match didReceiveData:(NSData *)data fromRemotePlayer:(GKPlayer *)player
 {
     
 }

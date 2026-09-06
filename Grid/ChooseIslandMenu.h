@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PeerSession.h"
+#import "PeerPickerController.h"
 #import "AlertView.h"
 #import <GameKit/GameKit.h>
 #import "cocos2d.h"
@@ -14,7 +16,7 @@
 #import "DlcLevelDelegate.h"
 #import "skullDotIndicator.h"
 @class Button;
-@interface ChooseIslandMenu : CCLayer<GKSessionDelegate,AlertViewDelegate,UITextFieldDelegate,GKMatchDelegate,DlcLevelDelegate>
+@interface ChooseIslandMenu : CCLayer<PeerSessionDelegate,PeerSessionDataReceiveHandler,AlertViewDelegate,UITextFieldDelegate,GKMatchDelegate,DlcLevelDelegate>
 {
 CCLabelTTF *_title;
 CCSprite *_goBackButton;
@@ -24,7 +26,7 @@ Button *_upgradeButton;
 NSString *_maxName;
 
 BOOL _isSoundOn;
-GKSession *currentSession;
+PeerSession *currentSession;
     GKMatch *myMatch;
 NSString *gameMode;
 CCScrollLayer  *_scroller;
@@ -46,7 +48,7 @@ BOOL _isEditing;
     int coinNumber;
 }
 
-@property (nonatomic, retain) GKSession *currentSession;
+@property (nonatomic, retain) PeerSession *currentSession;
 +(CCScene *) scene;
 
 

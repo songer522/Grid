@@ -71,6 +71,7 @@
 | `GCHelper` | Game Center 认证与排行榜上报 |
 | `InAppPurchaseManager` | StoreKit 内购（解锁完整版） |
 | `AlertView` | `UIAlertView` 的兼容替代，底层为 `UIAlertController` |
+| `PeerSession` / `PeerPickerController` | `GKSession` / `GKPeerPickerController` 的兼容替代，底层为 MultipeerConnectivity |
 | `ReviewPrompt` | 评分提示，底层为 `SKStoreReviewController` |
 
 ### 资源与分辨率体系
@@ -127,11 +128,34 @@
 | `shouldAutorotateToInterfaceOrientation:` | `supportedInterfaceOrientations` |
 | `UIViewController.wantsFullScreenLayout` | 直接移除 |
 | `UIAccelerometer` | 直接移除（游戏未使用重力感应） |
+| `GKSession` | `PeerSession`，底层 MultipeerConnectivity |
+| `GKPeerPickerController` | `PeerPickerController`，底层 `MCBrowserViewController` |
 | `Appirater` | `ReviewPrompt`，底层 `SKStoreReviewController` |
 
 `AlertView` 保留了 `UIAlertView` 的 delegate 与 tag 接口，48 个调用点和它们的
 分发逻辑一行未改。它额外做了两件原来没有的事：把并发的弹窗排队，以及强制在主线程
 present —— `UIAlertView` 能容忍从后台线程调用，`UIAlertController` 会直接崩溃。
+
+### 联机对战
+
+游戏有两种联机方式，损坏程度完全不同。
+
+**互联网对战**基于 `GKMatch`，这个类至今仍受完整支持，问题出在 delegate 签名：代码用的是
+iOS 8 就被取代的 `playerID` 字符串版本（`match:didReceiveData:fromPlayer:` 等）。
+选择子对不上，现代 GameKit 根本不会调用它们，于是联机既不报错也收不到任何数据。
+改成 `GKPlayer` 版本即可恢复。
+
+**近距离对战**基于 `GKSession` 与 `GKPeerPickerController`，两者都已从 SDK 移除，
+只能改用 MultipeerConnectivity。这里同样采用兼容层的做法：`PeerSession` 与
+`PeerPickerController` 保持原有的接口形状，四个界面里的联机逻辑一行未改。
+`PeerPickerController` 在浏览的同时也广播自己，复现 `GKPeerPickerController`
+双方对称发现的行为。
+
+MultipeerConnectivity 的回调在后台队列上派发，而这些回调会直接改动 cocos2d 的场景状态，
+因此 `PeerSession` 统一转回主线程后再交给游戏——这和 `AlertView` 遇到的是同一类问题。
+
+近距离对战现在需要本地网络权限（`NSLocalNetworkUsageDescription` 与 `NSBonjourServices`），
+玩家首次进入该模式时系统会弹出授权请求，这是 MultipeerConnectivity 的固有要求。
 
 ### 屏幕适配
 
@@ -161,9 +185,8 @@ present —— `UIAlertView` 能容忍从后台线程调用，`UIAlertController
 
 - **应用图标精度**：现有最大的原始素材是 512×512 的 `iTunesArtwork.png`，
   当前的 1024×1024 图标由它放大而来。上架前应替换为原始设计稿导出的版本。
-- **联机对战**：多人对战基于 `GKSession` / `GKPeerPickerController`，
-  这两者自 iOS 7 起废弃，虽仍可编译但运行时功能已不可用。
-  要恢复联机需迁移到 MultipeerConnectivity 或 GameKit 的现代 match API。
+- **联机对战的实机联通性**：代码已迁移完毕，编译、界面呈现与接口调用均已验证，
+  但两台设备实际配对、对局同步、断线重连只能在两台真机上验证。
 - **存档与联机消息的序列化**：约 30 处使用已废弃的
   `NSKeyedArchiver initForWritingWithMutableData:`。这些 API 仍然可用，
   且直接决定存档格式与联机线格式，贸然迁移会破坏老玩家的存档，因此保持原样。
