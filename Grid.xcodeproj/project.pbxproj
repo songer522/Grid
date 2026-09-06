@@ -12,6 +12,8 @@
 		AA000000000000000000001B /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA000000000000000000000B /* MultipeerConnectivity.framework */; };
 		AA0000000000000000000017 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000007 /* PrivacyInfo.xcprivacy */; };
 		AA0000000000000000000015 /* ReviewPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000005 /* ReviewPrompt.m */; };
+		AA0000000000000000000023 /* ScreenLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000022 /* ScreenLayout.m */; };
+		AA0000000000000000000026 /* FullScreenBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000025 /* FullScreenBackground.m */; };
 		AA0000000000000000000013 /* AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000003 /* AlertView.m */; };
 		AA0000000000000000000011 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000001 /* Assets.xcassets */; };
 		AA0000000000000000000012 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000002 /* LaunchScreen.storyboard */; };
@@ -693,6 +695,10 @@
 		AA0000000000000000000008 /* Grid.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Grid.entitlements; path = Resources/Grid.entitlements; sourceTree = "<group>"; };
 		AA0000000000000000000005 /* ReviewPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReviewPrompt.m; sourceTree = "<group>"; };
 		AA0000000000000000000006 /* ReviewPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReviewPrompt.h; sourceTree = "<group>"; };
+		AA0000000000000000000021 /* ScreenLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenLayout.h; sourceTree = "<group>"; };
+		AA0000000000000000000022 /* ScreenLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenLayout.m; sourceTree = "<group>"; };
+		AA0000000000000000000024 /* FullScreenBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullScreenBackground.h; sourceTree = "<group>"; };
+		AA0000000000000000000025 /* FullScreenBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullScreenBackground.m; sourceTree = "<group>"; };
 		AA0000000000000000000003 /* AlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertView.m; sourceTree = "<group>"; };
 		AA0000000000000000000004 /* AlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertView.h; sourceTree = "<group>"; };
 		AA0000000000000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
@@ -1621,6 +1627,8 @@
 				6196773415532CD3001F74E5 /* LevelButton.m */,
 				614BA24215460EA400A3568C /* GridView.h */,
 				614BA24315460EA400A3568C /* GridView.m */,
+				AA0000000000000000000024 /* FullScreenBackground.h */,
+				AA0000000000000000000025 /* FullScreenBackground.m */,
 				61EFFBD8155198FF00EA0732 /* BoxIcon.h */,
 				61EFFBD9155198FF00EA0732 /* BoxIcon.m */,
 				61E2F4CE156D755B00BBF74C /* FlashDot.h */,
@@ -1657,6 +1665,8 @@
 				6196772D1553287D001F74E5 /* Database.h */,
 				6196772E1553287D001F74E5 /* Database.m */,
 				614BA23915460EA400A3568C /* DeviceSettings.h */,
+				AA0000000000000000000021 /* ScreenLayout.h */,
+				AA0000000000000000000022 /* ScreenLayout.m */,
 				614BA24415460EA400A3568C /* MapSettings.h */,
 			);
 			name = Base;
@@ -3577,6 +3587,8 @@
 				614BA24B15460EA400A3568C /* GameLayer.m in Sources */,
 				614BA24C15460EA400A3568C /* GridModel.m in Sources */,
 				614BA24D15460EA400A3568C /* GridView.m in Sources */,
+				AA0000000000000000000023 /* ScreenLayout.m in Sources */,
+				AA0000000000000000000026 /* FullScreenBackground.m in Sources */,
 				614BA24E15460EA400A3568C /* ScoreBox.m in Sources */,
 				61A892431548896B00A74A37 /* TreasureBox.m in Sources */,
 				61C298621549BE1F00987570 /* MessageWindow.m in Sources */,

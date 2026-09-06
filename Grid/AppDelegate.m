@@ -50,10 +50,9 @@
 	// for rotation and other messages
 	[director_ setDelegate:self];
 
-	// The whole game is laid out against a fixed coordinate space: 320x480 on
-	// iPhone, and the same doubled plus the offsets in DeviceSettings.h on
-	// iPad. Declaring it lets the director letterbox the scene into whatever
-	// aspect ratio the device actually has.
+	// Minimum content size: 320x480 on iPhone, 768x1024 on iPad. The director
+	// extends the scene to fill the view so taller phones keep the authored
+	// layout centered and gain extra space above and below.
 	[director_ setDesignSize:(IS_IPAD() ? CGSizeMake(768, 1024) : CGSizeMake(kScreenWidth, kScreenHeight))];
 
 	// 2D projection
@@ -73,6 +72,9 @@
 
 	// make main window visible
 	[window_ makeKeyAndVisible];
+	[window_ layoutIfNeeded];
+	[glView layoutIfNeeded];
+	[director_ reshapeProjection:[glView bounds].size];
     [self authenticateLocalPlayer];
 	// Default texture format for PNG/BMP/TIFF/JPEG/GIF images
 	// It can be RGBA8888, RGBA4444, RGB5_A1, RGB565

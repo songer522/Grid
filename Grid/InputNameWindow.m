@@ -13,6 +13,7 @@
 #import "GameSettings.h"
 #import "UpgradeMenu.h"
 #import "SimpleAudioEngine.h"
+#import "FullScreenBackground.h"
 @implementation InputNameWindow
 @synthesize waitToFadeInWindow=_waitToFadeInWindow;
 
@@ -30,7 +31,7 @@
         _background=[CCSprite spriteWithSpriteFrameName:@"Graphic_Black50.png"];
         _doneButton=[Button buttonAtPosition:ADJUST_CCP(ccp(160,240)) andImage:@"Button_Done.png"];
         
-        [_background setPosition:ADJUST_CCP(ccp(160,240))];
+        [FullScreenBackground stretchSpriteToFillScene:_background];
         _window=[CCSprite spriteWithSpriteFrameName:@"Graphic_MessageWindow.png"];
         [_window setPosition:ADJUST_CCP(ccp(160,240))];
         

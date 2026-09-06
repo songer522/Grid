@@ -15,6 +15,7 @@
 #import "InAppPurchaseManager.h"
 #import "SimpleAudioEngine.h"
 #import "ChooseIslandMenu.h"
+#import "FullScreenBackground.h"
 @implementation UpgradeMenu
 @synthesize upgradeButton=_upgradeButton;
 +(CCScene *) scene
@@ -96,8 +97,7 @@
 
 - (void)loadUI
 {
-    CCSprite *background=[CCSprite spriteWithSpriteFrameName:@"Graphic_MainMenuBack.png"];
-    [background setPosition:ADJUST_CCP(ccp(160,240))];
+    CCNode *background=[FullScreenBackground backgroundWithSpriteFrameName:@"Graphic_MainMenuBack.png"];
 
     _fullVersionImage=[Button buttonAtPosition:ADJUST_CCP(ccp(160,200)) andImage:@"Graphic_ScreenShots.png"];
     [_fullVersionImage.buttonGraphic setOpacity:0];
@@ -128,7 +128,7 @@
    // [_fullVersionText runAction:moveAction];
     
     
-    _goBackButton=[Button buttonAtPosition:ADJUST_CCP(ccp(30,445)) andImage:@"Button_GoBack.png"];
+    _goBackButton=[Button buttonAtPosition:TOP_CCP(30, 35) andImage:@"Button_GoBack.png"];
     _upgradeButton=[Button buttonAtPosition:ADJUST_CCP(ccp(160,125)) andImage:@"Button_Upgrade.png"];
     [_goBackButton.buttonGraphic setOpacity:0];
     [_upgradeButton.buttonGraphic setOpacity:0];
@@ -152,7 +152,7 @@
     
     
     //_goBackButton=[Button buttonAtPosition:ADJUST_CCP(ccp(30,455)) andImage:@"Button_GoBack.png"];
-    _upgradeButton=[Button buttonAtPosition:ADJUST_CCP(ccp(130,445)) andImage:@"Button_Upgrade.png"];
+    _upgradeButton=[Button buttonAtPosition:TOP_CCP(130, 35) andImage:@"Button_Upgrade.png"];
     //[_upgradeButton.buttonGraphic setScale:0.8];
     
     //[self addChild:_goBackButton];
@@ -170,7 +170,7 @@
          [[InAppPurchaseManager shared] purchaseProductId:kInAppPurchaseUpgradeToFullVersion Delegate:self];
         
     }
-    if (touchOrigin2.x>ADJUST_X(10) && touchOrigin2.x<ADJUST_X(50) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(465))
+    if (touchOrigin2.x>ADJUST_X(10) && touchOrigin2.x<ADJUST_X(50) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(15))
     {
          [[SimpleAudioEngine sharedEngine] playEffect:@"menuBack.wav"];
         CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];

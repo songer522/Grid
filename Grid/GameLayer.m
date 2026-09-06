@@ -360,28 +360,28 @@
 -(BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event{
     CGPoint touchOrigin = [touch locationInView:[touch view]];
 	CGPoint touchOrigin2 = [[CCDirector sharedDirector] convertToGL:touchOrigin];
-    if(touchOrigin2.x>ADJUST_X(0) && touchOrigin2.x<ADJUST_X(50) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(470))
+    if(touchOrigin2.x>ADJUST_X(0) && touchOrigin2.x<ADJUST_X(50) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(10))
     {
         //if(_touchEnable||![_gameMode isEqualToString:@"solo"])
         //{
         [self newButtonPressed];
         //}
     }
-   else if (touchOrigin2.x>ADJUST_X(50) && touchOrigin2.x<ADJUST_X(100) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(470))
+   else if (touchOrigin2.x>ADJUST_X(50) && touchOrigin2.x<ADJUST_X(100) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(10))
    {
        //if(_touchEnable||![_gameMode isEqualToString:@"solo"])
        //{
        [self menuButtonPressed];
        //}
    }
-   else if (touchOrigin2.x>ADJUST_X(220) && touchOrigin2.x<ADJUST_X(270) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(470))
+   else if (touchOrigin2.x>ADJUST_X(220) && touchOrigin2.x<ADJUST_X(270) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(10))
    {
         [[SimpleAudioEngine sharedEngine] playEffect:@"menuForward.mp3"];
        _gridView.howToPlayPage=[HowToPlayPage HowToPlayWindowInController:self];
        [_gridView addChild:_gridView.howToPlayPage];
        //_gridView.howToPlayPage.waitToFadeInWindow=2.0;
    }
-    else if (touchOrigin2.x>ADJUST_X(270) && touchOrigin2.x<ADJUST_X(320) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(480))
+    else if (touchOrigin2.x>ADJUST_X(270) && touchOrigin2.x<ADJUST_X(320) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(0))
     {
         if(_gridView.isSoundOn)
         {
@@ -2606,13 +2606,13 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
     if(map.partNumber==TREASUREMAP_PART_ONE)
     {
         CCSprite *mapOne=[CCSprite spriteWithSpriteFrameName:@"Graphic_Tmap_1.png"];
-        [mapOne setPosition:ADJUST_CCP(ccp(50,35))];
+        [mapOne setPosition:BOTTOM_CCP(50,35)];
         [ _gridView.blockLayer addChild:mapOne];
     }
     else if (map.partNumber==TREASUREMAP_PART_TWO)
     {
         CCSprite *mapOne=[CCSprite spriteWithSpriteFrameName:@"Graphic_Tmap_2.png"];
-        [mapOne setPosition:ADJUST_CCP(ccp(50,35))];
+        [mapOne setPosition:BOTTOM_CCP(50,35)];
         [ _gridView.blockLayer addChild:mapOne];
     }
     [self checkTreasureMapWinner];
@@ -2633,13 +2633,13 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
     if(map.partNumber==TREASUREMAP_PART_ONE)
     {
         CCSprite *mapOne=[CCSprite spriteWithSpriteFrameName:@"Graphic_Tmap_1.png"];
-        [mapOne setPosition:ADJUST_CCP(ccp(270,35))];
+        [mapOne setPosition:BOTTOM_CCP(270,35)];
         [ _gridView.blockLayer addChild:mapOne];
     }
     else if (map.partNumber==TREASUREMAP_PART_TWO)
     {
         CCSprite *mapOne=[CCSprite spriteWithSpriteFrameName:@"Graphic_Tmap_2.png"];
-        [mapOne setPosition:ADJUST_CCP(ccp(270,35))];
+        [mapOne setPosition:BOTTOM_CCP(270,35)];
         [ _gridView.blockLayer addChild:mapOne];
     }
     [self checkTreasureMapWinner];

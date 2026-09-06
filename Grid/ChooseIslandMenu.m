@@ -18,6 +18,7 @@
 #import "IslandWindow.h"
 #import "ChooseLevelMenu.h"
 #import "SimpleAudioEngine.h"
+#import "FullScreenBackground.h"
 #import "UpgradeMenu.h"
 
 @implementation ChooseIslandMenu
@@ -55,9 +56,7 @@
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"chooseIslandSprite.plist"];
          [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"SeaSunshine.plist" ]; 
        // [[InAppPurchaseManager shared] loadStoreWithDelegate:self];
-        CCSprite *background=[CCSprite spriteWithSpriteFrameName:@"Graphic_MainMenuBack.png"];
-        
-        [background setPosition:ADJUST_CCP(ccp(160,240))];
+        CCNode *background=[FullScreenBackground backgroundWithSpriteFrameName:@"Graphic_MainMenuBack.png"];
            //[[InAppPurchaseManager shared] purchaseProductId:kInAppPurchaseUpgradeToFullVersion Delegate:self];    
          [[InAppPurchaseManager shared] loadStoreWithDelegate:self];
         [self addChild: background];
@@ -105,7 +104,7 @@
         }
                 
         _goBackButton=[CCSprite spriteWithSpriteFrameName:@"Button_GoBack.png"];
-        [_goBackButton setPosition:ADJUST_CCP(ccp(30,445))];
+        [_goBackButton setPosition:TOP_CCP(30, 35)];
         if(_isSoundOn)
         {
             _soundButton=[CCSprite spriteWithSpriteFrameName:@"Button_SoundOn.png"];
@@ -113,7 +112,7 @@
         else {
             _soundButton=[CCSprite spriteWithSpriteFrameName:@"Button_SoundOff.png"];
         }
-        [_soundButton setPosition:ADJUST_CCP(ccp(290,445))];
+        [_soundButton setPosition:TOP_CCP(290, 35)];
         
         //[self addChild:_title];
         [self addChild:_goBackButton];
@@ -297,7 +296,7 @@
     _scroller.minimumTouchLengthToChangePage = 30.0f;
     int pageNumber=[[[GameSettings shared] getGlobalForKey:@"pageNumber"] intValue];
     [_scroller moveToPage:pageNumber];
-    _dotIndicator =[skullDotIndicator skullDotIndicatorWithNumberOfDots:6 AndPosition:ADJUST_CCP(ccp(160,40)) CurrentPage:pageNumber];
+    _dotIndicator =[skullDotIndicator skullDotIndicatorWithNumberOfDots:6 AndPosition:BOTTOM_CCP(160,40) CurrentPage:pageNumber];
     [self addChild:_scroller];
     [self addChild:_dotIndicator];
     _scroller.showPagesIndicator=NO;
@@ -380,7 +379,7 @@
     _scroller.minimumTouchLengthToChangePage = 30.0f;
     int pageNumber=[[[GameSettings shared] getGlobalForKey:@"pageNumber"] intValue];
     [_scroller moveToPage:pageNumber];
-    _dotIndicator =[skullDotIndicator skullDotIndicatorWithNumberOfDots:4 AndPosition:ADJUST_CCP(ccp(160,40)) CurrentPage:pageNumber];
+    _dotIndicator =[skullDotIndicator skullDotIndicatorWithNumberOfDots:4 AndPosition:BOTTOM_CCP(160,40) CurrentPage:pageNumber];
     [self addChild:_scroller];
     [self addChild:_dotIndicator];
     _scroller.showPagesIndicator=NO;
@@ -441,7 +440,7 @@
 -(void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event{
     CGPoint touchOrigin = [touch locationInView:[touch view]];
 	CGPoint touchOrigin2 = [[CCDirector sharedDirector] convertToGL:touchOrigin];
-    if (touchOrigin2.x>ADJUST_X(0) && touchOrigin2.x<ADJUST_X(50) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(465))
+    if (touchOrigin2.x>ADJUST_X(0) && touchOrigin2.x<ADJUST_X(50) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(15))
     {
         [[SimpleAudioEngine sharedEngine] playEffect:@"menuBack.wav"];
        
@@ -460,7 +459,7 @@
         
     }
     
-        if(touchOrigin2.x>ADJUST_X(260) && touchOrigin2.x<ADJUST_X(320) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(465))
+        if(touchOrigin2.x>ADJUST_X(260) && touchOrigin2.x<ADJUST_X(320) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(15))
     {
         NSLog(@"%@",myMatch.players);
         if(_isSoundOn)

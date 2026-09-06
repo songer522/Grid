@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIDevice.h>
+#import "ScreenLayout.h"
 
 /*  DETERMINE THE DEVICE USED  */
 // UI_USER_INTERFACE_IDIOM is no longer a preprocessor macro, so the #ifdef this
@@ -21,33 +22,51 @@
 #define kXoffsetiPad        64
 #define kYoffsetiPad        32
 
+/* 1.0 pins HUD to the safe-area edge; 0.0 keeps the authored 320x480 seat. */
+#define kEdgePushRatio      1.0f
+
 #define SD_PNG      @".png"
 #define HD_PNG      @"-hd.png"
 
+#define ADJUST_LEN_X(__x__)     \
+(IS_IPAD() == YES ?             \
+( __x__ * 2 ) :                 \
+__x__)
+
+#define ADJUST_LEN_Y(__y__)     \
+(IS_IPAD() == YES ?             \
+( __y__ * 2 ) :                 \
+__y__)
+
 #define ADJUST_CCP(__p__)       \
 (IS_IPAD() == YES ?             \
-ccp( ( __p__.x * 2 ) + kXoffsetiPad, ( __p__.y * 2 ) + kYoffsetiPad ) : \
-__p__)
+ccp( ( __p__.x * 2 ) + kXoffsetiPad + GridContentOrigin().x, ( __p__.y * 2 ) + kYoffsetiPad + GridContentOrigin().y ) : \
+ccp( __p__.x + GridContentOrigin().x, __p__.y + GridContentOrigin().y ))
 
 #define REVERSE_CCP(__p__)      \
 (IS_IPAD() == YES ?             \
-ccp( ( __p__.x - kXoffsetiPad ) / 2, ( __p__.y - kYoffsetiPad ) / 2 ) : \
-__p__)
+ccp( ( __p__.x - GridContentOrigin().x - kXoffsetiPad ) / 2, ( __p__.y - GridContentOrigin().y - kYoffsetiPad ) / 2 ) : \
+ccp( __p__.x - GridContentOrigin().x, __p__.y - GridContentOrigin().y ))
 
 #define ADJUST_XY(__x__, __y__)     \
 (IS_IPAD() == YES ?                     \
-ccp( ( __x__ * 2 ) + kXoffsetiPad, ( __y__ * 2 ) + kYoffsetiPad ) : \
-ccp(__x__, __y__))
+ccp( ( __x__ * 2 ) + kXoffsetiPad + GridContentOrigin().x, ( __y__ * 2 ) + kYoffsetiPad + GridContentOrigin().y ) : \
+ccp((__x__) + GridContentOrigin().x, (__y__) + GridContentOrigin().y))
 
 #define ADJUST_X(__x__)         \
 (IS_IPAD() == YES ?             \
-( __x__ * 2 ) + kXoffsetiPad :      \
-__x__)
+( __x__ * 2 ) + kXoffsetiPad + GridContentOrigin().x :      \
+(__x__) + GridContentOrigin().x)
 
 #define ADJUST_Y(__y__)         \
 (IS_IPAD() == YES ?             \
-( __y__ * 2 ) + kYoffsetiPad :      \
-__y__)
+( __y__ * 2 ) + kYoffsetiPad + GridContentOrigin().y :      \
+(__y__) + GridContentOrigin().y)
+
+#define TOP_Y(__inset__)            GridTopY(__inset__)
+#define BOTTOM_Y(__inset__)         GridBottomY(__inset__)
+#define TOP_CCP(__x__, __inset__)   ccp(ADJUST_X(__x__), TOP_Y(__inset__))
+#define BOTTOM_CCP(__x__, __inset__) ccp(ADJUST_X(__x__), BOTTOM_Y(__inset__))
 
 #define HD_PIXELS(__pixels__)       \
 (IS_IPAD() == YES ?             \

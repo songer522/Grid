@@ -80,7 +80,7 @@
 
 -(void)setPositionBasedOnPosition:(CGPoint)position withOffset:(CGPoint)offset
 {
-    CGPoint newPosition = ccp(0,480.0f - position.y);
+    CGPoint newPosition = [[CCDirector sharedDirector] convertToUI:position];
     CGRect newFrame = CGRectMake(newPosition.x + offset.x, newPosition.y + offset.y, _textView.frame.size.width, _textView.frame.size.height);
     [_textView setFrame:newFrame];
 }

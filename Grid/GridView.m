@@ -8,6 +8,7 @@
 
 #import "GridView.h"
 #import "DeviceSettings.h"
+#include <math.h>
 #import "Edge.h"
 #import "MapSettings.h"
 #import "BoxIcon.h"
@@ -22,6 +23,7 @@
 #import "GameSettings.h"
 #import "Box.h"
 #import "SimpleAudioEngine.h"
+#import "FullScreenBackground.h"
 
 
 
@@ -74,9 +76,7 @@
 {
     if ((self=[super init])) {
         _parentController=controller;
-        _background=[CCSprite spriteWithSpriteFrameName:@"Graphic_Background.png"];
-        [_background setPosition:ADJUST_CCP(ccp(160,240))];
-        //[_background setScale:0.5];
+        _background=[FullScreenBackground backgroundWithSpriteFrameName:@"Graphic_Background.png"];
         
         _dashLines=[CCLayer node];        
         _dots=[CCLayer node];
@@ -101,10 +101,10 @@
         
         _lable=[CCLabelTTF labelWithString:[NSString stringWithFormat: @"%@",newIslandName] fontName:@"Impact" fontSize: HD_TEXT(14)];
         [_lable setColor:ccc3(25, 25, 25)];
-        _lable.position=ADJUST_CCP(ccp(160,452)) ;//FULL VERSION CHANGE BACK 110 to 415
+        _lable.position=TOP_CCP(160, 28) ;//FULL VERSION CHANGE BACK 110 to 415
         _lable2=[CCLabelTTF labelWithString:[NSString stringWithFormat: @"Level %@",levelNumber] fontName:@"Impact" fontSize: HD_TEXT(14)];
         [_lable2 setColor:ccc3(25, 25, 25)];
-        _lable2.position=ADJUST_CCP(ccp(160,435)) ;//FULL VERSION CHANGE BACK 110 to 415
+        _lable2.position=TOP_CCP(160, 45) ;//FULL VERSION CHANGE BACK 110 to 415
         
         //_playerIndicator=[CCSprite spriteWithSpriteFrameName:@"Graphic_TextBlue.png"];
         //[_playerIndicator setPosition:ADJUST_CCP(ccp(60,415))];
@@ -113,22 +113,22 @@
         //[_playerIndicator2 setPosition:ADJUST_CCP(ccp(260,415))];
        
         _blueIndicator=[CCSprite spriteWithSpriteFrameName:@"Graphic_Arrow_1.png"];
-        [_blueIndicator setPosition:ADJUST_CCP(ccp(30,110))];
+        [_blueIndicator setPosition:BOTTOM_CCP(30,110)];
         [_blueIndicator setOpacity:0];
         
         _orangeIndicator=[CCSprite spriteWithSpriteFrameName:@"Graphic_Arrow_1.png"];
-        [_orangeIndicator setPosition:ADJUST_CCP(ccp(290,110))];
+        [_orangeIndicator setPosition:BOTTOM_CCP(290,110)];
        [_orangeIndicator setOpacity:0];
         
         CCSprite *levelNumBack=[CCSprite spriteWithSpriteFrameName:@"Graphic_LevelNumber.png"];
-        [levelNumBack setPosition:ADJUST_CCP(ccp(155,445))];
+        [levelNumBack setPosition:TOP_CCP(155, 35)];
         
         _edgeLayer=[CCLayer node];
         _blockLayer=[CCLayer node];
         
-        _blueScoreBox=[ScoreBox ScoreBoxWithImage:@"Graphic_BlueScore.png" andPosition:ADJUST_CCP(ccp(50,86))]; //FULL VERSION 76
+        _blueScoreBox=[ScoreBox ScoreBoxWithImage:@"Graphic_BlueScore.png" andPosition:BOTTOM_CCP(50,86)]; //FULL VERSION 76
 
-        _orangeScoreBox=[ScoreBox ScoreBoxWithImage:@"Graphic_OrangeScore.png" andPosition:ADJUST_CCP(ccp(270,86))];//FULL VERSION 76
+        _orangeScoreBox=[ScoreBox ScoreBoxWithImage:@"Graphic_OrangeScore.png" andPosition:BOTTOM_CCP(270,86)];//FULL VERSION 76
 
         
         _theNewGameButton=[CCSprite spriteWithSpriteFrameName:@"Button_NewGame.png"];
@@ -156,15 +156,15 @@
             _soundButton=[CCSprite spriteWithSpriteFrameName:@"Button_SoundOff.png"];
         }
 
-        [_soundButton setPosition:ADJUST_CCP(ccp(290,445))];
+        [_soundButton setPosition:TOP_CCP(290, 35)];
         
-        [_helpButton setPosition:ADJUST_CCP(ccp(240,445))];
+        [_helpButton setPosition:TOP_CCP(240, 35)];
         
         
         
-        [_theNewGameButton setPosition:ADJUST_CCP(ccp(30,445))];
-        [_menuButton setPosition:ADJUST_CCP(ccp(80,445))];
-        _window=[MessageWindow GameWindowWithImage:@"Graphic_TBox_1.png" text:@"Treasure Points" number:@"+5" andPosition:ADJUST_CCP(ccp(160,86))];//FULL VERSION CHANGE BACK 110 to 70
+        [_theNewGameButton setPosition:TOP_CCP(30, 35)];
+        [_menuButton setPosition:TOP_CCP(80, 35)];
+        _window=[MessageWindow GameWindowWithImage:@"Graphic_TBox_1.png" text:@"Treasure Points" number:@"+5" andPosition:BOTTOM_CCP(160,86)];//FULL VERSION CHANGE BACK 110 to 70
 
         [_window setOpacity:0];  
        
@@ -224,8 +224,8 @@
            // CCLabelTTF *player1=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"Player1Name"] fontName:@"Impact" fontSize:HD_TEXT(20)];
             //CCLabelTTF *player2=[CCLabelTTF labelWithString:@"CPU" fontName:@"Impact" fontSize:HD_TEXT(20)];
             CCLabelTTF *player2=[CCLabelTTF labelWithString:@"CPU" dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentRight fontName:@"Impact" fontSize:HD_TEXT(20)];
-            [player1 setPosition:ADJUST_CCP(ccp(131,66))];
-            [player2 setPosition:ADJUST_CCP(ccp(189,66))];
+            [player1 setPosition:BOTTOM_CCP(131,66)];
+            [player2 setPosition:BOTTOM_CCP(189,66)];
             [player1 setColor:ccc3(25, 25, 25)];
             [player2 setColor:ccc3(25, 25, 25)];
            // player1.fontSize=HD_TEXT([self getTextName:player1]);
@@ -241,8 +241,8 @@
             CCLabelTTF *player1=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"Player1Name"] dimensions:CGSizeMake(HD_PIXELS(80), HD_PIXELS(25)) alignment:UITextAlignmentLeft fontName:@"Impact" fontSize:HD_TEXT(20)];
             CCLabelTTF *player2=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"Player2Name"] dimensions:CGSizeMake(HD_PIXELS(80), HD_PIXELS(25)) alignment:UITextAlignmentRight fontName:@"Impact" fontSize:HD_TEXT(20)];
             
-            [player1 setPosition:ADJUST_CCP(ccp(121,66))];
-            [player2 setPosition:ADJUST_CCP(ccp(199,66))];
+            [player1 setPosition:BOTTOM_CCP(121,66)];
+            [player2 setPosition:BOTTOM_CCP(199,66)];
             [player1 setColor:ccc3(25, 25, 25)];
             [player2 setColor:ccc3(25, 25, 25)];
             //player1.fontSize=HD_TEXT([self getTextName:player1]);
@@ -259,8 +259,8 @@
         {
             CCLabelTTF *player1=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"BluePlayer"] dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentLeft fontName:@"Impact" fontSize:HD_TEXT(20)];
             CCLabelTTF *player2=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"OrangePlayer"] dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentRight fontName:@"Impact" fontSize:HD_TEXT(20)];
-            [player1 setPosition:ADJUST_CCP(ccp(131,66))];
-            [player2 setPosition:ADJUST_CCP(ccp(189,66))];
+            [player1 setPosition:BOTTOM_CCP(131,66)];
+            [player2 setPosition:BOTTOM_CCP(189,66)];
             [player1 setColor:ccc3(25, 25, 25)];
             [player2 setColor:ccc3(25, 25, 25)];
            // player1.fontSize=HD_TEXT([self getTextName:player1]);
@@ -287,8 +287,8 @@
             
             CCLabelTTF *player1=[CCLabelTTF labelWithString:player1Name dimensions:CGSizeMake(HD_PIXELS(80), HD_PIXELS(50)) alignment:UITextAlignmentLeft fontName:@"Impact" fontSize:HD_TEXT(20)];
             CCLabelTTF *player2=[CCLabelTTF labelWithString:player2Name dimensions:CGSizeMake(HD_PIXELS(80), HD_PIXELS(50)) alignment:UITextAlignmentRight fontName:@"Impact" fontSize:HD_TEXT(20)];
-            [player1 setPosition:ADJUST_CCP(ccp(121,51))];
-            [player2 setPosition:ADJUST_CCP(ccp(199,51))];
+            [player1 setPosition:BOTTOM_CCP(121,51)];
+            [player2 setPosition:BOTTOM_CCP(199,51)];
             [player1 setColor:ccc3(25, 25, 25)];
             [player2 setColor:ccc3(25, 25, 25)];
             // player1.fontSize=HD_TEXT([self getTextName:player1]);
@@ -331,15 +331,15 @@
 
 -(void)loadPowerUpsAndsetupModel
 {
-    for(int positionX = HD_PIXELS(27.5); positionX< X_BOUNDARY_RIGHT; positionX=positionX+EDGE_LENGTH )
+    for(int positionX = X_MARGIN; positionX< X_BOUNDARY_RIGHT; positionX=positionX+EDGE_LENGTH )
     {
-        for (int positionY= HD_PIXELS(130); positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
+        for (int positionY= Y_MARGIN; positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
             //CCSprite *dot=[CCSprite spriteWithSpriteFrameName:@"Graphic_Dot.png"];
             //[dot setPosition:ccp(positionX,positionY)];
             //[_dots addChild:dot];
             CGPoint tileCoord = [self tileCoordForPosition:ccp(positionX,positionY)];
             BOOL rightLineFilled=NO;
-            int tileGid = [_lineRightLayer tileGIDAt:tileCoord];
+            int tileGid = [self safeTileGIDAt:tileCoord inLayer:_lineRightLayer];
             if (tileGid) {
                 NSDictionary *properties = [_tileMap propertiesForGID:tileGid];
                 if (properties) {
@@ -353,7 +353,7 @@
                 }
             }
             
-            int tileGid2 = [_lineDownLayer tileGIDAt:tileCoord];
+            int tileGid2 = [self safeTileGIDAt:tileCoord inLayer:_lineDownLayer];
             if (tileGid2) {
                 NSDictionary *properties = [_tileMap propertiesForGID:tileGid2];
                 if (properties) {
@@ -370,7 +370,7 @@
                     }
                 }
             }
-            int tileGid3 = [_itemLayer tileGIDAt:tileCoord];
+            int tileGid3 = [self safeTileGIDAt:tileCoord inLayer:_itemLayer];
             if (tileGid3) {
                 NSDictionary *properties = [_tileMap propertiesForGID:tileGid3];
                 if (properties) {
@@ -429,10 +429,10 @@
                         box.status=MAP;
                         [_parentController loadTreasureMapAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Part:TREASUREMAP_PART_ONE];
                         CCSprite *mapIndicator1=[CCSprite spriteWithSpriteFrameName:@"Graphic_TmapBack.png"];
-                        [mapIndicator1 setPosition:ADJUST_CCP(ccp(50,35))];
+                        [mapIndicator1 setPosition:BOTTOM_CCP(50,35)];
                         [_blockLayer addChild:mapIndicator1];
                         CCSprite *mapIndicator2=[CCSprite spriteWithSpriteFrameName:@"Graphic_TmapBack.png"];
-                        [mapIndicator2 setPosition:ADJUST_CCP(ccp(270,35))];
+                        [mapIndicator2 setPosition:BOTTOM_CCP(270,35)];
                         [_blockLayer addChild:mapIndicator2];
 
                     }
@@ -459,14 +459,14 @@
     }
     
     
-    for(int positionX = HD_PIXELS(27.5); positionX< X_BOUNDARY_RIGHT; positionX=positionX+EDGE_LENGTH )
+    for(int positionX = X_MARGIN; positionX< X_BOUNDARY_RIGHT; positionX=positionX+EDGE_LENGTH )
     {
-        for (int positionY= HD_PIXELS(130); positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
+        for (int positionY= Y_MARGIN; positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
             //CCSprite *dot=[CCSprite spriteWithSpriteFrameName:@"Graphic_Dot.png"];
             //[dot setPosition:ccp(positionX,positionY)];
             //[_dots addChild:dot];
             CGPoint tileCoord = [self tileCoordForPosition:ccp(positionX,positionY)];
-                       int tileGid3 = [_itemLayer tileGIDAt:tileCoord];
+                       int tileGid3 = [self safeTileGIDAt:tileCoord inLayer:_itemLayer];
             if (tileGid3) {
                 NSDictionary *properties = [_tileMap propertiesForGID:tileGid3];
                 if (properties) {
@@ -508,14 +508,14 @@
 }
 -(void)loadfog
 {
-    for(int positionX = HD_PIXELS(27.5); positionX< X_BOUNDARY_RIGHT; positionX=positionX+EDGE_LENGTH )
+    for(int positionX = X_MARGIN; positionX< X_BOUNDARY_RIGHT; positionX=positionX+EDGE_LENGTH )
     {
-        for (int positionY= HD_PIXELS(130); positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
+        for (int positionY= Y_MARGIN; positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
             //CCSprite *dot=[CCSprite spriteWithSpriteFrameName:@"Graphic_Dot.png"];
             //[dot setPosition:ccp(positionX,positionY)];
             //[_dots addChild:dot];
             CGPoint tileCoord = [self tileCoordForPosition:ccp(positionX,positionY)];
-            int tileGid3 = [_itemLayer tileGIDAt:tileCoord];
+            int tileGid3 = [self safeTileGIDAt:tileCoord inLayer:_itemLayer];
             if (tileGid3) {
                 NSDictionary *properties = [_tileMap propertiesForGID:tileGid3];
                 if (properties) {
@@ -794,12 +794,31 @@
 }
 
 - (CGPoint)tileCoordForPosition:(CGPoint)position {
-   
-    // int x = (position.x-X_MARGIN) / tileMap.tileSize.width;
-    int x = (position.x+1-HD_PIXELS(27.5)) / HD_PIXELS(53);
-    //int y = ((tileMap.mapSize.height * tileMap.tileSize.height) - position.y) / tileMap.tileSize.height;
-    int y=(HD_PIXELS(395) - position.y) / HD_PIXELS(53);//385
+    CGPoint origin = GridContentOrigin();
+    CGFloat localX = position.x - origin.x;
+    CGFloat localY = position.y - origin.y;
+    if (IS_IPAD()) {
+        localX -= kXoffsetiPad;
+        localY -= kYoffsetiPad;
+    }
+    // Truncation toward zero turned slightly-negative samples into tile 0 and
+    // made fog/item lookups lie. Floor keeps those samples outside the map.
+    int x = (int)floorf((localX + 1 - HD_PIXELS(27.5)) / HD_PIXELS(53));
+    int y = (int)floorf((HD_PIXELS(395) - localY) / HD_PIXELS(53));
     return ccp(x, y);
+}
+
+- (uint32_t)safeTileGIDAt:(CGPoint)tileCoord inLayer:(CCTMXLayer *)layer {
+    if (!layer) {
+        return 0;
+    }
+    int x = (int)tileCoord.x;
+    int y = (int)tileCoord.y;
+    CGSize size = [layer layerSize];
+    if (x < 0 || y < 0 || x >= (int)size.width || y >= (int)size.height) {
+        return 0;
+    }
+    return [layer tileGIDAt:ccp(x, y)];
 }
 
 

@@ -12,6 +12,7 @@
 #import "Button.h"
 #import "MainMenu.h"
 #import "SimpleAudioEngine.h"
+#import "FullScreenBackground.h"
 @implementation CreditsMenu
 +(CCScene *) scene
 {
@@ -56,8 +57,7 @@
 
 - (void)loadUI
 {
-    CCSprite *background=[CCSprite spriteWithSpriteFrameName:@"Graphic_MainMenuBack.png"];
-    [background setPosition:ADJUST_CCP(ccp(160,240))];
+    CCNode *background=[FullScreenBackground backgroundWithSpriteFrameName:@"Graphic_MainMenuBack.png"];
     
     _creditsImage=[Button buttonAtPosition:ADJUST_CCP(ccp(160,240)) andImage:@"Graphic_Credits.png"];
     [_creditsImage.buttonGraphic setOpacity:0];
@@ -92,7 +92,7 @@
     
     
     
-    _goBackButton=[Button buttonAtPosition:ADJUST_CCP(ccp(30,445)) andImage:@"Button_GoBack.png"];
+    _goBackButton=[Button buttonAtPosition:TOP_CCP(30, 35) andImage:@"Button_GoBack.png"];
    
     [_goBackButton.buttonGraphic setOpacity:0];
  
@@ -105,7 +105,7 @@
     CGPoint touchOrigin = [touch locationInView:[touch view]];
 	CGPoint touchOrigin2 = [[CCDirector sharedDirector] convertToGL:touchOrigin];
     
-    if (touchOrigin2.x>ADJUST_X(10) && touchOrigin2.x<ADJUST_X(50) && touchOrigin2.y>ADJUST_Y(415) && touchOrigin2.y<ADJUST_Y(465))
+    if (touchOrigin2.x>ADJUST_X(10) && touchOrigin2.x<ADJUST_X(50) && touchOrigin2.y>TOP_Y(65) && touchOrigin2.y<TOP_Y(15))
     {
         [[SimpleAudioEngine sharedEngine] playEffect:@"menuBack.wav"];
         CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
