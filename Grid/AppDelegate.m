@@ -23,8 +23,20 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	// Create the main window
-	window_ = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	return YES;
+}
+
+- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions
+{
+	if (![scene isKindOfClass:[UIWindowScene class]])
+		return;
+
+	window_ = [[UIWindow alloc] initWithWindowScene:(UIWindowScene *)scene];
+	[self configureRootViewControllerForWindow];
+}
+
+- (void)configureRootViewControllerForWindow
+{
 
 
 	// Create an CCGLView with a RGB565 color buffer, and a depth buffer of 0-bits
@@ -97,7 +109,40 @@
     
     [ReviewPrompt appLaunched];
 
-	return YES;
+}
+
+- (void)pauseForInactiveState
+{
+	if( [navController_ visibleViewController] == director_ )
+		[director_ pause];
+    [[GameSettings shared] saveToDisk];
+}
+
+- (void)resumeForActiveState
+{
+	if( [navController_ visibleViewController] == director_ )
+		[director_ resume];
+}
+
+- (void)stopForBackgroundState
+{
+	if (animationStoppedForBackground_)
+		return;
+
+	if( [navController_ visibleViewController] == director_ )
+		[director_ stopAnimation];
+    [[GameSettings shared] saveToDisk];
+	animationStoppedForBackground_ = YES;
+}
+
+- (void)startForForegroundState
+{
+	if (!animationStoppedForBackground_)
+		return;
+
+	if( [navController_ visibleViewController] == director_ )
+		[director_ startAnimation];
+	animationStoppedForBackground_ = NO;
 }
 
 // Supported orientations: Portrait only.
@@ -112,33 +157,24 @@
 }
 
 
-// getting a call, pause the game
--(void) applicationWillResignActive:(UIApplication *)application
+- (void)sceneWillResignActive:(UIScene *)scene
 {
-	if( [navController_ visibleViewController] == director_ )
-		[director_ pause];
-     [[GameSettings shared] saveToDisk];
+	[self pauseForInactiveState];
 }
 
-// call got rejected
--(void) applicationDidBecomeActive:(UIApplication *)application
+- (void)sceneDidBecomeActive:(UIScene *)scene
 {
-	if( [navController_ visibleViewController] == director_ )
-		[director_ resume];
+	[self resumeForActiveState];
 }
 
--(void) applicationDidEnterBackground:(UIApplication*)application
+- (void)sceneDidEnterBackground:(UIScene *)scene
 {
-	if( [navController_ visibleViewController] == director_ )
-		[director_ stopAnimation];
-    [[GameSettings shared] saveToDisk];
-
+	[self stopForBackgroundState];
 }
 
--(void) applicationWillEnterForeground:(UIApplication*)application
+- (void)sceneWillEnterForeground:(UIScene *)scene
 {
-	if( [navController_ visibleViewController] == director_ )
-		[director_ startAnimation];
+	[self startForForegroundState];
 }
 
 // application will be killed

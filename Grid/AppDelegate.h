@@ -12,12 +12,13 @@
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
 
-@interface AppController : NSObject <UIApplicationDelegate, CCDirectorDelegate,GKMatchmakerViewControllerDelegate,GKLocalPlayerListener>
+@interface AppController : NSObject <UIApplicationDelegate, UISceneDelegate, CCDirectorDelegate,GKMatchmakerViewControllerDelegate,GKLocalPlayerListener>
 {
 	UIWindow *window_;
 	UINavigationController *navController_;
 
 	CCDirectorIOS	*director_;							// weak ref
+	BOOL animationStoppedForBackground_;
 }
 
 @property (nonatomic, retain) UIWindow *window;
