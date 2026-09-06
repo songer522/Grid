@@ -35,13 +35,23 @@
         if(!FlipX)
         {
             //[_shipGraphic setPosition:ccp((position.x-0.6*EDGE_LENGTH),(position.y+0.1*EDGE_LENGTH))];
-            [_shipGraphic setPosition:position];
+            [_shipGraphic setPosition:ccp(position.x+HD_PIXELS(1),position.y)];
+            
+            if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && [[UIScreen mainScreen] scale] == 2.0)
+            {
+                
+               [_shipGraphic setPosition:ccp(position.x+HD_PIXELS(2),position.y)];
+            }
         }
         else {
             _isFlip=YES;
             //[_shipGraphic setPosition:ccp((position.x+0.6*EDGE_LENGTH),(position.y+0.1*EDGE_LENGTH))];
-            [_shipGraphic setPosition:position];
-           
+            [_shipGraphic setPosition:ccp(position.x-HD_PIXELS(1),position.y)];
+            if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && [[UIScreen mainScreen] scale] == 2.0)
+            {
+                
+                [_shipGraphic setPosition:ccp(position.x-HD_PIXELS(1),position.y)];
+            }
             [_shipGraphic setFlipX:YES];
            
         }

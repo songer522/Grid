@@ -35,15 +35,33 @@
          [_cannonBallGraphic setVisible:NO];
         if(!FlipX)
         {
-        [_cannonGraphic setPosition:ccp((position.x-0.6*EDGE_LENGTH),(position.y+0.1*EDGE_LENGTH))];
+        [_cannonGraphic setPosition:ccp((position.x-0.53*EDGE_LENGTH),(position.y+0.1*EDGE_LENGTH))];
         [_cannonBallGraphic setPosition:ccp((_cannonPosition.x-0.6*EDGE_LENGTH),(_cannonPosition.y+0.1*EDGE_LENGTH))];
+            
+            
+            if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && [[UIScreen mainScreen] scale] == 2.0)
+            {
+               
+                [_cannonGraphic setPosition:ccp((position.x-0.55*EDGE_LENGTH),(position.y+0.1*EDGE_LENGTH))];
+                [_cannonBallGraphic setPosition:ccp((_cannonPosition.x-0.6*EDGE_LENGTH),(_cannonPosition.y+0.1*EDGE_LENGTH))];
+            }
+
         }
         else {
             _isFlip=YES;
-            [_cannonGraphic setPosition:ccp((position.x+0.6*EDGE_LENGTH),(position.y+0.1*EDGE_LENGTH))];
+            [_cannonGraphic setPosition:ccp((position.x+0.53*EDGE_LENGTH),(position.y+0.1*EDGE_LENGTH))];
             [_cannonBallGraphic setPosition:ccp((_cannonPosition.x+0.6*EDGE_LENGTH),(_cannonPosition.y+0.1*EDGE_LENGTH))];
+            if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && [[UIScreen mainScreen] scale] == 2.0)
+            {
+                [_cannonGraphic setPosition:ccp((position.x+0.55*EDGE_LENGTH),(position.y+0.1*EDGE_LENGTH))];
+                [_cannonBallGraphic setPosition:ccp((_cannonPosition.x+0.6*EDGE_LENGTH),(_cannonPosition.y+0.1*EDGE_LENGTH))];
+            }
             [_cannonGraphic setFlipX:YES];
             [_cannonBallGraphic setFlipX:YES];
+            
+            
+            
+            
         }
         [self addChild:_cannonBallGraphic];
         [self addChild:_cannonGraphic];

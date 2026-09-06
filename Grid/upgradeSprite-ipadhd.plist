@@ -22,7 +22,7 @@
 			<key>spriteTrimmed</key>
 			<true/>
 			<key>textureRect</key>
-			<string>{{1232, 5}, {186, 186}}</string>
+			<string>{{1226, 5}, {186, 186}}</string>
 			<key>textureRotated</key>
 			<false/>
 		</dict>
@@ -34,17 +34,17 @@
 			
 			</array>
 			<key>spriteColorRect</key>
-			<string>{{544, 45}, {832, 202}}</string>
+			<string>{{95, 419}, {932, 222}}</string>
 			<key>spriteOffset</key>
-			<string>{192, 1}</string>
+			<string>{3, -169}</string>
 			<key>spriteSize</key>
-			<string>{832, 202}</string>
+			<string>{932, 222}</string>
 			<key>spriteSourceSize</key>
-			<string>{1536, 294}</string>
+			<string>{1116, 722}</string>
 			<key>spriteTrimmed</key>
 			<true/>
 			<key>textureRect</key>
-			<string>{{5, 1632}, {832, 202}}</string>
+			<string>{{5, 1219}, {932, 222}}</string>
 			<key>textureRotated</key>
 			<false/>
 		</dict>
@@ -56,39 +56,105 @@
 			
 			</array>
 			<key>spriteColorRect</key>
-			<string>{{544, 45}, {832, 202}}</string>
+			<string>{{95, 419}, {932, 222}}</string>
 			<key>spriteOffset</key>
-			<string>{192, 1}</string>
+			<string>{3, -169}</string>
 			<key>spriteSize</key>
-			<string>{832, 202}</string>
+			<string>{932, 222}</string>
 			<key>spriteSourceSize</key>
-			<string>{1536, 294}</string>
+			<string>{1116, 722}</string>
 			<key>spriteTrimmed</key>
 			<true/>
 			<key>textureRect</key>
-			<string>{{842, 1632}, {832, 202}}</string>
+			<string>{{942, 1219}, {932, 222}}</string>
 			<key>textureRotated</key>
 			<false/>
 		</dict>
 		
-		<key>Graphic_FullVersion.png</key>
+		<key>Graphic_CaptainL_1.png</key>
 		<dict>
 			<key>aliases</key>
 			<array>
 			
 			</array>
 			<key>spriteColorRect</key>
-			<string>{{157, 340}, {1222, 1622}}</string>
+			<string>{{200, 909}, {1118, 182}}</string>
 			<key>spriteOffset</key>
-			<string>{0, -127}</string>
+			<string>{-9, 24}</string>
 			<key>spriteSize</key>
-			<string>{1222, 1622}</string>
+			<string>{1118, 182}</string>
 			<key>spriteSourceSize</key>
 			<string>{1536, 2048}</string>
 			<key>spriteTrimmed</key>
 			<true/>
 			<key>textureRect</key>
-			<string>{{5, 5}, {1222, 1622}}</string>
+			<string>{{5, 1645}, {1118, 182}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Graphic_CaptainL_2.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{200, 898}, {1118, 194}}</string>
+			<key>spriteOffset</key>
+			<string>{-9, 29}</string>
+			<key>spriteSize</key>
+			<string>{1118, 194}</string>
+			<key>spriteSourceSize</key>
+			<string>{1536, 2048}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{5, 1446}, {1118, 194}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Graphic_FullVersionText.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{163, 968}, {1216, 444}}</string>
+			<key>spriteOffset</key>
+			<string>{3, -166}</string>
+			<key>spriteSize</key>
+			<string>{1216, 444}</string>
+			<key>spriteSourceSize</key>
+			<string>{1536, 2048}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{5, 5}, {1216, 444}}</string>
+			<key>textureRotated</key>
+			<false/>
+		</dict>
+		
+		<key>Graphic_ScreenShots.png</key>
+		<dict>
+			<key>aliases</key>
+			<array>
+			
+			</array>
+			<key>spriteColorRect</key>
+			<string>{{169, 333}, {1196, 760}}</string>
+			<key>spriteOffset</key>
+			<string>{-1, 311}</string>
+			<key>spriteSize</key>
+			<string>{1196, 760}</string>
+			<key>spriteSourceSize</key>
+			<string>{1536, 2048}</string>
+			<key>spriteTrimmed</key>
+			<true/>
+			<key>textureRect</key>
+			<string>{{5, 454}, {1196, 760}}</string>
 			<key>textureRotated</key>
 			<false/>
 		</dict>

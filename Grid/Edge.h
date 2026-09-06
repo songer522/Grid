@@ -8,12 +8,23 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    ON_ROW,
+    ON_LINE
+    
+} EdgeInfo;
 @interface Edge : NSObject
 {
     BOOL _isFilled;
-   
+    int _rowOrLineIndex;
+    int _edgeIndex;
+    EdgeInfo _rowOrLine;
+    
 }
 @property BOOL isFilled;
+@property int rowOrLineIndex;
+@property int edgeIndex;
+@property EdgeInfo rowOrLine;
 
 
 +(id)instance;

@@ -31,7 +31,7 @@
 	<key>metadata</key>
 	<dict>
 		<key>version</key>
-		<string>1.5.1</string>
+		<string>1.5.2</string>
 		<key>format</key>
 		<integer>3</integer>
 		<key>size</key>
@@ -45,11 +45,11 @@
 			<key>name</key>
 			<string>-hd</string>
 			<key>textureFileName</key>
-			<string>-hd</string>
+			<string>background2_-hd</string>
 			<key>textureFileExtension</key>
 			<string>.png</string>
 			<key>coordinatesFileName</key>
-			<string>-hd</string>
+			<string>background2_-hd</string>
 			<key>coordinatesFileExtension</key>
 			<string>.plist</string>
 			<key>premultipliedAlpha</key>

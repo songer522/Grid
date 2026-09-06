@@ -14,6 +14,8 @@ typedef enum {
     FILLED_WITH_THREE_EDGES,
     FILLED_WITH_TWO_EDGES,
     FILLED_WITH_ONE_EDGES,
+    FILLED_WITH_THREE_EDGES_AND_SKULL,
+    EMPTY_WITH_CANNON,
     EMPTY,
     SINGLE_LINE
     
@@ -30,6 +32,9 @@ typedef enum {
     float _waitToCheckNonThreeEdgeBox;
     float _waitToCheckRandomEdge;
     int _countForSearchingNonThreeEdgeBox;
+    float _waitToStartBrain;
+    
+    NSMutableArray *_nonThirdEdgeArray;
 }
 
 

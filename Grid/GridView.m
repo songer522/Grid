@@ -16,9 +16,12 @@
 #import "TreasureBox.h"
 #import "Cannon.h"
 #import "TreasureMap.h"
+#import "Skull.h"
+#import "Fog.h"
 #import "GameLayer.h"
 #import "GameSettings.h"
 #import "Box.h"
+#import "SimpleAudioEngine.h"
 
 
 
@@ -26,6 +29,8 @@
 @implementation GridView
 @synthesize edgeIndicator=_edgeIndicator;
 //@synthesize lable=_lable;
+@synthesize tileMap=_tileMap;
+@synthesize itemLayer=_itemLayer;
 @synthesize edgeLayer=_edgeLayer;
 @synthesize blockLayer=_blockLayer;
 @synthesize orangeScoreBox=_orangeScoreBox;
@@ -43,6 +48,8 @@
 @synthesize edgeArray=_edgeArray;
 @synthesize shipArray=_shipArray;
 @synthesize mapArray=_mapArray;
+@synthesize skullArray=_skullArray;
+@synthesize fogArray=_fogArray;
 //@synthesize playerIndicator=_playerIndicator;
 //@synthesize playerIndicator2=_playerIndicator2;
 @synthesize blueIndicator=_blueIndicator;
@@ -56,7 +63,8 @@
 @synthesize helpButton=_helpButton;
 @synthesize isSoundOn=_isSoundOn;
 @synthesize howToPlayPage=_howToPlayPage;
-
+@synthesize waitToPlayBackgroundMusic=_waitToPlayBackgroundMusic;
+@synthesize adView=_adView;
 
 +(id)gridViewInController:(id)controller
 {
@@ -86,14 +94,18 @@
         //_waitToFadeOutTreasureBoxOrange=0;
        
         NSString *islandNumber=[[GameSettings shared] getGlobalForKey:@"island"];
-        int newNumber=[islandNumber intValue];
-        NSString *newIslandNumber=[NSString stringWithFormat:@"%d",(newNumber+1)];
+       // int newNumber=[islandNumber intValue];
+       // NSString *newIslandNumber=[NSString stringWithFormat:@"%d",(newNumber+1)];
+        NSString *newIslandName=[self getIslandName:islandNumber];
         NSString *levelNumber=[[GameSettings shared] getGlobalForKey:@"levelNumberOnButton"];
         
         
-        _lable=[CCLabelTTF labelWithString:[NSString stringWithFormat: @"Level %@-%@",newIslandNumber,levelNumber] fontName:@"Impact" fontSize: HD_TEXT(14)];
+        _lable=[CCLabelTTF labelWithString:[NSString stringWithFormat: @"%@",newIslandName] fontName:@"Impact" fontSize: HD_TEXT(14)];
         [_lable setColor:ccc3(25, 25, 25)];
-        _lable.position=ADJUST_CCP(ccp(160,465)) ;//FULL VERSION CHANGE BACK 110 to 415
+        _lable.position=ADJUST_CCP(ccp(160,452)) ;//FULL VERSION CHANGE BACK 110 to 415
+        _lable2=[CCLabelTTF labelWithString:[NSString stringWithFormat: @"Level %@",levelNumber] fontName:@"Impact" fontSize: HD_TEXT(14)];
+        [_lable2 setColor:ccc3(25, 25, 25)];
+        _lable2.position=ADJUST_CCP(ccp(160,435)) ;//FULL VERSION CHANGE BACK 110 to 415
         
         //_playerIndicator=[CCSprite spriteWithSpriteFrameName:@"Graphic_TextBlue.png"];
         //[_playerIndicator setPosition:ADJUST_CCP(ccp(60,415))];
@@ -101,21 +113,23 @@
         //_playerIndicator2=[CCSprite spriteWithSpriteFrameName:@"Graphic_TextBlue.png"];
         //[_playerIndicator2 setPosition:ADJUST_CCP(ccp(260,415))];
        
-        _blueIndicator=[CCSprite spriteWithSpriteFrameName:@"Graphic_BluesTurn.png"];
-        [_blueIndicator setPosition:ADJUST_CCP(ccp(155,455))];
+        _blueIndicator=[CCSprite spriteWithSpriteFrameName:@"Graphic_Arrow_1.png"];
+        [_blueIndicator setPosition:ADJUST_CCP(ccp(30,110))];
+        [_blueIndicator setOpacity:0];
         
-        _orangeIndicator=[CCSprite spriteWithSpriteFrameName:@"Graphic_OrangesTurn.png"];
-        [_orangeIndicator setPosition:ADJUST_CCP(ccp(155,455))];
-
+        _orangeIndicator=[CCSprite spriteWithSpriteFrameName:@"Graphic_Arrow_1.png"];
+        [_orangeIndicator setPosition:ADJUST_CCP(ccp(290,110))];
+       [_orangeIndicator setOpacity:0];
+        
         CCSprite *levelNumBack=[CCSprite spriteWithSpriteFrameName:@"Graphic_LevelNumber.png"];
-        [levelNumBack setPosition:ADJUST_CCP(ccp(155,455))];
+        [levelNumBack setPosition:ADJUST_CCP(ccp(155,445))];
         
         _edgeLayer=[CCLayer node];
         _blockLayer=[CCLayer node];
         
-        _blueScoreBox=[ScoreBox ScoreBoxWithImage:@"Graphic_BlueScore.png" andPosition:ADJUST_CCP(ccp(50,96))]; //FULL VERSION 76
+        _blueScoreBox=[ScoreBox ScoreBoxWithImage:@"Graphic_BlueScore.png" andPosition:ADJUST_CCP(ccp(50,86))]; //FULL VERSION 76
 
-        _orangeScoreBox=[ScoreBox ScoreBoxWithImage:@"Graphic_OrangeScore.png" andPosition:ADJUST_CCP(ccp(270,96))];//FULL VERSION 76
+        _orangeScoreBox=[ScoreBox ScoreBoxWithImage:@"Graphic_OrangeScore.png" andPosition:ADJUST_CCP(ccp(270,86))];//FULL VERSION 76
 
         
         _theNewGameButton=[CCSprite spriteWithSpriteFrameName:@"Button_NewGame.png"];
@@ -128,10 +142,12 @@
         if([soundSetting isEqualToString:@"NO"])
         {
             _isSoundOn=NO;
+              [[SimpleAudioEngine sharedEngine] setMute:YES];
         }
         else 
         {
             _isSoundOn=YES;
+              [[SimpleAudioEngine sharedEngine] setMute:NO];
         }
         if(_isSoundOn)
         {
@@ -141,15 +157,15 @@
             _soundButton=[CCSprite spriteWithSpriteFrameName:@"Button_SoundOff.png"];
         }
 
-        [_soundButton setPosition:ADJUST_CCP(ccp(290,455))];
+        [_soundButton setPosition:ADJUST_CCP(ccp(290,445))];
         
-        [_helpButton setPosition:ADJUST_CCP(ccp(240,455))];
+        [_helpButton setPosition:ADJUST_CCP(ccp(240,445))];
         
         
         
-        [_theNewGameButton setPosition:ADJUST_CCP(ccp(30,455))];
-        [_menuButton setPosition:ADJUST_CCP(ccp(80,455))];
-        _window=[MessageWindow GameWindowWithImage:@"Graphic_TBox_1.png" text:@"Treasure Points" number:@"+5" andPosition:ADJUST_CCP(ccp(160,96))];//FULL VERSION CHANGE BACK 110 to 70
+        [_theNewGameButton setPosition:ADJUST_CCP(ccp(30,445))];
+        [_menuButton setPosition:ADJUST_CCP(ccp(80,445))];
+        _window=[MessageWindow GameWindowWithImage:@"Graphic_TBox_1.png" text:@"Treasure Points" number:@"+5" andPosition:ADJUST_CCP(ccp(160,86))];//FULL VERSION CHANGE BACK 110 to 70
 
         [_window setOpacity:0];  
        
@@ -158,15 +174,15 @@
         
         NSString *LevelNumber=[[GameSettings shared] getGlobalForKey:@"selectedLevel"];
         
-        tileMap = [CCTMXTiledMap tiledMapWithTMXFile: [NSString stringWithFormat:@"DAL_Level%@.tmx",LevelNumber ]];
+        _tileMap = [CCTMXTiledMap tiledMapWithTMXFile: [NSString stringWithFormat:@"DAL_Level%@.tmx",LevelNumber ]];
         
-        _itemLayer = [tileMap layerNamed:@"Items"];
+        _itemLayer = [_tileMap layerNamed:@"Items"];
         _itemLayer.visible = NO;
         
-        _lineRightLayer=[tileMap layerNamed:@"Right"];
-        _lineDownLayer=[tileMap layerNamed:@"Down"];
+        _lineRightLayer=[_tileMap layerNamed:@"Right"];
+        _lineDownLayer=[_tileMap layerNamed:@"Down"];
         
-        [tileMap setPosition:ADJUST_CCP(ccp(1,113.5))];//93.5  FULL VERSION CHANGE BACK
+        [_tileMap setPosition:ADJUST_CCP(ccp(1,103.5))];//93.5  FULL VERSION CHANGE BACK
        // _powerUpsArray=[NSMutableArray arrayWithObjects:_treasureBox1, nil];
 
         
@@ -180,9 +196,10 @@
         _edgeArray=[[NSMutableArray alloc] init];
         _shipArray=[[NSMutableArray alloc] init];
         _mapArray=[[NSMutableArray alloc] init];
-        
+        _skullArray=[[NSMutableArray alloc] init];
+        _fogArray=[[NSMutableArray alloc] init];
         [self addChild:_background];
-        [self addChild:tileMap];
+        [self addChild:_tileMap];
         //[self addChild:_dashLines];
         [self addChild:_blockLayer];
         [self addChild:_edgeLayer];
@@ -190,12 +207,14 @@
         
        // [self addChild:_playerIndicator];
        // [self addChild:_playerIndicator2];
-        [self addChild:_blueIndicator];
-        [self addChild:_orangeIndicator];
+       
         [self addChild:levelNumBack];
         [self addChild:_lable];
+        [self addChild:_lable2];
         [self addChild:_blueScoreBox];
         [self addChild:_orangeScoreBox];
+        [self addChild:_blueIndicator];
+        [self addChild:_orangeIndicator];
         
         [self blueIsOn];
         //[_orangeIndicator setOpacity:51];
@@ -206,8 +225,8 @@
            // CCLabelTTF *player1=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"Player1Name"] fontName:@"Impact" fontSize:HD_TEXT(20)];
             //CCLabelTTF *player2=[CCLabelTTF labelWithString:@"CPU" fontName:@"Impact" fontSize:HD_TEXT(20)];
             CCLabelTTF *player2=[CCLabelTTF labelWithString:@"CPU" dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentRight fontName:@"Impact" fontSize:HD_TEXT(20)];
-            [player1 setPosition:ADJUST_CCP(ccp(131,76))];
-            [player2 setPosition:ADJUST_CCP(ccp(189,76))];
+            [player1 setPosition:ADJUST_CCP(ccp(131,66))];
+            [player2 setPosition:ADJUST_CCP(ccp(189,66))];
             [player1 setColor:ccc3(25, 25, 25)];
             [player2 setColor:ccc3(25, 25, 25)];
            // player1.fontSize=HD_TEXT([self getTextName:player1]);
@@ -220,11 +239,11 @@
         
         else if([_parentController.gameMode isEqualToString:@"oneDevice"])
         {
-            CCLabelTTF *player1=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"Player1Name"] dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentLeft fontName:@"Impact" fontSize:HD_TEXT(20)];
-            CCLabelTTF *player2=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"Player2Name"] dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentRight fontName:@"Impact" fontSize:HD_TEXT(20)];
+            CCLabelTTF *player1=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"Player1Name"] dimensions:CGSizeMake(HD_PIXELS(80), HD_PIXELS(25)) alignment:UITextAlignmentLeft fontName:@"Impact" fontSize:HD_TEXT(20)];
+            CCLabelTTF *player2=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"Player2Name"] dimensions:CGSizeMake(HD_PIXELS(80), HD_PIXELS(25)) alignment:UITextAlignmentRight fontName:@"Impact" fontSize:HD_TEXT(20)];
             
-            [player1 setPosition:ADJUST_CCP(ccp(131,76))];
-            [player2 setPosition:ADJUST_CCP(ccp(189,76))];
+            [player1 setPosition:ADJUST_CCP(ccp(121,66))];
+            [player2 setPosition:ADJUST_CCP(ccp(199,66))];
             [player1 setColor:ccc3(25, 25, 25)];
             [player2 setColor:ccc3(25, 25, 25)];
             //player1.fontSize=HD_TEXT([self getTextName:player1]);
@@ -241,11 +260,39 @@
         {
             CCLabelTTF *player1=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"BluePlayer"] dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentLeft fontName:@"Impact" fontSize:HD_TEXT(20)];
             CCLabelTTF *player2=[CCLabelTTF labelWithString:[[GameSettings shared] getGlobalForKey:@"OrangePlayer"] dimensions:CGSizeMake(HD_PIXELS(100), HD_PIXELS(25)) alignment:UITextAlignmentRight fontName:@"Impact" fontSize:HD_TEXT(20)];
-            [player1 setPosition:ADJUST_CCP(ccp(131,76))];
-            [player2 setPosition:ADJUST_CCP(ccp(189,76))];
+            [player1 setPosition:ADJUST_CCP(ccp(131,66))];
+            [player2 setPosition:ADJUST_CCP(ccp(189,66))];
             [player1 setColor:ccc3(25, 25, 25)];
             [player2 setColor:ccc3(25, 25, 25)];
            // player1.fontSize=HD_TEXT([self getTextName:player1]);
+            //player2.fontSize=HD_TEXT([self getTextName:player2]);
+            player1.fontSize=HD_TEXT(16);
+            player2.fontSize=HD_TEXT(16);
+            [self addChild:player1];
+            [self addChild:player2];
+        }
+        
+        else if([_parentController.gameMode isEqualToString:@"network"])
+        {
+            NSString *player1Name=[[GameSettings shared] getGlobalForKey:@"BluePlayer"];
+             NSString *player2Name=[[GameSettings shared] getGlobalForKey:@"OrangePlayer"];
+           
+            if(player1Name.length>10)
+            {
+                player1Name= [[player1Name substringToIndex:8] stringByAppendingFormat:@".."];
+            }
+            if(player2Name.length>10)
+            {
+                player2Name= [[player2Name substringToIndex:8] stringByAppendingFormat:@".."];
+            }
+            
+            CCLabelTTF *player1=[CCLabelTTF labelWithString:player1Name dimensions:CGSizeMake(HD_PIXELS(80), HD_PIXELS(50)) alignment:UITextAlignmentLeft fontName:@"Impact" fontSize:HD_TEXT(20)];
+            CCLabelTTF *player2=[CCLabelTTF labelWithString:player2Name dimensions:CGSizeMake(HD_PIXELS(80), HD_PIXELS(50)) alignment:UITextAlignmentRight fontName:@"Impact" fontSize:HD_TEXT(20)];
+            [player1 setPosition:ADJUST_CCP(ccp(121,51))];
+            [player2 setPosition:ADJUST_CCP(ccp(199,51))];
+            [player1 setColor:ccc3(25, 25, 25)];
+            [player2 setColor:ccc3(25, 25, 25)];
+            // player1.fontSize=HD_TEXT([self getTextName:player1]);
             //player2.fontSize=HD_TEXT([self getTextName:player2]);
             player1.fontSize=HD_TEXT(16);
             player2.fontSize=HD_TEXT(16);
@@ -275,9 +322,12 @@
         [_dot2 setVisible:NO];
         [_dots addChild:_dot2];
          
-    
-       // [self loadiAd];
-        
+        _waitToPlayBackgroundMusic=2.0;
+        NSString *hasPurchased = [[GameSettings shared] getGlobalForKey:@"HasPurchased"];
+        if([hasPurchased isEqualToString:@"NO"])
+        {
+        //[self loadiAd];
+        }
     
         }
         
@@ -286,6 +336,7 @@
 
 -(void)loadiAd
 {
+    /*
     UIViewController *controller = [[UIViewController alloc] init];
     
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -296,23 +347,26 @@
        controller.view.frame=CGRectMake(0, 430, 480, 32);
    }
        [controller.view setBackgroundColor:[UIColor clearColor]];
-    
+    */
     //From the official iAd programming guide
-    ADBannerView *adView = [[ADBannerView alloc] initWithFrame:CGRectZero];
-    [adView setBackgroundColor:[UIColor clearColor]];
-    adView.requiredContentSizeIdentifiers = [NSSet setWithObject:ADBannerContentSizeIdentifierPortrait];
+    _adView = [[ADBannerView alloc] init];
+    [_adView setBackgroundColor:[UIColor clearColor]];
+   // _adView.requiredContentSizeIdentifiers = [NSSet setWithObject:ADBannerContentSizeIdentifierPortrait];
     
-    adView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
+    //_adView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
+ 
     
-    CGRect adFrame = adView.frame;
-    adFrame.origin.y =  [CCDirector sharedDirector].view.frame.size.height-adView.frame.size.height;
-    adView.frame = adFrame;
-    adView.delegate=self;
-    [controller.view addSubview:adView];
+    CGRect adFrame = _adView.frame;
+    adFrame.origin.y =  [CCDirector sharedDirector].view.frame.size.height-_adView.frame.size.height;
+    //adFrame.origin.y =  _adView.frame.size.height;
+    
+    _adView.frame = adFrame;
+    _adView.delegate=self;
+    //[controller.view addSubview:_adView];
     
     //Then I add the adView to the openglview of cocos2d
     //[[[CCDirector sharedDirector] view] addSubview:controller.view];
-    [[[CCDirector sharedDirector] view] addSubview:adView];
+    [[[CCDirector sharedDirector] view] addSubview:_adView];
     
 }
 
@@ -322,7 +376,7 @@
 {
     for(int positionX = HD_PIXELS(27.5); positionX< X_BOUNDARY_RIGHT; positionX=positionX+EDGE_LENGTH )
     {
-        for (int positionY= HD_PIXELS(140); positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
+        for (int positionY= HD_PIXELS(130); positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
             //CCSprite *dot=[CCSprite spriteWithSpriteFrameName:@"Graphic_Dot.png"];
             //[dot setPosition:ccp(positionX,positionY)];
             //[_dots addChild:dot];
@@ -330,27 +384,27 @@
             BOOL rightLineFilled=NO;
             int tileGid = [_lineRightLayer tileGIDAt:tileCoord];
             if (tileGid) {
-                NSDictionary *properties = [tileMap propertiesForGID:tileGid];
+                NSDictionary *properties = [_tileMap propertiesForGID:tileGid];
                 if (properties) {
                     NSString *collision = [properties valueForKey:@"RowFilled"];
                     if (collision && [collision compare:@"True"] == NSOrderedSame) {
                         Edge *edge= [_parentController.gridModel getEdgeAtRowIndex:tileCoord.x EdgeIndex:(NUM_OF_LINES-tileCoord.y)];
                         edge.isFilled=NO;
                         rightLineFilled=YES;
-                        NSLog(@"row edge Filled (%f,%f) position (%d,%d), tileGid:%d",tileCoord.x,tileCoord.y,positionX,positionY,tileGid);
+                       // NSLog(@"row edge Filled (%f,%f) position (%d,%d), tileGid:%d",tileCoord.x,tileCoord.y,positionX,positionY,tileGid);
                     }
                 }
             }
             
             int tileGid2 = [_lineDownLayer tileGIDAt:tileCoord];
             if (tileGid2) {
-                NSDictionary *properties = [tileMap propertiesForGID:tileGid2];
+                NSDictionary *properties = [_tileMap propertiesForGID:tileGid2];
                 if (properties) {
                     NSString *collision = [properties valueForKey:@"LineFilled"];
                     if (collision && [collision compare:@"True"] == NSOrderedSame) {
                         Edge *edge=[_parentController.gridModel getEdgeAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) EdgeIndex:tileCoord.x];
                         edge.isFilled=NO;
-                         NSLog(@"line edge Filled (%f,%f) position (%d,%d), tileGid:%d",tileCoord.x,tileCoord.y,positionX,positionY,tileGid2);
+                       //  NSLog(@"line edge Filled (%f,%f) position (%d,%d), tileGid:%d",tileCoord.x,tileCoord.y,positionX,positionY,tileGid2);
                         
                         if(rightLineFilled)
                         {
@@ -361,7 +415,7 @@
             }
             int tileGid3 = [_itemLayer tileGIDAt:tileCoord];
             if (tileGid3) {
-                NSDictionary *properties = [tileMap propertiesForGID:tileGid3];
+                NSDictionary *properties = [_tileMap propertiesForGID:tileGid3];
                 if (properties) {
                     NSString *collision = [properties valueForKey:@"Item"];
                     if (collision && [collision compare:@"TreasureBox"] == NSOrderedSame) {
@@ -370,6 +424,23 @@
                         [_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
                         [_parentController loadTreasureBoxAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
                     }
+                    else if (collision && [collision compare:@"Skull"] == NSOrderedSame) {
+                        Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
+                        box.status=SKULL;
+                        [_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
+                         [_parentController loadSkullAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
+                    }
+                    /*
+                    else if (collision && [collision compare:@"Fog"] == NSOrderedSame) {
+                        Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
+                     
+                        [_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
+                        [self loadRamdomItem:box position:tileCoord];
+                        [_parentController loadFogAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
+                    }
+                     
+                     */
+
                     else if (collision && [collision compare:@"CannonLeft"] == NSOrderedSame) {
                         [_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
                         Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
@@ -401,10 +472,10 @@
                         box.status=MAP;
                         [_parentController loadTreasureMapAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y) Part:TREASUREMAP_PART_ONE];
                         CCSprite *mapIndicator1=[CCSprite spriteWithSpriteFrameName:@"Graphic_TmapBack.png"];
-                        [mapIndicator1 setPosition:ADJUST_CCP(ccp(50,45))];
+                        [mapIndicator1 setPosition:ADJUST_CCP(ccp(50,35))];
                         [_blockLayer addChild:mapIndicator1];
                         CCSprite *mapIndicator2=[CCSprite spriteWithSpriteFrameName:@"Graphic_TmapBack.png"];
-                        [mapIndicator2 setPosition:ADJUST_CCP(ccp(270,45))];
+                        [mapIndicator2 setPosition:ADJUST_CCP(ccp(270,35))];
                         [_blockLayer addChild:mapIndicator2];
 
                     }
@@ -430,9 +501,307 @@
         }
     }
     
+    
+    for(int positionX = HD_PIXELS(27.5); positionX< X_BOUNDARY_RIGHT; positionX=positionX+EDGE_LENGTH )
+    {
+        for (int positionY= HD_PIXELS(130); positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
+            //CCSprite *dot=[CCSprite spriteWithSpriteFrameName:@"Graphic_Dot.png"];
+            //[dot setPosition:ccp(positionX,positionY)];
+            //[_dots addChild:dot];
+            CGPoint tileCoord = [self tileCoordForPosition:ccp(positionX,positionY)];
+                       int tileGid3 = [_itemLayer tileGIDAt:tileCoord];
+            if (tileGid3) {
+                NSDictionary *properties = [_tileMap propertiesForGID:tileGid3];
+                if (properties) {
+                    NSString *collision = [properties valueForKey:@"Item"];
+                                        
+                     if (collision && [collision compare:@"Fog"] == NSOrderedSame) {
+                     Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
+                     
+                     [_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
+                    if(![_parentController.gameMode isEqualToString:@"blueTooth"]&&![_parentController.gameMode isEqualToString:@"network"])
+                    {
+                     [self loadRamdomItem:box position:tileCoord];
+                     [_parentController loadFogAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
+                    }
+                         
+                    else if ([_parentController.gameMode isEqualToString:@"blueTooth"]){
+                    //    [self loadBluetoothRamdomItem:box position:tileCoord];
+                        _waitToLoadFog=1.0;
+                    }
+                    else if ([_parentController.gameMode isEqualToString:@"network"]){
+                    //    [self loadNetworkRamdomItem:box position:tileCoord];
+                        _waitToLoadFog=1.0;
+                    }
+                     }
+                     
+                    
+                                       
+                }
+            }
+            
+            
+            
+            
+            
+        }
+    }
    
      
 }
+-(void)loadfog
+{
+    for(int positionX = HD_PIXELS(27.5); positionX< X_BOUNDARY_RIGHT; positionX=positionX+EDGE_LENGTH )
+    {
+        for (int positionY= HD_PIXELS(130); positionY<Y_BOUNDARY_TOP; positionY=positionY+EDGE_LENGTH) {
+            //CCSprite *dot=[CCSprite spriteWithSpriteFrameName:@"Graphic_Dot.png"];
+            //[dot setPosition:ccp(positionX,positionY)];
+            //[_dots addChild:dot];
+            CGPoint tileCoord = [self tileCoordForPosition:ccp(positionX,positionY)];
+            int tileGid3 = [_itemLayer tileGIDAt:tileCoord];
+            if (tileGid3) {
+                NSDictionary *properties = [_tileMap propertiesForGID:tileGid3];
+                if (properties) {
+                    NSString *collision = [properties valueForKey:@"Item"];
+                    
+                    if (collision && [collision compare:@"Fog"] == NSOrderedSame) {
+                        Box *box=[_parentController.gridModel getBoxAtLineIndex:(NUM_OF_LINES-1-tileCoord.y) BoxIndex:tileCoord.x];
+                        
+                        //[_parentController loadBoxPatternAtRow:tileCoord.x ItemIndex:(NUM_OF_LINES-tileCoord.y)];
+                        
+                        if ([_parentController.gameMode isEqualToString:@"blueTooth"]){
+                            [self loadBluetoothRamdomItem:box position:tileCoord];
+                        }
+                        else if ([_parentController.gameMode isEqualToString:@"network"]){
+                            [self loadNetworkRamdomItem:box position:tileCoord];
+                        }
+                    }
+                    
+                    
+                    
+                }
+            }
+            
+            
+            
+            
+            
+        }
+    }
+
+}
+
+-(void)loadRamdomItem:(Box *)box position:(CGPoint)point
+{
+    int number= arc4random() % 100;
+    /*
+    switch (number) {
+        case 0:
+             box.status=TREASUREBOX;
+             [_parentController loadTreasureBoxAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+            break;
+        case 1:
+            box.status=SKULL;
+            [_parentController loadSkullAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+            break;
+        case 2:
+            box.status=CANNON;
+             [_parentController loadCannonAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:NO];
+            break;
+        case 3:
+            box.status=CANNON;
+            [_parentController loadCannonAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:YES];
+            break;
+        case 4:
+            box.status=SHIP;
+            [_parentController loadShipAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:YES];
+            break;
+        case 5:
+            box.status=SHIP;
+            [_parentController loadShipAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:NO];
+            break;
+        default:
+            break;
+    }
+     */
+    
+    if(number>=0 && number<20)
+    {
+        box.status=TREASUREBOX;
+        [_parentController loadTreasureBoxAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+        return;
+    }
+    else if(number>=20 && number<60) {
+        box.status=SKULL;
+        [_parentController loadSkullAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+        return;
+    }
+    else if(number>=60 && number<70) {
+        box.status=CANNON;
+        [_parentController loadCannonAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:NO];
+        return;
+        
+    }
+    else if (number>=70 && number<80) {
+        box.status=CANNON;
+        [_parentController loadCannonAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:YES];
+        return;
+    }
+    else if(number>=80 && number<90) {
+        box.status=SHIP;
+        [_parentController loadShipAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:YES];
+        return;
+    }
+    else if (number>=90 && number <100) {
+        box.status=SHIP;
+        [_parentController loadShipAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:NO];
+        return;
+    }
+    else {
+        return;
+    }
+}
+
+-(void)loadBluetoothRamdomItem:(Box *)box position:(CGPoint)point
+{
+    int number= arc4random() % 100;
+    NSString *play1Name=[[GameSettings shared] getGlobalForKey:@"Player1Name"];
+    NSString *orangePlayerName=[[GameSettings shared] getGlobalForKey:@"OrangePlayer"];
+    if([orangePlayerName isEqualToString:play1Name])
+    {
+    if(number>=0 && number<20)
+    {
+        box.status=TREASUREBOX;
+        [_parentController loadTreasureBoxAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+        [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+        [_parentController sendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"TreasureBox"];
+         [_parentController updateBoxNumber];
+         _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+        return;
+    }
+    else if(number>=20 && number<60) {
+        box.status=SKULL;
+        [_parentController loadSkullAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+         [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+        [_parentController sendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"Skull"];
+         [_parentController updateBoxNumber];
+        _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+        return;
+    }
+    else if(number>=60 && number<70) {
+        box.status=CANNON;
+        [_parentController loadCannonAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:NO];
+         [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+        [_parentController sendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"Cannon"];
+         [_parentController updateBoxNumber];
+        _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+        return;
+        
+    }
+    else if (number>=70 && number<80) {
+        box.status=CANNON;
+        [_parentController loadCannonAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:YES];
+         [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+        [_parentController sendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"YES" ItemName:@"Cannon"];
+         [_parentController updateBoxNumber];
+        _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+        return;
+    }
+    else if(number>=80 && number<90) {
+        box.status=SHIP;
+        [_parentController loadShipAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:YES];
+         [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+        [_parentController sendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"YES" ItemName:@"Ship"];
+         [_parentController updateBoxNumber];
+        _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+        return;
+    }
+    else if (number>=90 && number <100) {
+        box.status=SHIP;
+        [_parentController loadShipAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:NO];
+         [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+        [_parentController sendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"Ship"];
+         [_parentController updateBoxNumber];
+        _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+        return;
+    }
+    else {
+        return;
+    }
+        
+    }
+}
+
+-(void)loadNetworkRamdomItem:(Box *)box position:(CGPoint)point
+{
+    int number= arc4random() % 100;
+    //NSString *play1Name=[[GameSettings shared] getGlobalForKey:@"Player1Name"];
+     NSString *play1Name=	[[GKLocalPlayer localPlayer] alias];
+    NSString *orangePlayerName=[[GameSettings shared] getGlobalForKey:@"OrangePlayer"];
+    if([orangePlayerName isEqualToString:play1Name])
+    {
+        if(number>=0 && number<20)
+        {
+            box.status=TREASUREBOX;
+            [_parentController loadTreasureBoxAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+            [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+            [_parentController networkSendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"TreasureBox"];
+            [_parentController updateBoxNumber];
+            _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+            return;
+        }
+        else if(number>=20 && number<60) {
+            box.status=SKULL;
+            [_parentController loadSkullAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+            [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+            [_parentController networkSendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"Skull"];
+            [_parentController updateBoxNumber];
+            _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+            return;
+        }
+        else if(number>=60 && number<70) {
+            box.status=CANNON;
+            [_parentController loadCannonAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:NO];
+            [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+            [_parentController networkSendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"Cannon"];
+            [_parentController updateBoxNumber];
+            _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+            return;
+            
+        }
+        else if (number>=70 && number<80) {
+            box.status=CANNON;
+            [_parentController loadCannonAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:YES];
+            [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+            [_parentController networkSendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"YES" ItemName:@"Cannon"];
+            [_parentController updateBoxNumber];
+            _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+            return;
+        }
+        else if(number>=80 && number<90) {
+            box.status=SHIP;
+            [_parentController loadShipAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:YES];
+            [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+            [_parentController networkSendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"YES" ItemName:@"Ship"];
+            [_parentController updateBoxNumber];
+            _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+            return;
+        }
+        else if (number>=90 && number <100) {
+            box.status=SHIP;
+            [_parentController loadShipAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y) Flip:NO];
+            [_parentController loadFogAtRow:point.x ItemIndex:(NUM_OF_LINES-point.y)];
+            [_parentController networkSendFogInfoToTheOtherPlayer:point.x ItemIndex:(NUM_OF_LINES-point.y) FlipOrNot:@"NO" ItemName:@"Ship"];
+            [_parentController updateBoxNumber];
+            _parentController.gridModel.skullLeft=_parentController.gridView.skullArray.count;
+            return;
+        }
+        else {
+            return;
+        }
+    }
+}
+
 
 -(void)loadDashLines
 {
@@ -458,9 +827,9 @@
 
 - (void)loadEdgeIndicator
 {
-    _edgeIndicator =[CCSprite spriteWithSpriteFrameName:[_parentController getEdgeColor]];
+    _edgeIndicator =[CCSprite spriteWithSpriteFrameName:[_parentController getInitialEdgeColor]];
     [_edgeIndicator setVisible:NO]; 
-    _edgeIndicator =[CCSprite spriteWithSpriteFrameName:[_parentController getEdgeColor]];
+    _edgeIndicator =[CCSprite spriteWithSpriteFrameName:[_parentController getInitialEdgeColor]];
     [_edgeIndicator setVisible:NO]; 
     [_edgeLayer addChild:_edgeIndicator];
     
@@ -472,7 +841,7 @@
     // int x = (position.x-X_MARGIN) / tileMap.tileSize.width;
     int x = (position.x+1-HD_PIXELS(27.5)) / HD_PIXELS(53);
     //int y = ((tileMap.mapSize.height * tileMap.tileSize.height) - position.y) / tileMap.tileSize.height;
-    int y=(HD_PIXELS(405) - position.y) / HD_PIXELS(53);//385
+    int y=(HD_PIXELS(395) - position.y) / HD_PIXELS(53);//385
     return ccp(x, y);
 }
 
@@ -491,6 +860,64 @@
     NSLog(@"Treasure Box not found!");
     return nil;
     
+}
+
+- (id)getSkullAtPosition:(CGPoint)point
+{
+    for(Skull *obj in _skullArray)
+    {
+        if(obj.skullPosition.x==point.x && obj.skullPosition.y==point.y)
+        {
+            return obj;
+        }
+    }
+    NSLog(@"Skull not found!");
+    return nil;
+}
+
+- (id)getFogAtPosition:(CGPoint)point
+{
+    for(Fog *obj in _fogArray)
+    {
+        if(obj.fogPosition.x==point.x && obj.fogPosition.y==point.y)
+        {
+            return obj;
+        }
+    }
+    NSLog(@"Fog not found!");
+    return nil;
+}
+
+- (NSString *)getIslandName:(NSString *)islandNumber
+{
+if([islandNumber isEqualToString:@"0"])
+{
+    return @"Cabin Boy";
+}
+else if([islandNumber isEqualToString:@"1"])
+{
+    return @"Swabbie";
+}
+else if([islandNumber isEqualToString:@"2"])
+{
+    return @"Deckhand";
+}
+else if([islandNumber isEqualToString:@"3"])
+{
+    return @"Helmsman";
+}
+else if([islandNumber isEqualToString:@"4"])
+{
+    return @"Captain";
+}
+else if([islandNumber isEqualToString:@"5"])
+{
+    return @"Pirate King";
+}
+else {
+    return nil;
+}
+
 }
 
 - (id)getCannoAtPosition:(CGPoint)point
@@ -587,6 +1014,12 @@
 
 }
 
+- (void)showMessageBoxForSkull
+{
+    [_window setImage:@"Graphic_Skull_Small.png" text:@"Skull" number:@"-3"];
+    _window.waitToFadeInTreasureBoxMessageBox=1.0;
+}
+
 
 -(void)fillBlockAtPositionX:(CGFloat)positionX 
                   PositionY:(CGFloat)positionY
@@ -607,6 +1040,7 @@
                 //tempSprite=block;
                     
                 //_waitToShowBox=0.2;
+                     [[SimpleAudioEngine sharedEngine] playEffect:@"player1score.wav"];
                     block.waitToShowBox=0.4;
                 }
                 
@@ -620,6 +1054,7 @@
                     [_boxArray addObject:block];
                     //tempSprite=block;
                    // _waitToShowBox=0.2;
+                     [[SimpleAudioEngine sharedEngine] playEffect:@"player2score.wav"];
                     block.waitToShowBox=0.4;
                 }
         }
@@ -634,21 +1069,65 @@
 -(void)blueIsOn
 {
     //[_blueIndicator setOpacity:255];
-    //[_orangeIndicator setOpacity:51];
+    //[_orangeIndicator setOpacity:0];
    
     _waitToShowBlueIndicator=0.8;
     _waitToShowOrangeIndicator=-1;
+     _waitToPlayOrangeIndicatorAnimation=-1;
     
 }
 
 -(void)orangeIsOn
 {
-    //[_blueIndicator setOpacity:51];
+    //[_blueIndicator setOpacity:0];
     //[_orangeIndicator setOpacity:250];
     
     _waitToShowOrangeIndicator=0.8;
     _waitToShowBlueIndicator=-1;
+     _waitToPlayBlueIndicatorAnimation=-1;
     
+}
+-(void)blueIndicatorPlayAnimation
+{
+    CCAnimation *OpenAnimation=[CCAnimation animation];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_1.png"]];
+    //[OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_4.png" ]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_3.png"]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_2.png" ]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_1.png" ]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_1.png"]];
+    //[OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_4.png" ]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_3.png"]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_2.png" ]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_1.png" ]];
+    //id OpenAnimationAction=[CCAnimate actionWithDuration:0.5 animation:OpenAnimation restoreOriginalFrame:NO];
+    OpenAnimation.restoreOriginalFrame=NO;
+    OpenAnimation.delayPerUnit=1.0 / OpenAnimation.frames.count;
+    [_blueIndicator runAction:[[[CCAnimate alloc] initWithAnimation:OpenAnimation] autorelease]];
+    
+    _waitToPlayBlueIndicatorAnimation=3.3;
+}
+
+-(void)orangeIndicatorPlayAnimation
+{
+    CCAnimation *OpenAnimation=[CCAnimation animation];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_1.png"]];
+   // [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_4.png" ]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_3.png"]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_2.png" ]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_1.png" ]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_1.png"]];
+    //[OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_4.png" ]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_3.png"]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_2.png" ]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_Arrow_1.png" ]];
+    //id OpenAnimationAction=[CCAnimate actionWithDuration:0.5 animation:OpenAnimation restoreOriginalFrame:NO];
+    OpenAnimation.restoreOriginalFrame=NO;
+    OpenAnimation.delayPerUnit=1.0 / OpenAnimation.frames.count;
+    [_orangeIndicator runAction:[[[CCAnimate alloc] initWithAnimation:OpenAnimation] autorelease]];
+    
+    _waitToPlayOrangeIndicatorAnimation=3.3;
+
 }
 
 
@@ -752,6 +1231,14 @@
     {
         [self removeChild:obj cleanup:YES];
     }
+    for(Skull *obj in _skullArray)
+    {
+        [self removeChild:obj cleanup:YES];
+    }
+    for (Fog *obj in _fogArray)
+    {
+        [self removeChild:obj cleanup:YES];
+    }
     //[_gridView removeChild:_gridView.cannon1 cleanup:YES];
     
     
@@ -774,6 +1261,8 @@
     [_edgeArray removeAllObjects];
     [_shipArray removeAllObjects];
     [_mapArray removeAllObjects];
+    [_skullArray removeAllObjects];
+    [_fogArray removeAllObjects];
     
      [self loadPowerUpsAndsetupModel];
 }
@@ -782,9 +1271,9 @@
     if(_waitToShowBlueIndicator>0)
     {
         _waitToShowBlueIndicator=_waitToShowBlueIndicator-dt;
-        if(_waitToShowBlueIndicator<=0.5 && _waitToShowBlueIndicator>=0.1)
+        if(_waitToShowBlueIndicator<=0.5 && _waitToShowBlueIndicator>=0)
         {
-            [_blueIndicator setOpacity:((0.6-_waitToShowBlueIndicator)*510) ];
+            [_blueIndicator setOpacity:((0.5-_waitToShowBlueIndicator)*510) ];
             
             if(_waitToShowBlueIndicator<0.5)
             {
@@ -795,7 +1284,8 @@
         if(_waitToShowBlueIndicator<0)
         {
             [_blueIndicator setOpacity:255];
-            [_orangeIndicator setOpacity:51];
+            [_orangeIndicator setOpacity:0];
+            _waitToPlayBlueIndicatorAnimation=1.0;
         }
         
     }
@@ -803,9 +1293,9 @@
     if(_waitToShowOrangeIndicator>0)
     {
         _waitToShowOrangeIndicator=_waitToShowOrangeIndicator-dt;
-        if(_waitToShowOrangeIndicator<=0.5 && _waitToShowOrangeIndicator>=0.1)
+        if(_waitToShowOrangeIndicator<=0.5 && _waitToShowOrangeIndicator>=0)
         {
-            [_orangeIndicator setOpacity:((0.6-_waitToShowOrangeIndicator)*510) ];
+            [_orangeIndicator setOpacity:((0.5-_waitToShowOrangeIndicator)*510) ];
             if(_waitToShowOrangeIndicator<0.5)
             {
             [_blueIndicator setOpacity:(510*_waitToShowOrangeIndicator)];
@@ -815,9 +1305,47 @@
         if(_waitToShowOrangeIndicator<0)
         {
            [_orangeIndicator setOpacity:255];
-            [_blueIndicator setOpacity:51];
+            [_blueIndicator setOpacity:0];
+            _waitToPlayOrangeIndicatorAnimation=1.0;
         }
         
+    }
+    
+    
+    
+    if(_waitToPlayBackgroundMusic>0)
+    {
+        _waitToPlayBackgroundMusic=_waitToPlayBackgroundMusic-dt;
+        if(_waitToPlayBackgroundMusic<0)
+        {
+            [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"backgroundMusic.mp3"];
+           // [[SimpleAudioEngine sharedEngine] setBackgroundMusicVolume:0.5];
+        }
+    }
+    if(_waitToPlayBlueIndicatorAnimation>0)
+    {
+        _waitToPlayBlueIndicatorAnimation=_waitToPlayBlueIndicatorAnimation-dt;
+        if(_waitToPlayBlueIndicatorAnimation<0)
+        {
+            [self blueIndicatorPlayAnimation];
+        }
+    }
+    
+    if(_waitToPlayOrangeIndicatorAnimation>0)
+    {
+        _waitToPlayOrangeIndicatorAnimation=_waitToPlayOrangeIndicatorAnimation-dt;
+        if(_waitToPlayOrangeIndicatorAnimation<0)
+        {
+            [self orangeIndicatorPlayAnimation];
+        }
+    }
+    if(_waitToLoadFog>0)
+    {
+        _waitToLoadFog=_waitToLoadFog-dt;
+        if(_waitToLoadFog<0)
+        {
+            [self loadfog];
+        }
     }
     
     
@@ -850,6 +1378,14 @@
     {
         [obj update:dt];
     }
+    for(Skull *obj in _skullArray)
+    {
+        [obj update:dt];
+    }
+    for (Fog *obj in _fogArray)
+    {
+        [obj update:dt];
+    }
     
     [_lastEdge update:dt];
     [_gameoverWindow update:dt];
@@ -875,7 +1411,11 @@
     [_edgeArray release];
     [_shipArray release];
     [_mapArray release];
+    [_skullArray release];
+    [_fogArray release];
+    [_adView release];
     [super dealloc];
+    
     
 }
 @end

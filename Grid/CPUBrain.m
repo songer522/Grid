@@ -27,6 +27,7 @@
 {
     if ((self=[super init])) {
         _countForSearchingNonThreeEdgeBox=0;
+        _nonThirdEdgeArray=[[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -34,8 +35,9 @@
 //-(void)move:(GameLayer *)grid
 -(void)move
 {
-    int timeInterval=arc4random() %3;
-    [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(startBrain) userInfo:nil repeats:NO];
+    int timeInterval=(arc4random()%2)+1;
+    //[NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(startBrain) userInfo:nil repeats:NO];
+    _waitToStartBrain=timeInterval;
   
     }
 
@@ -65,9 +67,100 @@
 
 }
 
-
+-(void)fillRandomEdge
+{
+    NSMutableArray *nonThirdEdgeArray=[[NSMutableArray alloc] init];
+    
+    for(EdgeArray *array in _grid.gridModel.lines)
+    {
+        for(Edge *obj in array)
+        {
+            if(obj.rowOrLine ==ON_LINE)
+            {
+               // BoxStatus status= [self getEdgeInfoOnALineAtIndex:obj.rowOrLineIndex EdgeIndex:obj.edgeIndex];
+                if(!obj.isFilled)
+                {
+                    [nonThirdEdgeArray addObject:obj];
+                }
+                
+                
+            }
+            
+        }
+    }
+    
+    for(EdgeArray *array in _grid.gridModel.rows)
+    {
+        for(Edge *obj in array)
+        {
+            if(obj.rowOrLine==ON_ROW)
+            {
+                
+              //  BoxStatus status= [self getEdgeInfoOnARowAtIndex:obj.rowOrLineIndex EdgeIndex:obj.edgeIndex];
+                if(!obj.isFilled)
+                {
+                    [nonThirdEdgeArray addObject:obj];
+                }
+                
+                
+                
+                
+            }
+            
+        }
+    }
+    
+    if([nonThirdEdgeArray lastObject])
+    {
+        Edge *edge= [nonThirdEdgeArray objectAtIndex:(arc4random()%[nonThirdEdgeArray count])];
+        _grid.CPUTurn=NO;
+        _grid.CPUThinking=NO;
+        if(edge.rowOrLine==ON_ROW)
+        {
+            
+            BoxStatus status= [self getEdgeInfoOnARowAtIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
+            if(status==FILLED_WITH_THREE_EDGES_AND_SKULL)
+            {
+                [_grid drawEdgeAtRowIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
+                _waitToCheckRandomEdge=1.0;
+                return;
+            }
+            else {
+                [_grid drawEdgeAtRowIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
+            }
+        }
+        else if(edge.rowOrLine==ON_LINE) {
+            
+            BoxStatus status= [self getEdgeInfoOnALineAtIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
+            if(status==FILLED_WITH_THREE_EDGES_AND_SKULL)
+            {
+                [_grid drawEdgeAtLineIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
+                _waitToCheckRandomEdge=1.0;
+                return;
+            }
+            else {
+                [_grid drawEdgeAtLineIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
+            }
+        }
+        //filledAnEdge=YES;
+        _grid.touchEnable=YES;
+        // _countForSearchingNonThreeEdgeBox=0;
+        
+        [nonThirdEdgeArray removeObject:edge];
+        [nonThirdEdgeArray release];
+        return;
+    }
+    else {
+       // [self fillRandomEdge];
+       // [self fillRandomEdge];
+    }
+    
+    
+    return;
+}
 
 //-(void)fillRandomEdge:(GameLayer *)grid
+/*
 -(void)fillRandomEdge
 {
     //BOOL filledAnEdge=NO;
@@ -111,7 +204,8 @@
     return;
     //return filledAnEdge;
 }
-
+ */
+/*
 -(void)checkNonThreeEdgesfilledBox
 {
     //BOOL filledAnEdge=NO;
@@ -161,8 +255,217 @@
         [self fillRandomEdge];
     }
     return;
+     
     //return filledAnEdge;
 }
+ */
+
+-(void)checkTwoEdgesNoSkullfilledBox
+{
+    NSMutableArray *twoEdgeNoSkullArray=[[NSMutableArray alloc] init];
+    
+    for(EdgeArray *array in _grid.gridModel.lines)
+    {
+        for(Edge *obj in array)
+        {
+            if(obj.rowOrLine ==ON_LINE)
+            {
+                BoxStatus status= [self getEdgeInfoOnALineAtIndex:obj.rowOrLineIndex EdgeIndex:obj.edgeIndex];
+                if(!obj.isFilled&&(status== FILLED_WITH_TWO_EDGES))
+                {
+                    [twoEdgeNoSkullArray addObject:obj];
+                }
+                
+                
+            }
+            
+        }
+    }
+    
+    for(EdgeArray *array in _grid.gridModel.rows)
+    {
+        for(Edge *obj in array)
+        {
+            if(obj.rowOrLine==ON_ROW)
+            {
+                
+                BoxStatus status= [self getEdgeInfoOnARowAtIndex:obj.rowOrLineIndex EdgeIndex:obj.edgeIndex];
+                if(!obj.isFilled&&(status== FILLED_WITH_TWO_EDGES))
+                {
+                    [twoEdgeNoSkullArray addObject:obj];
+                }
+                
+                
+                
+                
+            }
+            
+        }
+    }
+    
+    if([twoEdgeNoSkullArray lastObject])
+    {
+        Edge *edge= [twoEdgeNoSkullArray objectAtIndex:(arc4random()%[twoEdgeNoSkullArray count])];
+        _grid.CPUTurn=NO;
+        _grid.CPUThinking=NO;
+        if(edge.rowOrLine==ON_ROW)
+        {
+            [_grid drawEdgeAtRowIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
+        }
+        else if(edge.rowOrLine==ON_LINE) {
+            [_grid drawEdgeAtLineIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
+        }
+        //filledAnEdge=YES;
+        _grid.touchEnable=YES;
+        // _countForSearchingNonThreeEdgeBox=0;
+        
+        //[nonThirdEdgeArray removeObject:edge];
+        [twoEdgeNoSkullArray release];
+        return;
+    }
+    else {
+        [twoEdgeNoSkullArray release];
+        [self fillRandomEdge];
+    }
+    
+    
+    return;
+    
+    //return filledAnEdge;
+}
+
+
+
+
+
+-(void)checkNonThreeEdgesfilledBox
+{
+    NSMutableArray *nonThirdEdgeArray=[[NSMutableArray alloc] init];
+    
+    for(EdgeArray *array in _grid.gridModel.lines)
+    {
+       for(Edge *obj in array)
+       {
+           if(obj.rowOrLine ==ON_LINE)
+           {
+           BoxStatus status= [self getEdgeInfoOnALineAtIndex:obj.rowOrLineIndex EdgeIndex:obj.edgeIndex];
+               if(!obj.isFilled&&(status== FILLED_WITH_ONE_EDGES||status==EMPTY || status==SINGLE_LINE))
+               {
+                   [nonThirdEdgeArray addObject:obj];
+               }
+
+               
+           }
+                     
+       }
+    }
+    
+    for(EdgeArray *array in _grid.gridModel.rows)
+    {
+        for(Edge *obj in array)
+        {
+            if(obj.rowOrLine==ON_ROW)
+            {
+                
+                BoxStatus status= [self getEdgeInfoOnARowAtIndex:obj.rowOrLineIndex EdgeIndex:obj.edgeIndex];
+                if(!obj.isFilled&&(status== FILLED_WITH_ONE_EDGES||status==EMPTY || status==SINGLE_LINE))
+                {
+                    [nonThirdEdgeArray addObject:obj];
+                }
+                
+                
+                
+                
+            }
+
+        }
+    }
+
+          if([nonThirdEdgeArray lastObject])
+          {
+             Edge *edge= [nonThirdEdgeArray objectAtIndex:(arc4random()%[nonThirdEdgeArray count])];
+              _grid.CPUTurn=NO;
+              _grid.CPUThinking=NO;
+              if(edge.rowOrLine==ON_ROW)
+              {
+              [_grid drawEdgeAtRowIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
+              }
+              else if(edge.rowOrLine==ON_LINE) {
+                  [_grid drawEdgeAtLineIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
+              }
+              //filledAnEdge=YES;
+              _grid.touchEnable=YES;
+             // _countForSearchingNonThreeEdgeBox=0;
+            
+              //[nonThirdEdgeArray removeObject:edge];
+              [nonThirdEdgeArray release];
+               return;
+          }
+          else {
+              [nonThirdEdgeArray release];
+              [self checkTwoEdgesNoSkullfilledBox];
+          }
+    
+    
+       return;
+    
+    //return filledAnEdge;
+}
+
+
+-(void)checkCannonBoxes
+{
+    NSMutableArray *cannonBoxArray=[[NSMutableArray alloc] init];
+    
+    for(EdgeArray *array in _grid.gridModel.lines)
+    {
+        for(Edge *obj in array)
+        {
+            if(obj.rowOrLine ==ON_LINE)
+            {
+                BoxStatus status= [self getEdgeInfoOnALineAtIndex:obj.rowOrLineIndex EdgeIndex:obj.edgeIndex];
+                if(!obj.isFilled&&(status== EMPTY_WITH_CANNON))
+                {
+                    [cannonBoxArray addObject:obj];
+                }
+                
+                
+            }
+            
+        }
+    }
+    
+        
+    if([cannonBoxArray lastObject])
+    {
+        Edge *edge= [cannonBoxArray objectAtIndex:(arc4random()%[cannonBoxArray count])];
+        _grid.CPUTurn=NO;
+        _grid.CPUThinking=NO;
+      
+       if(edge.rowOrLine==ON_LINE) {
+            [_grid drawEdgeAtLineIndex:edge.rowOrLineIndex EdgeIndex:edge.edgeIndex];
+        }
+        //filledAnEdge=YES;
+        _grid.touchEnable=YES;
+        // _countForSearchingNonThreeEdgeBox=0;
+        
+        //[nonThirdEdgeArray removeObject:edge];
+        [cannonBoxArray release];
+        return;
+    }
+    else {
+        [cannonBoxArray release];
+        [self checkNonThreeEdgesfilledBox];
+    }
+    
+    
+    return;
+    
+    //return filledAnEdge;
+}
+
+
+
 //-(BOOL)checkThreeEdgesfilledBox:(GameLayer *)grid
 -(void)checkThreeEdgesfilledBox
 {
@@ -211,14 +514,9 @@
             }
         }
     }
- if(hasThreeEdgesBox&&!_grid.isNewGame)
-   {
-      
-       
-       //[self fillRandomEdge:grid];
-      // [self fillRandomEdge];
-   }
+
       //[self fillRandomEdge];
+   // [self checkCannonBoxes];
     [self checkNonThreeEdgesfilledBox];
     return;
       //return hasThreeEdgesBox;
@@ -319,6 +617,30 @@
     int blockBoxIndex1=(pointX1-X_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
     
     Box *box1=  [_grid.gridModel getBoxAtLineIndex:blockLineIndex1 BoxIndex:blockBoxIndex1];
+    
+//    if(pointX1<X_BOUNDARY_RIGHT&&pointY1<Y_BOUNDARY_TOP)
+ //   {
+    CGPoint tileCoord = [_grid.gridView tileCoordForPosition:ccp(pointX1,pointY1)];
+    
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        tileCoord=[_grid.gridView tileCoordForPosition:ccp(pointX1-64,pointY1-32)];
+    }
+    
+    int tileGid3 = [_grid.gridView.itemLayer tileGIDAt:tileCoord];
+    if (tileGid3) {
+        NSDictionary *properties = [_grid.gridView.tileMap propertiesForGID:tileGid3];
+        if (properties) {
+            NSString *collision = [properties valueForKey:@"Item"];
+            
+            if (collision && [collision compare:@"Fog"] == NSOrderedSame)
+            {
+                box1.hasFog=YES;
+            }
+        }
+    }
+//    }
+    
     NSArray *array2=[NSArray arrayWithObjects:right,topRight,bottomRight, nil];
     for(Edge *obj in array2)
     {
@@ -333,28 +655,61 @@
    // NSLog(@"blockLineIndex1:%d, blockBoxIndex1:%d",blockBoxIndex1,blockBoxIndex1);
    // NSLog(@"blockLineIndex2:%d, blockBoxIndex2:%d",blockBoxIndex2,blockBoxIndex2);
     
-    Box *box2=  [_grid.gridModel getBoxAtLineIndex:blockLineIndex2 BoxIndex:blockBoxIndex2];    
+    Box *box2=  [_grid.gridModel getBoxAtLineIndex:blockLineIndex2 BoxIndex:blockBoxIndex2];
     
-    if((leftCount==3 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))||(rightCount==3 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX)))
+  //  if(pointX2<X_BOUNDARY_RIGHT&&pointY2<Y_BOUNDARY_TOP)
+  //  {
+    CGPoint tileCoord2 = [_grid.gridView tileCoordForPosition:ccp(pointX2,pointY2)];
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        tileCoord2=[_grid.gridView tileCoordForPosition:ccp(pointX2-64,pointY2-32)];
+    }
+    int tileGid2 = [_grid.gridView.itemLayer tileGIDAt:tileCoord2];
+    if (tileGid2) {
+        NSDictionary *properties = [_grid.gridView.tileMap propertiesForGID:tileGid2];
+        if (properties) {
+            NSString *collision = [properties valueForKey:@"Item"];
+            
+            if (collision && [collision compare:@"Fog"] == NSOrderedSame)
+            {
+                box2.hasFog=YES;
+            }
+        }
+    }
+ //   }
+   if(((leftCount==3 &&box1.status==SKULL)||(rightCount==3&& box2.status==SKULL))&&(!box1.hasFog && !box2.hasFog))
+    {
+        return FILLED_WITH_THREE_EDGES_AND_SKULL;
+    }
+    
+    
+      else  if((leftCount==3 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX||box1.hasFog))||(rightCount==3 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX||box2.hasFog)))
     {
         return FILLED_WITH_THREE_EDGES;
     }
+    else if((leftCount<2 && box1.status==CANNON && box2.status==EMPTY_BOX)||(rightCount<2 && box2.status==CANNON && box1.status==EMPTY_BOX))
+    {
+        return EMPTY_WITH_CANNON;
+    }
+   
+    
     
     else if(box1.status==UNAVAILABLE && box2.status==UNAVAILABLE)
     {
         return SINGLE_LINE;
     }
 
-    else if((leftCount==2 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))||(rightCount==2 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX)))
+    else if((leftCount==2 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX||box1.hasFog==YES))||(rightCount==2 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX||box2.hasFog==YES)))
     {
         return FILLED_WITH_TWO_EDGES;
     }
-    else if((leftCount==1 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))||(rightCount==1 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX))){
+    else if((leftCount==1 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX||box1.status==SKULL))||(rightCount==1 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX||box2.status==SKULL))){
         return FILLED_WITH_ONE_EDGES;
     }
-    else if((leftCount==0 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))&&(rightCount==0 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX))){
+    else if((leftCount==0 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX||box1.status==SKULL))&&(rightCount==0 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX||box2.status==SKULL))){
         return EMPTY;
     }
+   
     else {
         return FILLED_WITH_THREE_EDGES_AND_ITEM;
     }
@@ -382,16 +737,34 @@
         if (obj.isFilled)
             topCount++;
     }
-    CGFloat pointY1= edgeIndex * EDGE_LENGTH + Y_MARGIN+0.5*EDGE_LENGTH;
-    CGFloat pointX1=0.5*EDGE_LENGTH+rowIndex*EDGE_LENGTH+X_MARGIN;
+    CGFloat pointY1= edgeIndex * EDGE_LENGTH + Y_MARGIN+0.5*EDGE_LENGTH;//525
+    CGFloat pointX1=0.5*EDGE_LENGTH+rowIndex*EDGE_LENGTH+X_MARGIN;//320
     
     
     int blockLineIndex1=(pointY1-Y_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
     int blockBoxIndex1=(pointX1-X_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
     
     Box *box1=  [_grid.gridModel getBoxAtLineIndex:blockLineIndex1 BoxIndex:blockBoxIndex1];
-    
-    
+ //   if(pointX1<X_BOUNDARY_RIGHT&&pointY1<Y_BOUNDARY_TOP)
+  //  {
+    CGPoint tileCoord = [_grid.gridView tileCoordForPosition:ccp(pointX1,pointY1)];
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        tileCoord=[_grid.gridView tileCoordForPosition:ccp(pointX1-64,pointY1-32)];
+    }
+    int tileGid3 = [_grid.gridView.itemLayer tileGIDAt:tileCoord];
+    if (tileGid3) {
+        NSDictionary *properties = [_grid.gridView.tileMap propertiesForGID:tileGid3];
+        if (properties) {
+            NSString *collision = [properties valueForKey:@"Item"];
+            
+            if (collision && [collision compare:@"Fog"] == NSOrderedSame)
+            {
+                box1.hasFog=YES;
+            }
+        }
+    }
+ //   }
     
     NSArray *array2=[NSArray arrayWithObjects:bottom,bottomLeft,bottomRight, nil];
     for(Edge *obj in array2)
@@ -399,17 +772,41 @@
         if(obj.isFilled)
             bottomCount++;
     }
-    CGFloat pointY2= edgeIndex * EDGE_LENGTH + Y_MARGIN-0.5*EDGE_LENGTH;
-    CGFloat pointX2=0.5*EDGE_LENGTH+rowIndex*EDGE_LENGTH+X_MARGIN;
+    CGFloat pointY2= edgeIndex * EDGE_LENGTH + Y_MARGIN-0.5*EDGE_LENGTH;//419
+    CGFloat pointX2=0.5*EDGE_LENGTH+rowIndex*EDGE_LENGTH+X_MARGIN;//320
     
     int blockLineIndex2=(pointY2-Y_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
     int blockBoxIndex2=(pointX2-X_MARGIN-0.5*EDGE_LENGTH)/EDGE_LENGTH;
    // NSLog(@"blockLineIndex1:%d, blockBoxIndex1:%d",blockBoxIndex1,blockBoxIndex1);
    // NSLog(@"blockLineIndex2:%d, blockBoxIndex2:%d",blockBoxIndex2,blockBoxIndex2);
     Box *box2=  [_grid.gridModel getBoxAtLineIndex:blockLineIndex2 BoxIndex:blockBoxIndex2];
+  //  if(pointX2<X_BOUNDARY_RIGHT&&pointY2<Y_BOUNDARY_TOP)
+   // {
+    CGPoint tileCoord2 = [_grid.gridView tileCoordForPosition:ccp(pointX2,pointY2)];
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        tileCoord2=[_grid.gridView tileCoordForPosition:ccp(pointX2-64,pointY2-32)];
+    }
+    int tileGid2 = [_grid.gridView.itemLayer tileGIDAt:tileCoord2];
     
+    if (tileGid2) {
+        NSDictionary *properties = [_grid.gridView.tileMap propertiesForGID:tileGid2];
+        if (properties) {
+            NSString *collision = [properties valueForKey:@"Item"];
+            
+            if (collision && [collision compare:@"Fog"] == NSOrderedSame)
+            {
+                box2.hasFog=YES;
+            }
+        }
+    }
+  //  }
     
-    if((topCount==3 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))||(bottomCount==3 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX)))
+    if(((topCount==3 &&box1.status==SKULL)||(bottomCount==3&& box2.status==SKULL))&&(!box1.hasFog && !box2.hasFog))
+    {
+        return FILLED_WITH_THREE_EDGES_AND_SKULL;
+    }
+    else  if((topCount==3 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX||box1.hasFog))||(bottomCount==3 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX||box2.hasFog)))
     {
         return FILLED_WITH_THREE_EDGES;
     }
@@ -417,22 +814,36 @@
     {
         return SINGLE_LINE;
     }
-    
-    else if((topCount==2 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))||(bottomCount==2 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX)))
+  
+    else if((topCount==2 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX||box1.hasFog==YES))||(bottomCount==2 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX||box2.hasFog==YES)))
     {
         return FILLED_WITH_TWO_EDGES;
     }
-    else if((topCount==1 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))||(bottomCount==1 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX))){
+    else if((topCount==1 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX||box1.status==SKULL))||(bottomCount==1 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX||box2.status==SKULL))){
         return FILLED_WITH_ONE_EDGES;
     }
-    else if((topCount==0 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX))&&(bottomCount==0 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX))){
+    else if((topCount==0 && (box1.status==CANNON||box1.status==TREASUREBOX || box1.status==SHIP|| box1.status==MAP|| box1.status==EMPTY_BOX||box1.status==SKULL))||(bottomCount==0 &&  (box2.status==CANNON||box2.status==TREASUREBOX || box2.status==SHIP|| box2.status==MAP|| box2.status==EMPTY_BOX||box2.status==SKULL))){
         return EMPTY;
     }
+ 
     else {
         return FILLED_WITH_THREE_EDGES_AND_ITEM;
     }
 }
 - (void)update:(ccTime)dt {
+    
+   if( _waitToStartBrain>0)
+   {
+       _waitToStartBrain=_waitToStartBrain-dt;
+       if(_waitToStartBrain<0)
+       {
+           [self startBrain];
+       }
+   }
+    
+    
+    
+    
 if(_waitToCheckThreeEdgeBox>0)
 {
     _waitToCheckThreeEdgeBox=_waitToCheckThreeEdgeBox-dt;
@@ -447,6 +858,7 @@ if(_waitToCheckThreeEdgeBox>0)
         _waitToCheckRandomEdge=_waitToCheckRandomEdge-dt;
         if(_waitToCheckRandomEdge<0)
         {
+            //[self checkCannonBoxes];
             [self fillRandomEdge];
         }
     }
@@ -460,6 +872,13 @@ if(_waitToCheckThreeEdgeBox>0)
     }
 
     
+}
+
+-(void)dealloc
+{
+     [_nonThirdEdgeArray release];
+    [super dealloc];
+   
 }
 
 @end

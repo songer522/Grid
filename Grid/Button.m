@@ -7,6 +7,7 @@
 //
 
 #import "Button.h"
+#import "SimpleAudioEngine.h"
 
 @implementation Button
 @synthesize waitToFadeOutButton=_waitToFadeOutButton;
@@ -39,6 +40,8 @@
 
 - (void)playbuttonAnimation
 {
+    
+    [[SimpleAudioEngine sharedEngine] playEffect:@"menuForward.mp3"];
     CCAnimation *OpenAnimation=[CCAnimation animation];
     
     NSString *suffix=@"_Pressed.png";
@@ -49,12 +52,38 @@
     [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:_imageName]];
     [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[aString stringByAppendingString:suffix] ]];
       [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:_imageName]];
+
  
     //id OpenAnimationAction=[CCAnimate actionWithDuration:0.5 animation:OpenAnimation restoreOriginalFrame:NO];
     OpenAnimation.restoreOriginalFrame=NO;
     OpenAnimation.delayPerUnit=0.5 / OpenAnimation.frames.count;
     [_buttonGraphic runAction:[[[CCAnimate alloc] initWithAnimation:OpenAnimation] autorelease]];
 }
+
+
+- (void)playIconAnimation
+{
+    
+    //[[SimpleAudioEngine sharedEngine] playEffect:@"menuForward.mp3"];
+    CCAnimation *OpenAnimation=[CCAnimation animation];
+    
+    NSString *suffix=@"_Pressed.png";
+    NSString *tempString=[NSString stringWithFormat:_imageName];
+    NSString *aString=[tempString stringByDeletingPathExtension];
+    
+    //NSLog(@"%@",aString);
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:_imageName]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[aString stringByAppendingString:suffix] ]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:_imageName]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[aString stringByAppendingString:suffix] ]];
+    [OpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:_imageName]];
+    
+    //id OpenAnimationAction=[CCAnimate actionWithDuration:0.5 animation:OpenAnimation restoreOriginalFrame:NO];
+    OpenAnimation.restoreOriginalFrame=NO;
+    OpenAnimation.delayPerUnit=0.8 / OpenAnimation.frames.count;
+    [_buttonGraphic runAction:[[[CCAnimate alloc] initWithAnimation:OpenAnimation] autorelease]];
+}
+
 
 
 - (void)update:(ccTime)dt

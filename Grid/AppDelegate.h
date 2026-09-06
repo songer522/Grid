@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GameKit/GameKit.h>
+
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
 
-@interface AppController : NSObject <UIApplicationDelegate, CCDirectorDelegate>
+@interface AppController : NSObject <UIApplicationDelegate, CCDirectorDelegate,GKMatchmakerViewControllerDelegate>
 {
 	UIWindow *window_;
 	UINavigationController *navController_;

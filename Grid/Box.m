@@ -10,6 +10,7 @@
 
 @implementation Box
 @synthesize status=_status;
+@synthesize hasFog=_hasFog;
 
 +(id)instance
 {
@@ -20,6 +21,7 @@
 {
     if ((self=[super init])) {
         _status=UNAVAILABLE;
+        _hasFog=NO;
         
         
     }

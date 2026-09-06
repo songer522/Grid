@@ -12,6 +12,7 @@ typedef enum {
     ORANGE,
     CANNON,
     TREASUREBOX,
+    SKULL,
     SHIP,
     MAP,
     EMPTY_BOX,
@@ -22,9 +23,11 @@ typedef enum {
 
 {
     BoxInfo _status;
+    BOOL _hasFog;
 }
 
 @property BoxInfo status;
+@property BOOL hasFog;
 +(id)instance;
 -(BoxInfo)checkStatus;
 @end

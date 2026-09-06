@@ -18,6 +18,9 @@
     int _damageCount;
     int _blueMapCount;
     int _orangeMapCount;
+    int _skullDamageCount;
+    int _skullHalfDamageCount;
+    int _skullLeft;
 
 }
 @property (retain,nonatomic)NSMutableArray *lines;
@@ -28,6 +31,9 @@
 @property int damageCount;
 @property int blueMapCount;
 @property int orangeMapCount;
+@property int skullDamageCount;
+@property int skullHalfDamageCount;
+@property int skullLeft;
 +(id)GridWithNumOfLines:(int)numberOfLines NumberOfRows:(int)numberOfRows;
 -(id)getEdgeAtLineIndex:(NSUInteger)lineIndex EdgeIndex:(NSUInteger)edgeIndex;
 -(id)getEdgeAtRowIndex:(NSUInteger)rowIndex EdgeIndex:(NSUInteger)edgeIndex;

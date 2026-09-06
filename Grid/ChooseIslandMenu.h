@@ -10,8 +10,10 @@
 #import <GameKit/GameKit.h>
 #import "cocos2d.h"
 #import "CCScrollLayer.h"
+#import "DlcLevelDelegate.h"
+#import "skullDotIndicator.h"
 @class Button;
-@interface ChooseIslandMenu : CCLayer<GKSessionDelegate,UIAlertViewDelegate,UITextFieldDelegate>
+@interface ChooseIslandMenu : CCLayer<GKSessionDelegate,UIAlertViewDelegate,UITextFieldDelegate,GKMatchDelegate,DlcLevelDelegate>
 {
 CCLabelTTF *_title;
 CCSprite *_goBackButton;
@@ -21,19 +23,29 @@ Button *_upgradeButton;
 NSString *_maxName;
 
 BOOL _isSoundOn;
-
+GKSession *currentSession;
+    GKMatch *myMatch;
 NSString *gameMode;
 CCScrollLayer  *_scroller;
+skullDotIndicator *_dotIndicator;
 UIAlertView *_waitingAlert;
+    BOOL _touchEnable;
 
 float _waitToShowTextField1;
 float _waitToShowTextField2;
 float _waitToShowTextfield3;
+    CCSprite *_sunshine1;
+    CCSprite *_sunshine2;
+    CCSprite *_sunshine3;
+    
+    float _waitToShowSunshine1;
+    float _waitToShowSunshine2;
+    float _waitToShowSunshine3;
 BOOL _isEditing;
-
+    int coinNumber;
 }
 
-
+@property (nonatomic, retain) GKSession *currentSession;
 +(CCScene *) scene;
 
 

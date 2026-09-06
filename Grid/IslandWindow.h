@@ -15,7 +15,10 @@
 
     CCLabelTTF *_medalNum;
     CCLabelTTF *_score;
+    
+    //CCLabelBMFont *_medalNum;
+    //CCLabelBMFont *_score;
 }
 +(id)IslandWindowWithImage:(NSString *)windowImage MedalNum:(NSString *)num Score:(NSString *)score andPosition:(CGPoint)position;
-
++(id)IslandWindowWithImage:(NSString *)windowImage andPosition:(CGPoint)position;
 @end

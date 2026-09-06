@@ -13,6 +13,8 @@
 #import "MainMenu.h"
 #import "ChooseLevelMenu.h"
 #import "GameSettings.h"
+#import "ChooseIslandMenu.h"
+#import "Appirater.h"
 
 @implementation AppController
 
@@ -67,7 +69,7 @@
 
 	// make main window visible
 	[window_ makeKeyAndVisible];
-
+    [self authenticateLocalPlayer];
 	// Default texture format for PNG/BMP/TIFF/JPEG/GIF images
 	// It can be RGBA8888, RGBA4444, RGB5_A1, RGB565
 	// You can change anytime.
@@ -86,6 +88,8 @@
 	//[director_ pushScene: [GameLayer scene]]; 
    // [director_ pushScene: [ChooseLevelMenu scene]]; 
     [director_ pushScene: [MainMenu scene]]; 
+    
+    [Appirater appLaunched:YES];
 
 	return YES;
 }
@@ -102,6 +106,7 @@
 {
 	if( [navController_ visibleViewController] == director_ )
 		[director_ pause];
+     [[GameSettings shared] saveToDisk];
 }
 
 // call got rejected
@@ -136,8 +141,9 @@
 // purge memory
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
+     [[GameSettings shared] saveToDisk];
 	[[CCDirector sharedDirector] purgeCachedData];
-    [[GameSettings shared] saveToDisk];
+   
 
 }
 
@@ -145,6 +151,70 @@
 -(void) applicationSignificantTimeChange:(UIApplication *)application
 {
 	[[CCDirector sharedDirector] setNextDeltaTimeZero:YES];
+     [[GameSettings shared] saveToDisk];
+}
+
+- (void) authenticateLocalPlayer
+{
+    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
+    [localPlayer authenticateWithCompletionHandler:^(NSError *error) {
+        if (localPlayer.isAuthenticated)
+        {
+            // Perform additional tasks for the authenticated player.
+        }
+    }];
+    
+    [GKMatchmaker sharedMatchmaker].inviteHandler = ^(GKInvite *acceptedInvite, NSArray *playersToInvite) {
+        // Insert application-specific code here to clean up any games in progress.
+        if (acceptedInvite)
+        {
+            GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithInvite:acceptedInvite] autorelease];
+            mmvc.matchmakerDelegate = self;
+            [[[CCDirector sharedDirector] parentViewController] presentModalViewController:mmvc animated:YES];
+        }
+        else if (playersToInvite)
+        {
+            GKMatchRequest *request = [[[GKMatchRequest alloc] init] autorelease];
+            request.minPlayers = 2;
+            request.maxPlayers = 2;
+            request.playersToInvite = playersToInvite;
+            
+            GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithMatchRequest:request] autorelease];
+            mmvc.matchmakerDelegate = self;
+            [[[CCDirector sharedDirector] parentViewController] presentModalViewController:mmvc animated:YES];
+        }
+    };
+}
+- (void)matchmakerViewControllerWasCancelled:(GKMatchmakerViewController *)viewController
+{
+    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    // implement any specific code in your application here.
+}
+- (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFailWithError:(NSError *)error
+{
+    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    // Display the error to the user.
+   // NSLog(@"error");
+}
+- (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFindMatch:(GKMatch *)match
+{
+    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+   // NSLog(@"find a match");
+   // myMatch = match; // Use a retaining property to retain the match.
+    //myMatch.delegate = self;
+    [[GameSettings shared] saveObj:match ForKey:@"GKMatch"];
+      [[GameSettings shared] setGlobal:@"network" ForKey:@"gameMode"];
+     [[GameSettings shared] setGlobal:@"NO" ForKey:@"isHost"];
+    [[GameSettings shared] setGlobal:@"NO" ForKey:@"ShowNotHostWindow"];
+    CCDirectorIOS	*director1= (CCDirectorIOS*) [CCDirector sharedDirector];
+    
+    [director1 pushScene: [CCTransitionFade transitionWithDuration:1.0f scene:[ChooseIslandMenu scene]]];
+    
+    //if (!self.matchStarted && match.expectedPlayerCount == 0)
+    //{
+    //  self.matchStarted = YES;
+    // Insert application-specific code to begin the match.
+    //}
 }
 
 - (void) dealloc

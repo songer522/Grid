@@ -12,6 +12,7 @@
 #import "GameLayer.h"
 #import "CCScrollLayer.h"
 #import "DlcLevelDelegate.h"
+#import "skullDotIndicator.h"
 
 @class GameLayer;
 @interface HowToPlayPage : CCLayer
@@ -19,12 +20,13 @@
     CCSprite *_background;
     CCSprite *_page;
     CCSprite *_closeButton;
-   
+   skullDotIndicator *_dotIndicator;
     float _waitToFadeInWindow;
     float _waitToFadeOutWindow;
     GameLayer *_parentController;
     CCScrollLayer  *_scroller;
     BOOL _touchEnable;
+    BOOL _isTutorialPages;
     
 }
 @property float waitToFadeInWindow;

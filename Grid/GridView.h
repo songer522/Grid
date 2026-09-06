@@ -36,6 +36,7 @@ typedef enum {
 @class FlashDot;
 @interface GridView : CCLayer<ADBannerViewDelegate> {
     CCLabelTTF *_lable;
+    CCLabelTTF *_lable2;
     CCSprite *_background;
     CCSprite *_dashLines;
     CCSprite *_dots;
@@ -58,11 +59,16 @@ typedef enum {
     float _waitToShowBox;
     float _waitToShowBlueIndicator;
     float _waitToShowOrangeIndicator;
+    float _waitToPlayBackgroundMusic;
+    float _waitToPlayBlueIndicatorAnimation;
+    float _waitToPlayOrangeIndicatorAnimation;
+    float _waitToLoadFog;
    
+    ADBannerView *_adView ;
 
   
     EdgeGraphic *_lastEdge;
-    CCTMXTiledMap  *tileMap;
+    CCTMXTiledMap  *_tileMap;
     CCTMXLayer *_itemLayer;
     CCTMXLayer *_lineRightLayer;
     CCTMXLayer *_lineDownLayer;
@@ -79,10 +85,14 @@ typedef enum {
     NSMutableArray *_edgeArray;
     NSMutableArray *_shipArray;
     NSMutableArray *_mapArray;
+    NSMutableArray *_skullArray;
+    NSMutableArray *_fogArray;
     
     GameLayer *_parentController;
      BOOL _isSoundOn;
 }
+@property (retain, nonatomic) CCTMXLayer *itemLayer;
+@property (retain, nonatomic)  CCTMXTiledMap  *tileMap;
 @property (retain, nonatomic)CCSprite *edgeIndicator;
 @property (retain, nonatomic)EdgeGraphic *lastEdge;
 @property (retain, nonatomic)FlashDot *dot1;
@@ -94,12 +104,13 @@ typedef enum {
 @property (retain,nonatomic) CCSprite *helpButton;
 //@property (retain,nonatomic) CCSprite *playerIndicator;
 //@property (retain,nonatomic) CCSprite *playerIndicator2;
-
+@property (retain,nonatomic)ADBannerView *adView;
 @property (retain,nonatomic)CCSprite *blueIndicator;
 @property (retain,nonatomic)CCSprite *orangeIndicator;
 @property (retain, nonatomic)CCLayer *edgeLayer;
 @property (retain, nonatomic)CCLayer *blockLayer;
 //@property (retain, nonatomic)CCLabelTTF *lable;
+@property float waitToPlayBackgroundMusic;
 @property (retain, nonatomic)ScoreBox *blueScoreBox;
 @property (retain, nonatomic)ScoreBox *orangeScoreBox;
 @property float secondBoxPositionX;
@@ -114,6 +125,8 @@ typedef enum {
 @property (nonatomic,retain)NSMutableArray *edgeArray;
 @property (nonatomic,retain)NSMutableArray *shipArray;
 @property (nonatomic,retain)NSMutableArray *mapArray;
+@property (nonatomic,retain)NSMutableArray *skullArray;
+@property (nonatomic,retain)NSMutableArray *fogArray;
 @property BOOL isSoundOn;
 @property (nonatomic,assign)GameLayer *parentController;
 //@property float waitToFadeOutTreasureBoxBlue;
@@ -134,16 +147,21 @@ typedef enum {
                   WithColor:(BoxColor)color;
 - (void)showMessageBoxForTreasureBox;
 - (void)showMessageBoxForTreasureMap;
+- (void)showMessageBoxForSkull;
 - (id)getTreasureBoxAtPosition:(CGPoint)point;
 - (id)getCannoAtPosition:(CGPoint)point;
 - (id)getBoxAtPosition:(CGPoint)point;
 - (id)getShipAtPosition:(CGPoint)point;
 - (id)getMapAtPosition:(CGPoint)point;
+- (id)getSkullAtPosition:(CGPoint)point;
+- (id)getFogAtPosition:(CGPoint)point;
+- (CGPoint)tileCoordForPosition:(CGPoint)position;
 -(void)blueIsOn;
 -(void)orangeIsOn;
 - (CGPoint)getBoxPositionAt:(Direction)direction From:(CGPoint)point;
 -(CGPoint)getItemPositionAtRowIndex:(int)rowIndex ItemIndex:(int)edgeIndex;
 - (void)update:(ccTime)dt;
 - (void)resetView;
+-(void)loadfog;
 @end
 

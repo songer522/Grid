@@ -48,12 +48,12 @@
     CCAnimation *halfOpenAnimation=[CCAnimation animation];
     [halfOpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TBox_1.png"]];
     [halfOpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TBox_2.png" ]];
-    [halfOpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TBox_3.png"]];
+    //[halfOpenAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Graphic_TBox_3.png"]];
    // id halfOpenAnimationAction=[CCAnimate actionWithDuration:0.75 animation:halfOpenAnimation restoreOriginalFrame:NO];
     
     
     halfOpenAnimation.restoreOriginalFrame=NO;
-    halfOpenAnimation.delayPerUnit =  0.5 / halfOpenAnimation.frames.count;
+    halfOpenAnimation.delayPerUnit =  0.35 / halfOpenAnimation.frames.count;
     [_boxGraphic runAction:[[[CCAnimate alloc] initWithAnimation:halfOpenAnimation] autorelease]];
 
 }

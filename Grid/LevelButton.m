@@ -10,6 +10,7 @@
 #import "GameSettings.h"
 #import "GameLayer.h"
 #import "DeviceSettings.h"
+#import "SimpleAudioEngine.h"
 
 
 @implementation LevelButton
@@ -37,7 +38,8 @@
 {
     _hasMedal=NO;
    NSString *unlockedValue = [[GameSettings shared] getGlobalForKey:[NSString stringWithFormat:@"level%d",_buttonId]];
-    if ([unlockedValue isEqualToString:@"YES"])
+    NSString *gameMode=[[GameSettings shared] getGlobalForKey:@"gameMode"];
+    if ([unlockedValue isEqualToString:@"YES"]||![gameMode isEqualToString:@"solo"])
     {
                 _buttonGraphic=[CCSprite spriteWithSpriteFrameName:@"Graphic_LevelBack.png"];
         
@@ -56,12 +58,20 @@
        [self addChild:_buttonGraphic];
         [self addChild:_levelNumber];
         
-        NSString *clearLevel=[[GameSettings shared] getGlobalForKey:[NSString stringWithFormat:@"ClearLevel%d",_buttonId]];
-        if([clearLevel isEqualToString:@"YES"])
+        NSString *hasMedalLevel=[[GameSettings shared] getGlobalForKey:[NSString stringWithFormat:@"GiveMedalLevel%d",_buttonId]];
+        if([hasMedalLevel isEqualToString:@"YES"]&&[gameMode isEqualToString:@"solo"])
         {
             _medal=[CCSprite spriteWithSpriteFrameName:@"Graphic_LevelCleared.png"];
             [self addChild:_medal];
             _hasMedal=YES;
+        }
+        if([gameMode isEqualToString:@"blueTooth"]||[gameMode isEqualToString:@"network"])
+        {
+            if(_buttonId==1||_buttonId==2)
+            {
+                _bars=[CCSprite spriteWithSpriteFrameName:@"Graphic_LevelBlocked.png"];
+                [self addChild:_bars];
+            }
         }
     }
     else {
@@ -77,6 +87,7 @@
 -(void)setPosition:(CGPoint)position
 {
     [_buttonGraphic setPosition:position];
+    [_bars setPosition:position];
     [_levelNumber setPosition:position];
     [_medal setPosition:position];
     _buttonPosition=position;
@@ -120,16 +131,26 @@
     [[GameSettings shared] setGlobal:buttonNumber ForKey:@"levelNumberOnButton"];
     }
     
-    
-    if ([unlockedValue isEqualToString:@"YES"])
+     NSString *gameMode=[[GameSettings shared] getGlobalForKey:@"gameMode"];
+    if ([unlockedValue isEqualToString:@"YES"]||![gameMode isEqualToString:@"solo"])
     {
+   
+
+        
+        
+        [_buttonGraphic setScale:0.85];
+        [_levelNumber setScale:0.85];
+         [[SimpleAudioEngine sharedEngine] playEffect:@"menuForward.mp3"];
+        /*
     CCAnimation *buttonAnimation=[CCAnimation animation];
     [buttonAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Button_Level.png"]];
     [buttonAnimation addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"Button_LevelPressed.png" ]];
         buttonAnimation.restoreOriginalFrame=YES;
-    buttonAnimation.delayPerUnit=0.1/buttonAnimation.frames.count;
+    buttonAnimation.delayPerUnit=0.05/buttonAnimation.frames.count;
     [_buttonGraphic runAction:[[[CCAnimate alloc] initWithAnimation:buttonAnimation] autorelease]];
+         */
         
+        [[SimpleAudioEngine sharedEngine] stopBackgroundMusic];
         CCDirectorIOS	*director_= (CCDirectorIOS*) [CCDirector sharedDirector];
         [director_ replaceScene: [CCTransitionFade transitionWithDuration:1.0f scene:[GameLayer scene]]]; 
         return YES;

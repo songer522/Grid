@@ -31,7 +31,7 @@
 	<key>metadata</key>
 	<dict>
 		<key>version</key>
-		<string>1.5.1</string>
+		<string>1.5.2</string>
 		<key>format</key>
 		<integer>3</integer>
 		<key>size</key>
@@ -45,11 +45,11 @@
 			<key>name</key>
 			<string>-ipad</string>
 			<key>textureFileName</key>
-			<string>-ipad</string>
+			<string>Black50_-ipad</string>
 			<key>textureFileExtension</key>
 			<string>.png</string>
 			<key>coordinatesFileName</key>
-			<string>-ipad</string>
+			<string>Black50_-ipad</string>
 			<key>coordinatesFileExtension</key>
 			<string>.plist</string>
 			<key>premultipliedAlpha</key>

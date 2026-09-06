@@ -43,7 +43,7 @@
 - (void)recordTransaction:(SKPaymentTransaction *)transaction;
 - (void)provideContent:(NSString *)productId;
 - (void)purchaseProductId:(NSString*)productId Delegate:(id<DlcLevelDelegate>)delegate;
-
+- (void)restorePurchaseWithDelegate:(id<DlcLevelDelegate>)delegate;
 
 -(SKProduct*)getProductInfoForKey:(NSString*)key;
 

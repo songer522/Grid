@@ -15,9 +15,22 @@
 {
     CCSprite *_background;
     CCSprite *_window;
+    CCSprite *_resultInfo;
+    CCSprite *_scoreWindow;
     Button *_nextLevelButton;
     Button *_playAgainButton;
     Button *_mainMenuButton;
+    CCSprite *_close;
+   // CCLabelBMFont *_score;
+   // CCLabelBMFont *_bestScore;
+    NSString *_gameMode;
+    CCLabelTTF *_score;
+    CCLabelTTF *_bestScore;
+    
+    CCLabelTTF *_player1Tally;
+    CCLabelTTF *_player2Tally;
+    CCLabelTTF *_tallyResult;
+    CCSprite *_newRecord;
     float _waitToFadeInWindow;
     float _waitToFadeOutWindow;
     GameLayer *_parentController;

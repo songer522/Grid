@@ -70,7 +70,7 @@ static GameSettings *_shared = nil;
 
 -(id)getObjForKey:(NSString*)key
 {
-    id returnVal = [_settings valueForKey:key];
+    id returnVal = [_savedSettings valueForKey:key];
     
     if (returnVal) {
         return returnVal;        
@@ -82,7 +82,7 @@ static GameSettings *_shared = nil;
 
 -(void)saveObj:(id)obj ForKey:(NSString*)key
 {
-    [_settings setValue:obj forKey:key];
+    [_savedSettings setValue:obj forKey:key];
 }
 
 

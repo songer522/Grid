@@ -10,6 +10,9 @@
 
 @implementation Edge
 @synthesize isFilled=_isFilled;
+@synthesize edgeIndex=_edgeIndex;
+@synthesize rowOrLine=_rowOrLine;
+@synthesize rowOrLineIndex=_rowOrLineIndex;
 
 +(id)instance
 {

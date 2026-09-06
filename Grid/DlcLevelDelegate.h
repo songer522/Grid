@@ -14,6 +14,7 @@
 @protocol DlcLevelDelegate <NSObject>
 
 -(void)updateDlcLevels;
+-(void)restoreFails;
 -(void)openErrorWindowCantConnectToStore;
 -(void)openErrorWindowCantMakePurchases;
 -(void)setCantConnectToStore:(BOOL)CantConnectToStore;

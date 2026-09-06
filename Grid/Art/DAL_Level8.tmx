@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="6" height="6" tilewidth="53" tileheight="53">
+ <tileset firstgid="1" name="TileGraphic_Final-ipadhd" tilewidth="53" tileheight="53">
+  <image source="TileGraphic_Final.png" width="636" height="1060"/>
+  <tile id="0">
+   <properties>
+    <property name="LineFilled" value="True"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="Item" value="TreasureBox"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="RowFilled" value="True"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="Item" value="CannonLeft"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="Item" value="ShipRight"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="Item" value="MapOne"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="Item" value="CannonRight"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="Item" value="ShipLeft"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="Item" value="MapTwo"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="Item" value="Empty"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Down" width="6" height="6">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYMSCCQFS1RFrPgAFRAAP
+  </data>
+ </layer>
+ <layer name="Up" width="6" height="6">
+  <data encoding="base64" compression="zlib">
+   eJxjYMAOWHBgQoBUdegYAA4gADk=
+  </data>
+ </layer>
+ <layer name="Left" width="6" height="6">
+  <data encoding="base64" compression="zlib">
+   eJxjYGBgYEPCDGg0NnEGHHxc4oTMQxYHAB7wAG0=
+  </data>
+ </layer>
+ <layer name="Right" width="6" height="6">
+  <data encoding="base64" compression="zlib">
+   eJxjZWBgYIViBjQamzgDDj4ucULmoYsDABtIAFs=
+  </data>
+ </layer>
+ <layer name="Dots" width="6" height="6">
+  <data encoding="base64" compression="zlib">
+   eJxjYmBgYCIBwwA6H5c4KWaDMAAQwAA5
+  </data>
+ </layer>
+ <layer name="Items" width="6" height="6">
+  <data encoding="base64" compression="zlib">
+   eJzjZWBg4IViEOBmIA7wElYCBhxI6pHtwQUAJtgAbw==
+  </data>
+ </layer>
+</map>

@@ -25,6 +25,7 @@
 
 + (id)buttonAtPosition:(CGPoint)position andImage:(NSString*)image;
 - (void)playbuttonAnimation;
+- (void)playIconAnimation;
 - (void)update:(ccTime)dt;
 
 

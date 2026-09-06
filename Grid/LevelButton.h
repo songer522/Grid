@@ -15,6 +15,7 @@
     CCSprite *_buttonGraphic;
     CGPoint _buttonPosition;
     CCSprite *_medal;
+    CCSprite *_bars;
     CCLabelTTF *_levelNumber;
     int _buttonId;
     BOOL _hasMedal;

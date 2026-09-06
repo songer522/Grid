@@ -21,6 +21,9 @@
 @synthesize damageCount=_damageCount;
 @synthesize blueMapCount=_blueMapCount;
 @synthesize orangeMapCount=_orangeMapCount;
+@synthesize skullDamageCount=_skullDamageCount;
+@synthesize skullHalfDamageCount=_skullHalfDamageCount;
+@synthesize skullLeft=_skullLeft;
 
 +(id)GridWithNumOfLines:(int)numberOfLines NumberOfRows:(int)numberOfRows
 {
@@ -52,6 +55,8 @@
         _damageCount=0;
         _blueMapCount=0;
         _orangeMapCount=0;
+        _skullDamageCount=0;
+        _skullLeft=0;
         
   
         
@@ -90,6 +95,9 @@
         return nil;
     }
     Edge *edge=[(EdgeArray*)[_lines objectAtIndex:lineIndex] objectAtIndex:edgeIndex];
+    edge.rowOrLine=ON_LINE;
+    edge.rowOrLineIndex=lineIndex;
+    edge.edgeIndex=edgeIndex;
     return  edge;
     
 }
@@ -107,6 +115,9 @@
         return nil;
     }
     Edge  *edge=[(EdgeArray*)[_rows objectAtIndex:rowIndex] objectAtIndex:edgeIndex];
+    edge.rowOrLine=ON_ROW;
+    edge.rowOrLineIndex=rowIndex;
+    edge.edgeIndex=edgeIndex;
     return edge;
 }
 -(void)resetModel
@@ -116,6 +127,9 @@
     _damageCount=0;
     _orangeMapCount=0;
     _blueMapCount=0;
+    _skullDamageCount=0;
+    _skullLeft=0;
+    _skullHalfDamageCount=0;
     for(EdgeArray *array in _lines)
     {
         for(Edge *edge in array)

@@ -280,6 +280,19 @@ static InAppPurchaseManager *_shared = nil;
     
 }
 
+- (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error
+{
+   // [_delegate restoreFails];
+}
+
+- (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue
+{
+    if([queue.transactions count]==0)
+    {
+       [_delegate restoreFails]; 
+    }
+}
+
 
 - (void)purchaseProductId:(NSString*)productId Delegate:(id<DlcLevelDelegate>)delegate
 {
@@ -287,12 +300,30 @@ static InAppPurchaseManager *_shared = nil;
     
     if ([self canMakePurchases]) {
         SKPayment *payment = [SKPayment paymentWithProductIdentifier:productId];
-        [[SKPaymentQueue defaultQueue] addPayment:payment];        
+        [[SKPaymentQueue defaultQueue] addPayment:payment]; 
+       // [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
     } else {
         if (_delegate!=nil) {
             //[_delegate openErrorWindowCantMakePurchases];
             //[_delegate setCantMakePurchases:YES];
             [_delegate openErrorWindowCantMakePurchases];
+        }
+    }
+}
+
+- (void)restorePurchaseWithDelegate:(id<DlcLevelDelegate>)delegate
+{
+    _delegate = delegate;
+    
+    if ([self canMakePurchases]) {
+        // SKPayment *payment = [SKPayment paymentWithProductIdentifier:productId];
+        //[[SKPaymentQueue defaultQueue] addPayment:payment]; 
+        [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+    } else {
+        if (_delegate!=nil) {
+            //[_delegate openErrorWindowCantMakePurchases];
+            //[_delegate setCantMakePurchases:YES];
+            //[_delegate openErrorWindowCantMakePurchases];
         }
     }
 }

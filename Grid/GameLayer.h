@@ -18,7 +18,7 @@
 
 // HelloWorldLayer
 @class CPUBrain;
-@interface GameLayer : CCLayer <GKAchievementViewControllerDelegate, GKLeaderboardViewControllerDelegate,GKSessionDelegate>
+@interface GameLayer : CCLayer <GKAchievementViewControllerDelegate, GKLeaderboardViewControllerDelegate,GKSessionDelegate,GKMatchDelegate>
 {
     GridView *_gridView;
     GridModel *_gridModel;
@@ -26,6 +26,7 @@
     CPUBrain *_brain;
     BOOL _isBlueColor;
     BOOL _changeColor;
+    BOOL _winOrLose;
     int _blueScore;
     int _orangeScore;
     int _boxCount;
@@ -37,13 +38,16 @@
     BOOL _isReceiving;
     BOOL _twoPlayerOnOneDevice;
     BOOL _GameOver;
+   // BOOL _receiveInvite;
     NSString *_gameMode;
     UIAlertView *_waitingAlert;
     CGPoint _drawPosition;
     GKSession *currentSession;
+    GKMatch *myMatch;
     
 }
 @property BOOL CPUTurn;
+@property BOOL winOrLose;
 @property BOOL CPUThinking;
 @property BOOL twoPlayerOnOneDevice;
 @property int boxCount;
@@ -64,12 +68,25 @@
 -(void)drawEdgeAtLineIndex:(NSInteger)lineIndex EdgeIndex:(NSInteger)edgeIndex;
 -(NSString *)getEdgeIndicatorColor;
 -(NSString *)getEdgeColor;
+-(NSString *)getInitialEdgeColor;
 -(void)newGame;
 -(void)reply:(NSString *)yesOrNo;
 - (void)loadTreasureBoxAtRow:(int)rowIndex ItemIndex:(int)edgeIndex;
+- (void)loadSkullAtRow:(int)rowIndex ItemIndex:(int)edgeIndex;
 -(void)loadCannonAtRow:(int)rowIndex ItemIndex:(int)edgeIndex Flip:(BOOL)flipOrNot;
 -(void)loadShipAtRow:(int)rowIndex ItemIndex:(int)edgeIndex Flip:(BOOL)flipOrNot;
 -(void)loadTreasureMapAtRow:(int)rowIndex ItemIndex:(int)edgeIndex Part:(TreasureMapNumber)number;
+- (void)loadFogAtRow:(int)rowIndex ItemIndex:(int)edgeIndex;
 -(void)loadBoxPatternAtRow:(int)rowIndex ItemIndex:(int)edgeIndex;
 - (void)showMessage:(NSString *)buttonID;
+- (void)networkShowMessage:(NSString *)buttonID;
+-(void)sendFogInfoToTheOtherPlayer:(int)RowIndex
+                         ItemIndex:(int)itemIndex
+                         FlipOrNot:(NSString *)FlipOrNot
+                          ItemName:(NSString *)ItemName;
+-(void)networkSendFogInfoToTheOtherPlayer:(int)RowIndex
+                                ItemIndex:(int)itemIndex
+                                FlipOrNot:(NSString *)FlipOrNot
+                                 ItemName:(NSString *)ItemName;
+-(void)updateBoxNumber;
 @end
