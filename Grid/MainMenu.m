@@ -647,7 +647,7 @@
             
             mmvc.matchmakerDelegate = self;
             
-            [  [CCDirector sharedDirector].parentViewController  presentModalViewController:mmvc animated:YES];          
+            [  [CCDirector sharedDirector].parentViewController  presentViewController:mmvc animated:YES completion:nil];          
         }
     } 
     
@@ -771,15 +771,15 @@
 }
 - (void)matchmakerViewControllerWasCancelled:(GKMatchmakerViewController *)viewController
 {
-    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    [[[CCDirector sharedDirector] parentViewController] dismissViewControllerAnimated:YES completion:nil];
     // implement any specific code in your application here.
 }
 - (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFailWithError:(NSError *)error
 {
-    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    [[[CCDirector sharedDirector] parentViewController] dismissViewControllerAnimated:YES completion:nil];
     // Display the error to the user.
       NSLog(@"error");
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+    AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                     message:@"Can't find internet connection"
                                                    delegate:self
                                           cancelButtonTitle:nil
@@ -790,7 +790,7 @@
 }
 - (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFindMatch:(GKMatch *)match
 {
-    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    [[[CCDirector sharedDirector] parentViewController] dismissViewControllerAnimated:YES completion:nil];
     NSLog(@"find a match");
     myMatch = match; // Use a retaining property to retain the match.
     myMatch.delegate = self;
@@ -822,7 +822,7 @@
     
     //[director_ pushScene: [CCTransitionFade transitionWithDuration:1.0f scene:[ChooseIslandMenu scene]]];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+    AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                     message:@"Purchases restored."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"
@@ -833,7 +833,7 @@
 }
 -(void)restoreFails
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+    AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                     message:@"Purchases restored."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"
@@ -844,7 +844,7 @@
 
 -(void)openErrorWindowCantConnectToStore
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ERROR!"
+    AlertView *alert = [[AlertView alloc] initWithTitle:@"ERROR!"
                                                     message:@"Cannot connect to the store at this time. Please try again later."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"
@@ -854,7 +854,7 @@
 }
 -(void)openErrorWindowCantMakePurchases
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ERROR!"
+    AlertView *alert = [[AlertView alloc] initWithTitle:@"ERROR!"
                                                     message:@"Cannot make purchase at this time. Please try again later or make sure to have in app purchases enabled in Settings>General>Restrictions."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"

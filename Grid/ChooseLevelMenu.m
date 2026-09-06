@@ -566,7 +566,7 @@ else {
                    // NSString *pageNumber=[NSString stringWithFormat:@"%d",_scroller.currentScreen];
                     //[[GameSettings shared] setGlobal:pageNumber ForKey:@"pageNumber"];
                     [self showMessage:[NSString stringWithFormat:@"%d", obj.buttonId]];
-                    _waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+                    _waitingAlert = [[AlertView alloc] initWithTitle:@""
                                                                message:@"waiting for response...."
                                                               delegate:self
                                                      cancelButtonTitle:nil
@@ -615,7 +615,7 @@ else {
                     // NSString *pageNumber=[NSString stringWithFormat:@"%d",_scroller.currentScreen];
                     //[[GameSettings shared] setGlobal:pageNumber ForKey:@"pageNumber"];
                     [self networkShowMessage:[NSString stringWithFormat:@"%d", obj.buttonId]];
-                    _waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+                    _waitingAlert = [[AlertView alloc] initWithTitle:@""
                                                                message:@"waiting for response...."
                                                               delegate:self
                                                      cancelButtonTitle:nil
@@ -831,7 +831,7 @@ else {
             currentSession = nil;
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"BluePlayer"]];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"OrangePlayer"]];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"The connection with the other player has been lost"
                                                            delegate:self
                                                   cancelButtonTitle:@"Okay"
@@ -974,7 +974,7 @@ else {
         [[GameSettings shared] setGlobal:levelNumberOnButton ForKey:@"levelNumberOnButton"];
     NSString *levelNumber=[infoList objectForKey:@"LevelNumber"];
    [[GameSettings shared] setGlobal:levelNumber ForKey:@"selectedLevel"];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+    AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                     message:text
                                                    delegate:self
                                           cancelButtonTitle:@"No"
@@ -1022,7 +1022,7 @@ else {
                 [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             }
            
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"Seems your opponent doesn't like that level, please select another one."
                                                            delegate:self
                                                   cancelButtonTitle:nil
@@ -1036,7 +1036,7 @@ else {
 }
 
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(AlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     
     if(alertView.tag==3)
@@ -1210,7 +1210,7 @@ else {
 }
 -(void)openErrorWindowCantConnectToStore
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ERROR!"
+    AlertView *alert = [[AlertView alloc] initWithTitle:@"ERROR!"
                                                     message:@"Cannot connect to the store at this time. Please try again later."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"
@@ -1220,7 +1220,7 @@ else {
 }
 -(void)openErrorWindowCantMakePurchases
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ERROR!"
+    AlertView *alert = [[AlertView alloc] initWithTitle:@"ERROR!"
                                                     message:@"Cannot make purchase at this time. Please try again later or make sure to have in app purchases enabled in Settings>General>Restrictions."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"
@@ -1250,7 +1250,7 @@ else {
              [[GameSettings shared] setGlobal:@"YES" ForKey:@"isHost"];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"BluePlayer"]];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"OrangePlayer"]];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"The connection with the other player has been lost"
                                                            delegate:self
                                                   cancelButtonTitle:@"Okay"
@@ -1291,7 +1291,7 @@ else {
 
         NSString *levelNumber=[infoList objectForKey:@"LevelNumber"];
         [[GameSettings shared] setGlobal:levelNumber ForKey:@"selectedLevel"];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+        AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                         message:text
                                                        delegate:self
                                               cancelButtonTitle:@"No"
@@ -1339,7 +1339,7 @@ else {
                 [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             }
             
-             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+             AlertView *alert = [[AlertView alloc] initWithTitle:@""
              message:@"Seems your opponent doesn't like that level, please select another one."
              delegate:self
              cancelButtonTitle:nil

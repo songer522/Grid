@@ -8,6 +8,7 @@
 
 
 #import <GameKit/GameKit.h>
+#import "AlertView.h"
 
 #import "GridModel.h"
 #import "GridView.h"
@@ -40,7 +41,7 @@
     BOOL _GameOver;
    // BOOL _receiveInvite;
     NSString *_gameMode;
-    UIAlertView *_waitingAlert;
+    AlertView *_waitingAlert;
     CGPoint _drawPosition;
     GKSession *currentSession;
     GKMatch *myMatch;
@@ -57,7 +58,7 @@
 @property BOOL touchEnable;
 @property (nonatomic,retain)NSString *gameMode;
 @property (nonatomic, retain) GKSession *currentSession;
-@property (nonatomic,retain) UIAlertView *waitingAlert;
+@property (nonatomic,retain) AlertView *waitingAlert;
 @property (nonatomic, retain) GKPeerPickerController *picker;
 // returns a CCScene that contains the HelloWorldLayer as the only child
 +(CCScene *) scene;

@@ -35,6 +35,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "AlertView.h"
 
 extern NSString *const kAppiraterFirstUseDate;
 extern NSString *const kAppiraterUseCount;
@@ -123,12 +124,12 @@ extern NSString *const kAppiraterDeclinedToRate;
  */
 #define APPIRATER_DEBUG				NO
 
-@interface Appirater : NSObject <UIAlertViewDelegate> {
+@interface Appirater : NSObject <AlertViewDelegate> {
 
-	UIAlertView		*ratingAlert;
+	AlertView		*ratingAlert;
 }
 
-@property(nonatomic, retain) UIAlertView *ratingAlert;
+@property(nonatomic, retain) AlertView *ratingAlert;
 
 /*
  DEPRECATED: While still functional, it's better to use

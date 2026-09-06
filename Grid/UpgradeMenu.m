@@ -256,7 +256,7 @@
 }
 -(void)openErrorWindowCantConnectToStore
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ERROR!"
+    AlertView *alert = [[AlertView alloc] initWithTitle:@"ERROR!"
                                                     message:@"Cannot connect to the store at this time. Please try again later."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"
@@ -266,7 +266,7 @@
 }
 -(void)openErrorWindowCantMakePurchases
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ERROR!"
+    AlertView *alert = [[AlertView alloc] initWithTitle:@"ERROR!"
                                                     message:@"Cannot make purchase at this time. Please try again later or make sure to have in app purchases enabled in Settings>General>Restrictions."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"

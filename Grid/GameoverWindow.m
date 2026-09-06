@@ -310,7 +310,7 @@
             
             [_parentController showMessage:nextLevelNumberString];
             
-            _parentController.waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+            _parentController.waitingAlert = [[AlertView alloc] initWithTitle:@""
                                                                         message:@"waiting for response...."
                                                                        delegate:_parentController
                                                               cancelButtonTitle:nil
@@ -325,7 +325,7 @@
             else if([_parentController.gameMode isEqualToString:@"network"])
             {
                 [_parentController networkShowMessage:nextLevelNumberString];
-                _parentController.waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+                _parentController.waitingAlert = [[AlertView alloc] initWithTitle:@""
                                                                             message:@"waiting for response...."
                                                                            delegate:_parentController
                                                                   cancelButtonTitle:nil
@@ -360,7 +360,7 @@
             
             [_parentController showMessage:[[GameSettings shared] getGlobalForKey:@"selectedLevel"]];
             
-            _parentController.waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+            _parentController.waitingAlert = [[AlertView alloc] initWithTitle:@""
                                                                         message:@"waiting for response...."
                                                                        delegate:_parentController
                                                               cancelButtonTitle:nil
@@ -373,7 +373,7 @@
             
             [_parentController networkShowMessage:[[GameSettings shared] getGlobalForKey:@"selectedLevel"]];
             
-            _parentController.waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+            _parentController.waitingAlert = [[AlertView alloc] initWithTitle:@""
                                                                         message:@"waiting for response...."
                                                                        delegate:_parentController
                                                               cancelButtonTitle:nil
@@ -485,7 +485,7 @@
         
     }
 }
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(AlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if(alertView.tag==1)
     {

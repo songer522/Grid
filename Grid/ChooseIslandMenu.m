@@ -141,7 +141,7 @@
         if(!myMatch.expectedPlayerCount==0)
         {
         _touchEnable=NO;
-       _waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+       _waitingAlert = [[AlertView alloc] initWithTitle:@""
                                                         message:@"Deciding who gets to choose the level..............."
                                                        delegate:self
                                               cancelButtonTitle:nil
@@ -153,7 +153,7 @@
         {
         [[GameSettings shared] setGlobal:@"YES" ForKey:@"ShowNotHostWindow"];
         [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+        AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                         message:@"Your friend gets to pick the level. Please wait for their decision."
                                                        delegate:self
                                               cancelButtonTitle:@"Okay"
@@ -601,7 +601,7 @@
 }
 -(void)openErrorWindowCantConnectToStore
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ERROR!"
+    AlertView *alert = [[AlertView alloc] initWithTitle:@"ERROR!"
                                                     message:@"Cannot connect to the store at this time. Please try again later."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"
@@ -611,7 +611,7 @@
 }
 -(void)openErrorWindowCantMakePurchases
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ERROR!"
+    AlertView *alert = [[AlertView alloc] initWithTitle:@"ERROR!"
                                                     message:@"Cannot make purchase at this time. Please try again later or make sure to have in app purchases enabled in Settings>General>Restrictions."
                                                    delegate:self
                                           cancelButtonTitle:@"Okay"
@@ -654,7 +654,7 @@
             [currentSession disconnectFromAllPeers];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"BluePlayer"]];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"OrangePlayer"]];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"The connection with the other player has been lost"
                                                            delegate:self
                                                   cancelButtonTitle:@"Okay"
@@ -777,7 +777,7 @@
         [[GameSettings shared] setGlobal:levelNumberOnButton ForKey:@"levelNumberOnButton"];
         NSString *levelNumber=[infoList objectForKey:@"LevelNumber"];
         [[GameSettings shared] setGlobal:levelNumber ForKey:@"selectedLevel"];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+        AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                         message:text
                                                        delegate:self
                                               cancelButtonTitle:@"No"
@@ -822,7 +822,7 @@
                 [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             }
             /*
-             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+             AlertView *alert = [[AlertView alloc] initWithTitle:@""
              message:@"invatition rejected"
              delegate:self
              cancelButtonTitle:nil
@@ -833,7 +833,7 @@
         }
     }
 }
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(AlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     
 if(alertView.tag==3)
@@ -950,7 +950,7 @@ else {
              [[GameSettings shared] setGlobal:@"YES" ForKey:@"isHost"];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"BluePlayer"]];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"OrangePlayer"]];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"The connection with the other player has been lost"
                                                            delegate:self
                                                   cancelButtonTitle:@"Okay"
@@ -984,7 +984,7 @@ else {
         {
             [[GameSettings shared] setGlobal:@"NO" ForKey:@"isHost"];
              [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"The other player gets to pick the level this time. Please wait for their decision."
                                                            delegate:self
                                                   cancelButtonTitle:@"Okay"
@@ -998,7 +998,7 @@ else {
         {
              [[GameSettings shared] setGlobal:@"YES" ForKey:@"isHost"];
              [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"You have been chosen! Please pick which level to play."
                                                            delegate:self
                                                   cancelButtonTitle:@"Okay"
@@ -1027,7 +1027,7 @@ else {
         [[GameSettings shared] setGlobal:levelNumberOnButton ForKey:@"levelNumberOnButton"];
         NSString *levelNumber=[infoList objectForKey:@"LevelNumber"];
         [[GameSettings shared] setGlobal:levelNumber ForKey:@"selectedLevel"];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+        AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                         message:text
                                                        delegate:self
                                               cancelButtonTitle:@"No"
@@ -1074,7 +1074,7 @@ else {
                 [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             }
             /*
-             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+             AlertView *alert = [[AlertView alloc] initWithTitle:@""
              message:@"invatition rejected"
              delegate:self
              cancelButtonTitle:nil

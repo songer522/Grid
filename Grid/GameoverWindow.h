@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AlertView.h"
 #import "cocos2d.h"
 #import "Button.h"
 #import "GameLayer.h"
 @class GameLayer;
-@interface GameoverWindow : CCLayer <UIAlertViewDelegate>
+@interface GameoverWindow : CCLayer <AlertViewDelegate>
 {
     CCSprite *_background;
     CCSprite *_window;

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AlertView.h"
 #import <GameKit/GameKit.h>
 #import "cocos2d.h"
 #import "CCScrollLayer.h"
@@ -14,7 +15,7 @@
 #import "InputNameWindow.h"
 @class Button;
 @class InputNameWindow;
-@interface ChooseLevelMenu : CCLayer<GKSessionDelegate,UIAlertViewDelegate,UITextFieldDelegate,DlcLevelDelegate,GKMatchDelegate>
+@interface ChooseLevelMenu : CCLayer<GKSessionDelegate,AlertViewDelegate,UITextFieldDelegate,DlcLevelDelegate,GKMatchDelegate>
 {
     CCLabelTTF *_title;
     CCSprite *_goBackButton;
@@ -32,7 +33,7 @@
      GKMatch *myMatch;
     NSString *gameMode;
     CCScrollLayer  *_scroller;
-    UIAlertView *_waitingAlert;
+    AlertView *_waitingAlert;
     //UITextField* myTextField1;
     //UITextField* myTextField2;
     float _waitToShowTextField1;

@@ -368,18 +368,17 @@ CGFloat	__ccContentScaleFactor = 1;
 }
 
 // Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-	BOOL ret =YES;
-	if( [delegate_ respondsToSelector:_cmd] )
-		ret = (BOOL) [delegate_ shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+	if( [delegate_ respondsToSelector:@selector(supportedInterfaceOrientationsForDirector)] )
+		return [delegate_ supportedInterfaceOrientationsForDirector];
 
-	return ret;
+	return UIInterfaceOrientationMaskAll;
 }
 
--(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (BOOL)shouldAutorotate
 {
-	// do something ?
+	return YES;
 }
 
 

@@ -143,12 +143,11 @@ do	{																							\
 													];											\
 	[director_ setView:__glView];																\
 	[director_ setDelegate:self];																\
-	director_.wantsFullScreenLayout = YES;														\
 	if( ! [director_ enableRetinaDisplay:YES] )													\
 		CCLOG(@"Retina Display Not supported");													\
 	navController_ = [[UINavigationController alloc] initWithRootViewController:director_];		\
 	navController_.navigationBarHidden = YES;													\
-	[window_ addSubview:navController_.view];													\
+	[window_ setRootViewController:navController_];												\
 	[window_ makeKeyAndVisible];																\
 } while(0)
 

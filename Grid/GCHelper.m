@@ -538,8 +538,8 @@ static GCHelper *sharedHelper = nil;
         leaderboardController.leaderboardDelegate = self;
       //  AppDelegate *delegate = [UIApplication sharedApplication].delegate;
         
-     [  [CCDirector sharedDirector].parentViewController  presentModalViewController:leaderboardController animated:YES];          
-       // [delegate.viewController presentModalViewController:leaderboardController animated:YES];
+     [  [CCDirector sharedDirector].parentViewController  presentViewController:leaderboardController animated:YES completion:nil];          
+       // [delegate.viewController presentViewController:leaderboardController animated:YES completion:nil];
     }
     
 }
@@ -551,23 +551,23 @@ static GCHelper *sharedHelper = nil;
     if (achievementController!=NULL) {
         achievementController.achievementDelegate = self;
         AppDelegate *delegate = [UIApplication sharedApplication].delegate;
-        [delegate.viewController presentModalViewController:achievementController animated:YES];
+        [delegate.viewController presentViewController:achievementController animated:YES completion:nil];
     }
 }
 */
 - (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController
 {
     //AppDelegate *delegate = [UIApplication sharedApplication].delegate;
-    [  [CCDirector sharedDirector].parentViewController dismissModalViewControllerAnimated:YES];
+    [  [CCDirector sharedDirector].parentViewController dismissViewControllerAnimated:YES completion:nil];
      
-    //[delegate.viewController dismissModalViewControllerAnimated:YES];
+    //[delegate.viewController dismissViewControllerAnimated:YES completion:nil];
 }
 /*
 
 -(void)achievementViewControllerDidFinish:(GKAchievementViewController *)viewController
 {
     AppDelegate *delegate = [UIApplication sharedApplication].delegate;
-    [delegate.viewController dismissModalViewControllerAnimated:YES];
+    [delegate.viewController dismissViewControllerAnimated:YES completion:nil];
 }
 */
 

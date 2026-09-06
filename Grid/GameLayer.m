@@ -186,7 +186,7 @@
 			
 			AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
 			
-			[[app navController] presentModalViewController:achivementViewController animated:YES];
+			[[app navController] presentViewController:achivementViewController animated:YES completion:nil];
 			
 			[achivementViewController release];
 		}
@@ -201,7 +201,7 @@
 			
 			AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
 			
-			[[app navController] presentModalViewController:leaderboardViewController animated:YES];
+			[[app navController] presentViewController:leaderboardViewController animated:YES completion:nil];
 			
 			[leaderboardViewController release];
 		}
@@ -879,7 +879,7 @@
    /*
         currentSession = nil;
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+    AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                     message:@"connection lost"
                                                    delegate:self
                                           cancelButtonTitle:nil
@@ -892,7 +892,7 @@
     */
         
         [self showMessage:[[GameSettings shared] getGlobalForKey:@"selectedLevel"]];
-        self.waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+        self.waitingAlert = [[AlertView alloc] initWithTitle:@""
                                                                     message:@"waiting for response...."
                                                                    delegate:self
                                                           cancelButtonTitle:nil
@@ -904,7 +904,7 @@
     }
     else if([_gameMode isEqualToString:@"network"]) {
         [self networkShowMessage:[[GameSettings shared] getGlobalForKey:@"selectedLevel"]];
-        self.waitingAlert = [[UIAlertView alloc] initWithTitle:@""
+        self.waitingAlert = [[AlertView alloc] initWithTitle:@""
                                                        message:@"waiting for response...."
                                                       delegate:self
                                              cancelButtonTitle:nil
@@ -2899,13 +2899,13 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
 -(void) achievementViewControllerDidFinish:(GKAchievementViewController *)viewController
 {
 	AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
-	[[app navController] dismissModalViewControllerAnimated:YES];
+	[[app navController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void) leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController
 {
 	AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
-	[[app navController] dismissModalViewControllerAnimated:YES];
+	[[app navController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark
@@ -2930,7 +2930,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
             [currentSession disconnectFromAllPeers];
         
             
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"The connection with the other player has been lost"
                                                            delegate:self
                                                   cancelButtonTitle:@"Okay"
@@ -3264,7 +3264,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         [[GameSettings shared] setGlobal:levelNumberOnButton ForKey:@"levelNumberOnButton"];
         NSString *levelNumber=[infoList objectForKey:@"LevelNumber"];
         [[GameSettings shared] setGlobal:levelNumber ForKey:@"selectedLevel"];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+        AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                         message:text
                                                        delegate:self
                                               cancelButtonTitle:@"No"
@@ -3308,7 +3308,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         else {
             [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             
-             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+             AlertView *alert = [[AlertView alloc] initWithTitle:@""
              message:@"Seems your opponent doesn't like that level, please select another one."
              delegate:self
              cancelButtonTitle:nil
@@ -3323,7 +3323,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
 }
 
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(AlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if(alertView.tag==3)
     {
@@ -3407,7 +3407,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"BluePlayer"]];
             [[GameSettings shared] setGlobal:@"0" ForKey:[[GameSettings shared] getGlobalForKey:@"OrangePlayer"]];
             [[GameSettings shared] setGlobal:@"solo" ForKey:@"gameMode"];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+            AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                             message:@"The connection with the other player has been lost"
                                                            delegate:self
                                                   cancelButtonTitle:@"Okay"
@@ -3555,7 +3555,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         [[GameSettings shared] setGlobal:levelNumberOnButton ForKey:@"levelNumberOnButton"];
         NSString *levelNumber=[infoList objectForKey:@"LevelNumber"];
         [[GameSettings shared] setGlobal:levelNumber ForKey:@"selectedLevel"];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+        AlertView *alert = [[AlertView alloc] initWithTitle:@""
                                                         message:text
                                                        delegate:self
                                               cancelButtonTitle:@"No"
@@ -3601,7 +3601,7 @@ NSString *touchEnable=[[GameSettings shared] getGlobalForKey:@"touchEnable"];
         else {
             [_waitingAlert dismissWithClickedButtonIndex:-1 animated:YES];
             
-             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+             AlertView *alert = [[AlertView alloc] initWithTitle:@""
              message:@"Seems your opponent doesn't like that level, please select another one."
              delegate:self
              cancelButtonTitle:nil

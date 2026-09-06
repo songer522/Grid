@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AlertView.h"
 #import <GameKit/GameKit.h>
 #import "cocos2d.h"
 #import "CCScrollLayer.h"
 #import "DlcLevelDelegate.h"
 #import "skullDotIndicator.h"
 @class Button;
-@interface ChooseIslandMenu : CCLayer<GKSessionDelegate,UIAlertViewDelegate,UITextFieldDelegate,GKMatchDelegate,DlcLevelDelegate>
+@interface ChooseIslandMenu : CCLayer<GKSessionDelegate,AlertViewDelegate,UITextFieldDelegate,GKMatchDelegate,DlcLevelDelegate>
 {
 CCLabelTTF *_title;
 CCSprite *_goBackButton;
@@ -28,7 +29,7 @@ GKSession *currentSession;
 NSString *gameMode;
 CCScrollLayer  *_scroller;
 skullDotIndicator *_dotIndicator;
-UIAlertView *_waitingAlert;
+AlertView *_waitingAlert;
     BOOL _touchEnable;
 
 float _waitToShowTextField1;

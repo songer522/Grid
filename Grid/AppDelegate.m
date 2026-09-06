@@ -37,8 +37,6 @@
 
 	director_ = (CCDirectorIOS*) [CCDirector sharedDirector];
 
-	director_.wantsFullScreenLayout = YES;
-
 	// Display FSP and SPF
 	[director_ setDisplayStats:NO];
 
@@ -64,8 +62,7 @@
 	navController_.navigationBarHidden = YES;
 
 	// set the Navigation Controller as the root view controller
-//	[window_ setRootViewController:rootViewController_];
-	[window_ addSubview:navController_.view];
+	[window_ setRootViewController:navController_];
 
 	// make main window visible
 	[window_ makeKeyAndVisible];
@@ -94,10 +91,15 @@
 	return YES;
 }
 
-// Supported orientations: Landscape. Customize it for your own needs
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+// Supported orientations: Portrait only.
+- (UIInterfaceOrientationMask)supportedInterfaceOrientationsForDirector
 {
-	return UIInterfaceOrientationIsPortrait(interfaceOrientation);
+	return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+	return UIInterfaceOrientationMaskPortrait;
 }
 
 
@@ -170,7 +172,7 @@
         {
             GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithInvite:acceptedInvite] autorelease];
             mmvc.matchmakerDelegate = self;
-            [[[CCDirector sharedDirector] parentViewController] presentModalViewController:mmvc animated:YES];
+            [navController_ presentViewController:mmvc animated:YES completion:nil];
         }
         else if (playersToInvite)
         {
@@ -181,24 +183,24 @@
             
             GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithMatchRequest:request] autorelease];
             mmvc.matchmakerDelegate = self;
-            [[[CCDirector sharedDirector] parentViewController] presentModalViewController:mmvc animated:YES];
+            [navController_ presentViewController:mmvc animated:YES completion:nil];
         }
     };
 }
 - (void)matchmakerViewControllerWasCancelled:(GKMatchmakerViewController *)viewController
 {
-    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    [navController_ dismissViewControllerAnimated:YES completion:nil];
     // implement any specific code in your application here.
 }
 - (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFailWithError:(NSError *)error
 {
-    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    [navController_ dismissViewControllerAnimated:YES completion:nil];
     // Display the error to the user.
    // NSLog(@"error");
 }
 - (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFindMatch:(GKMatch *)match
 {
-    [[[CCDirector sharedDirector] parentViewController] dismissModalViewControllerAnimated:YES];
+    [navController_ dismissViewControllerAnimated:YES completion:nil];
    // NSLog(@"find a match");
    // myMatch = match; // Use a retaining property to retain the match.
     //myMatch.delegate = self;
