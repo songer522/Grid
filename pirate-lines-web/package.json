@@ -1,0 +1,13 @@
+{
+  "name": "pirate-lines-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "levels": "node scripts/extract-levels.mjs",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": { "vite": "^7.0.0" }
+}

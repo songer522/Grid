@@ -26,3 +26,7 @@ Grid.approj/build/
 *.mobileprovision
 *.p12
 *.cer
+
+# Node / web edition
+node_modules/
+pirate-lines-web/dist/
