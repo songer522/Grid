@@ -1,8 +1,10 @@
 name: Deploy web edition
 
+# The web edition lives on the `web` branch; master stays iOS-only, so this
+# is the sole branch that publishes the Pages site.
 on:
   push:
-    branches: [master, web]
+    branches: [web]
     paths:
       - 'pirate-lines-web/**'
       - '.github/workflows/deploy-web.yml'
