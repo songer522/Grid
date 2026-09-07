@@ -2,6 +2,10 @@ import './style.css';
 import { levels } from './levels.js';
 
 const app = document.querySelector('#app');
+// Vite serves the site from the root in dev and from /Grid/ on GitHub
+// Pages. CSS url() references are rewritten at build time, but paths built
+// in JS strings are not, so they go through this prefix.
+const ASSETS = `${import.meta.env.BASE_URL}assets/`;
 // Match the original Cocos2d flips: cannon art faces left by default, while
 // ship art faces right by default.
 const icons = { TreasureBox: 'treasure', CannonLeft: 'cannon', CannonRight: 'cannon flip', ShipLeft: 'ship flip', ShipRight: 'ship', MapOne: 'map', MapTwo: 'map', Skull: 'skull', Fog: 'fog' };
@@ -47,7 +51,7 @@ function powerGraphic(type) { return icons[type] ? `<i class="power-icon ${icons
 function boot() {
   app.innerHTML = `
     <section class="game-shell">
-      <header><button class="brand" id="levels" aria-label="Choose a level"><img src="/assets/pirate-lines-logo.png" alt="Pirate Lines"></button><div class="header-actions"><button id="reset" aria-label="Restart level">↻</button><button id="help" aria-label="How to play">?</button></div></header>
+      <header><button class="brand" id="levels" aria-label="Choose a level"><img src="${ASSETS}pirate-lines-logo.png" alt="Pirate Lines"></button><div class="header-actions"><button id="reset" aria-label="Restart level">↻</button><button id="help" aria-label="How to play">?</button></div></header>
       <section class="statusbar"><div><small>VOYAGE</small><strong id="level-label">LEVEL ${selected}</strong></div><div id="turn" class="turn player">YOUR TURN</div><div class="objective"><small>CHART</small><strong id="objective">0 / 0</strong></div></section>
       <section class="board-wrap"><div id="board" class="board" aria-label="Pirate Lines game board"></div></section>
       <section class="scoreboard"><div class="score player-score"><i class="turn-arrow" aria-hidden="true"></i><div class="score-box"><strong id="player-score">0</strong></div><span>YOU</span></div><div class="score cpu-score"><i class="turn-arrow" aria-hidden="true"></i><div class="score-box"><strong id="cpu-score">0</strong></div><span>CPU</span></div></section>
@@ -72,7 +76,7 @@ function showLevelTutorial(page) {
   overlay.setAttribute('role', 'dialog');
   overlay.setAttribute('aria-modal', 'true');
   overlay.setAttribute('aria-label', `Tutorial page ${page}`);
-  overlay.innerHTML = `<div class="tutorial-card"><img class="tutorial-page" src="/assets/tutorial-${page}.png" alt="Pirate Lines tutorial"><button class="tutorial-close" aria-label="Close tutorial"><img src="/assets/tutorial-close.png" alt=""></button></div>`;
+  overlay.innerHTML = `<div class="tutorial-card"><img class="tutorial-page" src="${ASSETS}tutorial-${page}.png" alt="Pirate Lines tutorial"><button class="tutorial-close" aria-label="Close tutorial"><img src="${ASSETS}tutorial-close.png" alt=""></button></div>`;
   overlay.querySelector('.tutorial-close').onclick = dismissTutorial;
   document.body.append(overlay);
 }
