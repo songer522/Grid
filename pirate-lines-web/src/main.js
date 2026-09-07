@@ -20,6 +20,9 @@ const tutorialPages = { 1: 1, 2: 2, 3: 3, 5: 4, 8: 5, 12: 6, 17: 7, 19: 8 };
 // Original board geometry: X_MARGIN 27.5 on a 320pt canvas and 53pt edges.
 const GRID_INSET = 8.59375;
 const GRID_STEP = 16.5625;
+// GameLayer.m sets the window's waitToFadeInWindow to 3.0 once the board is
+// finished, so the result is held back three seconds before it fades in.
+const GAMEOVER_DELAY = 3000;
 const CANNON_FRAME = { texture: [394, 367, 93, 73], color: [144, 43] };
 const CANNON_SHOT_FRAMES = [
   { texture: [253, 84, 23, 25], color: [138, 46] },
@@ -88,6 +91,7 @@ function scheduleTutorial(levelNumber) {
 }
 
 function start(number) {
+  dismissGameover();
   selected = number;
   localStorage.setItem('pirate-lines-level', selected);
   const level = levels[number - 1];
@@ -315,13 +319,65 @@ function finish(effectDuration = 0) {
   if (won && selected >= unlocked && selected < 96) { unlocked = selected + 1; localStorage.setItem('pirate-lines-unlocked', unlocked); }
   render();
   setMessage(won ? 'Victory! Your flag flies over this chart.' : 'The CPU takes this chart. Try a different route.');
-  window.setTimeout(() => showResult(won), Math.max(350, effectDuration));
+  window.setTimeout(() => showGameover(won), Math.max(GAMEOVER_DELAY, effectDuration));
 }
 
 function setMessage(text) { document.querySelector('#message').textContent = text; }
 function openPanel(content) { const panel = document.querySelector('#panel'); panel.innerHTML = content; panel.showModal(); panel.querySelectorAll('[data-close]').forEach(el => el.onclick = () => panel.close()); }
 function showHelp() { dismissTutorial(); openPanel(`<button class="close" data-close>×</button><h2>How to play</h2><p>Take turns claiming the glowing routes. Complete a square to claim it and take another turn.</p><p>Power-ups follow the original rules: treasure earns 2, skulls cost 2, cannons damage an adjacent enemy square, ships take over a row, and both map pieces earn a 5-point bonus. Fog hides a random power-up.</p><button class="primary" data-close>Set sail</button>`); }
-function showResult(won) { openPanel(`<h2>${won ? 'Chart conquered!' : 'Chart lost'}</h2><p>${won ? 'The next chart is now available.' : 'The sea is fickle — give it another voyage.'}</p><div class="result-score"><span>You <b>${game.score.player}</b></span><span>CPU <b>${game.score.cpu}</b></span></div><div class="panel-actions"><button data-close>Charts</button><button class="primary" id="again">${won && selected < 96 ? 'Next level' : 'Try again'}</button></div>`); document.querySelector('#again').onclick = () => { document.querySelector('#panel').close(); start(won && selected < 96 ? selected + 1 : selected); }; }
+function bestKey(level) { return `pirate-lines-best-${level}`; }
+function clearedKey(level) { return `pirate-lines-cleared-${level}`; }
+function dismissGameover() {
+  document.querySelector('.gameover-overlay')?.remove();
+  window.removeEventListener('resize', fitGameover);
+}
+// The stage is laid out at the original 320x480; scale it to the viewport
+// rather than reflowing, so every ported offset stays exact.
+function fitGameover() {
+  const stage = document.querySelector('.gameover-stage');
+  if (stage) stage.style.setProperty('--go-scale', Math.min(window.innerWidth * 0.96 / 320, window.innerHeight * 0.96 / 480, 1.6));
+}
+
+function showGameover(won) {
+  // GameLayer.m stores 100 * blueScore as the level score, and refreshes the
+  // per-level best on a loss as well as a win.
+  const score = game.score.player * 100;
+  const previousBest = Number(localStorage.getItem(bestKey(selected)) || 0);
+  const newRecord = score > previousBest;
+  if (newRecord) localStorage.setItem(bestKey(selected), score);
+  if (won) localStorage.setItem(clearedKey(selected), 'YES');
+  // Every 16th level ends an island, where the original sends the player back
+  // to the island map instead of straight on, and greys Next Level out.
+  const islandCleared = won && selected % 16 === 0;
+  const banner = won ? (islandCleared ? 'island' : 'cleared') : 'failed';
+  const canAdvance = localStorage.getItem(clearedKey(selected)) === 'YES' && !islandCleared && selected < 96;
+
+  const overlay = document.createElement('section');
+  overlay.className = 'gameover-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-label', won ? 'Level cleared' : 'Level failed');
+  overlay.innerHTML = `
+    <div class="gameover-stage">
+      <i class="go-art go-window" aria-hidden="true"></i>
+      <i class="go-art go-score-back" aria-hidden="true"></i>
+      <i class="go-art go-banner ${banner}" aria-label="${won ? (islandCleared ? 'Island cleared' : 'Level cleared') : 'Level failed'}"></i>
+      ${newRecord ? '<i class="go-art go-new-record" aria-label="New record"></i>' : ''}
+      <p class="go-score">Score: ${score}</p>
+      <p class="go-best">Best Score: ${Math.max(score, previousBest)}</p>
+      <button class="go-art go-btn go-menu" aria-label="Choose a chart"></button>
+      <button class="go-art go-btn go-again" aria-label="Play again"></button>
+      <button class="go-art go-btn go-next" aria-label="Next level"${canAdvance ? '' : ' disabled'}></button>
+      <button class="go-art go-close" aria-label="Close"></button>
+    </div>`;
+  overlay.querySelector('.go-close').onclick = dismissGameover;
+  overlay.querySelector('.go-menu').onclick = () => { dismissGameover(); showLevels(); };
+  overlay.querySelector('.go-again').onclick = () => { dismissGameover(); start(selected); };
+  overlay.querySelector('.go-next').onclick = () => { dismissGameover(); start(Math.min(selected + 1, 96)); };
+  document.body.append(overlay);
+  fitGameover();
+  window.addEventListener('resize', fitGameover);
+}
 function showLevels() { dismissTutorial(); const buttons = levels.map(level => `<button class="level ${level.number <= unlocked ? '' : 'locked'} ${level.number === selected ? 'active' : ''}" data-level="${level.number}" ${level.number > unlocked ? 'disabled' : ''}>${level.number <= unlocked ? level.number : '⚓'}</button>`).join(''); openPanel(`<button class="close" data-close>×</button><h2>Choose a chart</h2><p class="muted">96 original voyage layouts · single player</p><div class="level-grid">${buttons}</div>`); document.querySelectorAll('[data-level]').forEach(button => button.onclick = () => { document.querySelector('#panel').close(); start(Number(button.dataset.level)); }); }
 
 boot();
