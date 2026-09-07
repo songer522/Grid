@@ -10,6 +10,23 @@
 
 ---
 
+## 网页版
+
+游戏另有一个单人网页版，打开即玩，无需安装：
+
+**https://songer522.github.io/Grid/**
+
+源码位于 `web` 分支的 `pirate-lines-web/` 目录，用 Vite + 原生 JS 重写，与 iOS 版不共用
+任何代码，但直接复用原版的美术资源与全部 96 张 TMX 关卡地图——关卡数据由脚本从
+`Grid/Art/DAL_Level*-hd.tmx` 提取生成，因此路线布局与道具位置和 iOS 版一致。
+CPU 对手是 `CPUBrain` 战术优先级的移植；联机对战、Game Center 与内购没有网页端对应实现，
+均已省略。
+
+分支分工：`master` 只用于 iOS 开发，`web` 承载网页版并经 GitHub Actions 自动部署到
+GitHub Pages。两者不做合并。
+
+---
+
 ## 技术栈
 
 | 项目 | 现状 |
